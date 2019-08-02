@@ -4,6 +4,15 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
+
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -13,6 +22,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.kgate.entity.User;
@@ -65,8 +75,10 @@ public class UserController {
 	}
 	
 	@PostMapping("/save")
-	public ModelAndView save(@ModelAttribute("user") User user) {
+	public ModelAndView save(@ModelAttribute("user") User user, @RequestParam("email")String email) {
 		ModelAndView mav = new ModelAndView("abc");
+		UserController uc = new UserController();
+		uc.sendMail(user.getEmail(), "Your login id is: "+user.getEmail()+"\n Your Password is: "+user.getPassword(), "Your Credential and Details");
 		repo.save(user);
 		return mav;
 	}
@@ -77,6 +89,42 @@ public class UserController {
 		System.out.println(userList);
 		mav.addObject("users",userList);
 		return mav;
+	}
+	
+	public void sendMail(String to, String message, String subject) {
+		final User u = new User();
+		Properties props = new Properties();
+		props.put("mail.smtp.host", "smtp.gmail.com");
+		props.put("mail.smtp.socketFactory.port", "465");
+		props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+		props.put("mail.smtp.auth", "true");
+		props.put("mail.smtp.port", "465");
+
+		Session session = Session.getInstance(props, new javax.mail.Authenticator() {
+			protected PasswordAuthentication getPasswordAuthentication() {
+				return new PasswordAuthentication("gulfarooqui1@gmail.com", "Gmail#7326");
+			}
+
+		});
+
+		Message message1 = new MimeMessage(session);
+
+		try {
+
+			message1.setFrom(new InternetAddress("test@gmail.com"));
+			message1.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
+			message1.setSubject(subject);
+			message1.setText(message);
+
+			Transport.send(message1);
+
+			System.out.println("Done");
+
+		} catch (MessagingException e1) {
+			throw new RuntimeException(e1);
+		}
+		// return "employeelist";
+
 	}
 	
 }

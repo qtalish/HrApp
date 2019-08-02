@@ -13,18 +13,17 @@
         <div class="generic-container">
                 <div class="panel panel-default">
                           <!-- Default panel contents -->
-                          <div class="panel-heading"><span class="lead">List of Users </span></div>
-                          <div class="tablecontainer">
-                                <table class="table table-hover">
+                          <div class="panel-heading"><span class="lead"><h1>List of Users</h1> </span></div>
+                          <div class="tablecontainer" >
+                                <table class="table table-hover" border="1">
                                     <thead>
-                                              <tr>
+                                           
                                                 <th>First Name</th>
                                                 <th>Last Name</th>
                                                 <th>Email</th>
                                                 <th>Employee Code</th>
-                                                <th width="100"></th>
-                                                <th width="100"></th>
-                                                </tr>
+                                                <th width="100">Update</th>
+                                                <th width="100">Delete</th>
                                     </thead>
                                     <tbody>
                                         <c:forEach items="${users}" var="user">
@@ -33,8 +32,8 @@
                                                         <td>${user.lname}</td>
                                                         <td>${user.email}</td>
                                                         <td>${user.empCode}</td>
-                                                        <%-- <td><a href="<c:url value='/edit-user-${user.id}' />" class="btn btn-success custom-width">edit</a></td>
-                                                        <td><a href="<c:url value='/delete-user-${user.id}' />" class="btn btn-danger custom-width">delete</a></td> --%>
+                                                        <td><a href="<c:url value='/edit-user-${user.id}' />" class="btn btn-success custom-width">edit</a></td>
+                                                        <td><a href="<c:url value='/delete-user-${user.id}' />" class="btn btn-danger custom-width">delete</a></td>
                                                 </tr>
                                         </c:forEach>
                                     </tbody>
