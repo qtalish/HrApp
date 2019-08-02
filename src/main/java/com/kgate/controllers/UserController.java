@@ -149,6 +149,7 @@ public class UserController {
 	@GetMapping("/attendance")
 	public ModelAndView viewAttendance() {
 		ModelAndView mav = new ModelAndView("employeeAttendance");
+		System.out.println("Akshay");
 		return mav;
 	}
 
