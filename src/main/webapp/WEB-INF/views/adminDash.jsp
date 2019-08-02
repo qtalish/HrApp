@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<title>Admin DashBoard</title>
 </head>
 <body><center><center>
 <h1>Hello Hr</h1>

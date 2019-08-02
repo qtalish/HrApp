@@ -33,7 +33,7 @@ public class UserController {
 
 	@Autowired
 	UserRepository repo;
-	
+
 	@InitBinder
 	public void bindingPreparation(WebDataBinder binder) {
 		DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
@@ -41,13 +41,12 @@ public class UserController {
 		binder.registerCustomEditor(Date.class, orderDateEditor);
 	}
 
-	
 	@GetMapping("/")
 	public ModelAndView login() {
 		ModelAndView mav = new ModelAndView("login");
 		User user = new User();
-		String userType[] = {"Admin","Employee"};
-		mav.addObject("userType",userType);
+		String userType[] = { "Admin", "Employee" };
+		mav.addObject("userType", userType);
 		mav.addObject("user", user);
 		return mav;
 	}
@@ -55,25 +54,31 @@ public class UserController {
 	@PostMapping("/authenticate")
 	public ModelAndView authenticate(@ModelAttribute("user") User user) {
 		ModelAndView mav = new ModelAndView();
-		User user2 = repo.findUser(user.getEmail(), user.getPassword(),user.getUserType());
-		System.out.println("user:::::::::: "+user2);
-		if(user2==null) {
+		User user2 = repo.findUser(user.getEmail(), user.getPassword(), user.getUserType());
+		System.out.println("user:::::::::: " + user2);
+		if (user2 == null) {
 			mav.setViewName("login");
-			mav.addObject("msg","User Name or Password is invalid");
-			String userType[] = {"Admin","Employee"};
-			mav.addObject("userType",userType);
+			mav.addObject("msg", "User Name or Password is invalid");
+			String userType[] = { "Admin", "Employee" };
+			mav.addObject("userType", userType);
 			return mav;
 		}
 		System.out.println(user.getEmail());
-		mav.setViewName("abc");
+		if (user.getUserType().equals("Employee")) {
+			System.out.println("Employee Login");
+			mav.setViewName("empDash");
+		} else {
+			mav.setViewName("adminDash");
+		}
 		return mav;
 	}
+
 	@GetMapping("/register")
 	public ModelAndView register(@ModelAttribute("user") User user) {
 		ModelAndView mav = new ModelAndView("register");
 		return mav;
 	}
-	
+
 	@PostMapping("/save")
 	public ModelAndView save(@ModelAttribute("user") User user, @RequestParam("email")String email) {
 		ModelAndView mav = new ModelAndView("abc");
@@ -82,12 +87,13 @@ public class UserController {
 		repo.save(user);
 		return mav;
 	}
+
 	@GetMapping("/viewEmployees")
 	public ModelAndView viewEmployees() {
 		ModelAndView mav = new ModelAndView("employeelist");
-		List<User> userList =repo.findAll();
+		List<User> userList = repo.findAll();
 		System.out.println(userList);
-		mav.addObject("users",userList);
+		mav.addObject("users", userList);
 		return mav;
 	}
 	
@@ -127,4 +133,29 @@ public class UserController {
 
 	}
 	
+
+	@GetMapping("/employeeDash")
+	public ModelAndView viewEmployeeDash() {
+		ModelAndView mav = new ModelAndView("empDash");
+		return mav;
+	}
+
+	@GetMapping("/profile")
+	public ModelAndView viewProfile() {
+		ModelAndView mav = new ModelAndView("employeeProfile");
+		return mav;
+	}
+
+	@GetMapping("/attendance")
+	public ModelAndView viewAttendance() {
+		ModelAndView mav = new ModelAndView("employeeAttendance");
+		return mav;
+	}
+
+	@GetMapping("/documents")
+	public ModelAndView viewDocuments() {
+		ModelAndView mav = new ModelAndView("employeeDocuments");
+		return mav;
+	}
+
 }
