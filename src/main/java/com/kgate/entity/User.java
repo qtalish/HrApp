@@ -7,46 +7,46 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
-import org.springframework.lang.Nullable;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "User")
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int id;
+	private Integer id;
 	private String fname;
 	private String mname;
 	private String lname;
 	private String address;
+	@DateTimeFormat(pattern = "dd-MM-yyyy")
+	@Temporal(TemporalType.DATE)
 	private Date dob;
 	private String email;
-	@Nullable
-	private long mob;
+	private Long mob;
 	private String designation;
 	private String empCode;
 	private String bloodGroup;
-	@Nullable
-	private long aadhar;
+	private Long aadhar;
 	private String pan;
+	@DateTimeFormat(pattern = "dd-MM-yyyy")
+	@Temporal(TemporalType.DATE)
 	private Date joiningDate;
-	@Nullable
-	private int aLeave;
-	@Nullable
-	private int tLeave;
-	@Nullable
-	private int bLeave;
-	@Nullable
-	private long salary;
+	private Integer aLeave;
+	private Integer tLeave;
+	private Integer bLeave;
+	private Long salary;
 	private String userType;
 	private String password;
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -98,11 +98,11 @@ public class User {
 		this.email = email;
 	}
 
-	public long getMob() {
+	public Long getMob() {
 		return mob;
 	}
 
-	public void setMob(long mob) {
+	public void setMob(Long mob) {
 		this.mob = mob;
 	}
 
@@ -130,11 +130,11 @@ public class User {
 		this.bloodGroup = bloodGroup;
 	}
 
-	public long getAadhar() {
+	public Long getAadhar() {
 		return aadhar;
 	}
 
-	public void setAadhar(long aadhar) {
+	public void setAadhar(Long aadhar) {
 		this.aadhar = aadhar;
 	}
 
@@ -154,35 +154,35 @@ public class User {
 		this.joiningDate = joiningDate;
 	}
 
-	public int getaLeave() {
+	public Integer getaLeave() {
 		return aLeave;
 	}
 
-	public void setaLeave(int aLeave) {
+	public void setaLeave(Integer aLeave) {
 		this.aLeave = aLeave;
 	}
 
-	public int gettLeave() {
+	public Integer gettLeave() {
 		return tLeave;
 	}
 
-	public void settLeave(int tLeave) {
+	public void settLeave(Integer tLeave) {
 		this.tLeave = tLeave;
 	}
 
-	public int getbLeave() {
+	public Integer getbLeave() {
 		return bLeave;
 	}
 
-	public void setbLeave(int bLeave) {
+	public void setbLeave(Integer bLeave) {
 		this.bLeave = bLeave;
 	}
 
-	public long getSalary() {
+	public Long getSalary() {
 		return salary;
 	}
 
-	public void setSalary(long salary) {
+	public void setSalary(Long salary) {
 		this.salary = salary;
 	}
 
