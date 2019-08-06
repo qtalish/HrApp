@@ -90,7 +90,8 @@ public class UserController {
 
 	@GetMapping("/viewEmployees")
 	public ModelAndView viewEmployees() {
-		ModelAndView mav = new ModelAndView("employeelist");
+//		ModelAndView mav = new ModelAndView("employeelist");
+		ModelAndView mav = new ModelAndView("home2");
 		List<User> userList = repo.findAll();
 		System.out.println(userList);
 		mav.addObject("users", userList);
@@ -158,5 +159,4 @@ public class UserController {
 		ModelAndView mav = new ModelAndView("employeeDocuments");
 		return mav;
 	}
-
 }
