@@ -6,6 +6,9 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Insert title here</title>
+<script type="text/javascript" src="./resources/JS/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="./resources/JS/emp.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 </head>
 
 <body>
@@ -34,6 +37,7 @@
 				<td><input type="submit" value="Login" /></td>
 			</tr>
 		</form:form>
+		<a href="#" onclick="forgot()">Forgot Password</a>
 	</table>
 
 

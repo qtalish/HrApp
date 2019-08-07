@@ -3,7 +3,9 @@ package com.kgate.controllers;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.mail.Message;
@@ -16,13 +18,17 @@ import javax.mail.internet.MimeMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.kgate.entity.User;
@@ -80,23 +86,26 @@ public class UserController {
 	}
 
 	@PostMapping("/save")
-	public ModelAndView save(@ModelAttribute("user") User user, @RequestParam("email")String email) {
+	public ModelAndView save(@ModelAttribute("user") User user, @RequestParam("email") String email) {
 		ModelAndView mav = new ModelAndView("abc");
 		UserController uc = new UserController();
-		uc.sendMail(user.getEmail(), "Your login id is: "+user.getEmail()+"\n Your Password is: "+user.getPassword(), "Your Credential and Details");
+		uc.sendMail(user.getEmail(),
+				"Your login id is: " + user.getEmail() + "\n Your Password is: " + user.getPassword(),
+				"Your Credential and Details");
 		repo.save(user);
 		return mav;
 	}
 
 	@GetMapping("/viewEmployees")
 	public ModelAndView viewEmployees() {
-		ModelAndView mav = new ModelAndView("employeelist");
+//		ModelAndView mav = new ModelAndView("employeelist");
+		ModelAndView mav = new ModelAndView("home2");
 		List<User> userList = repo.findAll();
 		System.out.println(userList);
 		mav.addObject("users", userList);
 		return mav;
 	}
-	
+
 	public void sendMail(String to, String message, String subject) {
 		final User u = new User();
 		Properties props = new Properties();
@@ -132,7 +141,6 @@ public class UserController {
 		// return "employeelist";
 
 	}
-	
 
 	@GetMapping("/employeeDash")
 	public ModelAndView viewEmployeeDash() {
@@ -149,7 +157,7 @@ public class UserController {
 	@GetMapping("/attendance")
 	public ModelAndView viewAttendance() {
 		ModelAndView mav = new ModelAndView("employeeAttendance");
-	
+
 		return mav;
 	}
 
@@ -159,4 +167,25 @@ public class UserController {
 		return mav;
 	}
 
+	@PostMapping("/forgetPassword")
+	@ResponseBody
+//	public Map<String, Object> forgetPassword(@RequestBody User user) {
+	public ResponseEntity<?> forgetPassword(@RequestBody User user) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		System.out.println("inside forgot");
+		System.out.println("inside forgot" + user.getEmail());
+		User user2 = repo.fetchPassword(user.getEmail());
+		if (user2 == null) {
+			map.put("msg", "User does not exist!");
+			return new ResponseEntity<Map<String, Object>>(map, HttpStatus.NOT_FOUND);
+		} else {
+			UserController uc = new UserController();
+			uc.sendMail(user2.getEmail(), "Your Password is : " + user2.getPassword(), "Login Credentials");
+			map.put("msg", "Your Password has been send to your email successfully");
+			return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+		}
+//		System.out.println("11111111111111");
+//		return map;
+
+	}
 }

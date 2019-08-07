@@ -12,8 +12,9 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 @Configuration
 @EnableWebMvc
 @ComponentScan(basePackages="com")
-public class WebMvcConfig implements WebMvcConfigurer
-{
+
+public class WebMvcConfig implements WebMvcConfigurer{
+
 	@Bean
 	public InternalResourceViewResolver resolver() {
 		InternalResourceViewResolver view = new InternalResourceViewResolver();
@@ -21,8 +22,7 @@ public class WebMvcConfig implements WebMvcConfigurer
 		view.setSuffix(".jsp");
 		return view;
 }
-	
- /*To give path for css and javascripts */
+
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
