@@ -23,7 +23,7 @@ Designation : <form:input path="designation"/><br>
 Joining Date : <form:input path="joiningDate" type="date"/><br>
 Address : <form:input path="address"/><br>
 Salary : <form:input path="salary"/><br>
-User Type : <form:input path="userType"/><br>
+<%-- User Type : <form:input path="userType"/><br> --%>
 Password : <form:input path="password"/><br>
 <input type="submit" value="Register"/>
 

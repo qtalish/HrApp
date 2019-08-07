@@ -4,12 +4,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.kgate.entity.User;
 import com.kgate.repository.UserRepository;
@@ -39,5 +43,15 @@ public class AdminAjaxController {
 		 Map<String,Object> map = new HashMap<>();
 		 repo.deleteById(user.getId());
 		 return map;
+	 }
+	 
+	 @RequestMapping(value="/editEmployeeAjax", method= RequestMethod.GET )
+	 public ModelAndView editEmployee(HttpServletRequest request) {
+		 int userId = Integer.parseInt(request.getParameter("id"));
+		 User user = repo.getOne(userId);
+		 System.out.println(user);
+		 ModelAndView mav = new ModelAndView("register");
+		 mav.addObject("user",user);
+		 return mav;
 	 }
 }

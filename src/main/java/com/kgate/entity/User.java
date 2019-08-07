@@ -10,10 +10,12 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.Proxy;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "User")
+@Proxy(lazy=false)	
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

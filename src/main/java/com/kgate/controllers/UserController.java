@@ -80,8 +80,9 @@ public class UserController {
 	}
 
 	@PostMapping("/save")
-	public ModelAndView save(@ModelAttribute("user") User user, @RequestParam("email")String email) {
-		ModelAndView mav = new ModelAndView("abc");
+	public ModelAndView save(@ModelAttribute("user") User user) {
+		ModelAndView mav = new ModelAndView("home2");
+		user.setUserType("Employee");
 		UserController uc = new UserController();
 		uc.sendMail(user.getEmail(), "Your login id is: "+user.getEmail()+"\n Your Password is: "+user.getPassword(), "Your Credential and Details");
 		repo.save(user);
