@@ -36,7 +36,7 @@ load = function(page) {
 												+ "`);'>|  Delete</a></td>");
 					}
 					 pagenumber = "";
-			            for (i = 0; i < response.pno; i++) {
+ 			            for (i = 0; i < response.pno; i++) {
 			                j = i + 1;
 			                pagenumber += "<a href='#' onclick=load(" + j + ");>" + j + "</a>" + "&nbsp";
 			            }

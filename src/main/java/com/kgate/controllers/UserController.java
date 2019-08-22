@@ -38,14 +38,17 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.kgate.entity.User;
-import com.kgate.repository.UserRepository;
+
+import com.kgate.service.UserService;
 
 @Controller
 @SessionAttributes("user")
 public class UserController {
 
+	
+	
 	@Autowired
-	UserRepository repo;
+	UserService userService;
 
 //	@InitBinder
 //	public void bindingPreparation(WebDataBinder binder) {
@@ -76,7 +79,7 @@ public class UserController {
 	@PostMapping("/authenticate")
 	public ModelAndView authenticate(@ModelAttribute("user") User user) {
 		ModelAndView mav = new ModelAndView();
-		 User user2 = repo.findUser(user.getEmail(), user.getPassword(), user.getUserType());
+		 User user2 = userService.findUser(user.getEmail(), user.getPassword(), user.getUserType());
 		System.out.println("user:::::::::: " + user2);
 		if (user2 == null) {
 			mav.setViewName("login");
@@ -129,18 +132,18 @@ public class UserController {
 		 * "\n Your Password is: " + user.getPassword(), //
 		 * "Your Credential and Details");
 		 * 
-		 * String email = user.getEmail(); String email2 = repo.findByEmail(email);
+		 * String email = user.getEmail(); String email2 = userService.findByEmail(email);
 		 * if(email.equals(email2)) { ModelAndView mav2 = new ModelAndView("register");
 		 * } else {
 		 */
 		/*
-		 * User user2 = repo.findUser(user.getEmail(), user.getPassword(),
+		 * User user2 = userService.findUser(user.getEmail(), user.getPassword(),
 		 * user.getUserType()); if(user.getEmail().equals(user2.getEmail())) {
 		 * mav.setViewName("register"); mav.addObject("msg", "User Already Exists");
 		 * return mav; }
 		System.out.println("asdfghjhgfds");
 		 */
-		repo.save(user);
+		userService.save(user);
 	return mav;
 }
 
@@ -148,7 +151,7 @@ public class UserController {
 	public ModelAndView viewEmployees() {
 //		ModelAndView mav = new ModelAndView("employeelist");
 		ModelAndView mav = new ModelAndView("home2");
-		List<User> userList = repo.findAll();
+		List<User> userList = userService.findAll();
 		System.out.println(userList);
 		mav.addObject("users", userList);
 		return mav;
@@ -224,7 +227,7 @@ public class UserController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		System.out.println("inside forgot");
 		System.out.println("inside forgot" + user.getEmail());
-		User user2 = repo.fetchPassword(user.getEmail());
+		User user2 = userService.fetchPassword(user.getEmail());
 		if (user2 == null) {
 			map.put("msg", "User does not exist!");
 			return new ResponseEntity<Map<String, Object>>(map, HttpStatus.NOT_FOUND);
