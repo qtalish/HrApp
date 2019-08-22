@@ -6,7 +6,9 @@
 <meta charset="ISO-8859-1">
 <title>Admin DashBoard</title>
 </head>
-<body><center><center>
+<body>
+<%@include file="logout.jsp" %>
+<center><center>
 <h1>Hello Hr</h1>
 
 <br><br><br>

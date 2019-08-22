@@ -7,6 +7,7 @@
 <title>Employee DashBoard</title>
 </head>
 <body >
+<%@include file="logout.jsp" %>
 <center>
 	<a href="/HrApp/profile">Profile</a>
 	<br>

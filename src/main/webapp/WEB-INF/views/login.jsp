@@ -5,20 +5,28 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<script type="text/javascript">
+	history.pushState(null, null, location.href);
+	window.onpopstate = function() {
+		history.go(1);
+	};
+	window.onbeforeunload = null;
+</script>
+
+<title>Login</title>
 <script type="text/javascript" src="./resources/JS/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="./resources/JS/emp.js"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 </head>
 
-<body>
+<body bgcolor="#ADD8E6">
+				<h3><center><p style="color: red">${msg}</p></center></h3>
 	<table align="center">
 		<form:form action="authenticate" method="post" modelAttribute="user">
 
 			<tr>
 				<td>User:</td>
 				<td><form:input path="email" /></td>
-				<p>${msg}</p>
 			</tr>
 			<tr>
 				<td>Password:</td>

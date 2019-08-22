@@ -2,6 +2,7 @@ package com.kgate.entity;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,6 +12,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.Proxy;
+import org.hibernate.validator.constraints.Email;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
@@ -27,6 +29,8 @@ public class User {
 	@DateTimeFormat(pattern = "dd-MM-yyyy")
 	@Temporal(TemporalType.DATE)
 	private Date dob;
+	@Email
+	@Column(unique=true)
 	private String email;
 	private Long mob;
 	private String designation;
