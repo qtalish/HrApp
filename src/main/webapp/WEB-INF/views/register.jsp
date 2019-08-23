@@ -12,7 +12,7 @@
 
 <script src="./resources/JS/formvalid.js" type="text/javascript"></script>
 
-<script>
+<!-- <script>
 myFunction=function(id){
 	var regex = /^[a-zA-Z]+$/;
 	var name = id.value;
@@ -37,7 +37,7 @@ function validate(id)
     }
 }
 
-</script>
+</script> -->
 </head>
 <body>
 <div class="container">
@@ -54,8 +54,8 @@ function validate(id)
 				<td><form:input path="empCode" /></td>
 			</tr>
 			<tr>
-				<td>First Name :</td>
-				<td><form:input  id="fname" path="fname" vb ="myFunction(this)"/><p id="p1" style="color:red;"></p></td>
+				<td>First Name :</td><!-- vb ="myFunction(this)" -->
+				<td><form:input  id="fname" path="fname" /><p id="p1" style="color:red;"></p></td>
 			</tr>
 			<tr>
 				<td>Middle Name :</td>
@@ -64,7 +64,7 @@ function validate(id)
 
 			<tr>
 				<td>Last Name :</td>
-				<td><form:input id=" lname" path="lname" /></td>
+				<td><form:input id="lname" path="lname" /></td>
 			</tr>
 			<tr>
 				<td>Email :</td>

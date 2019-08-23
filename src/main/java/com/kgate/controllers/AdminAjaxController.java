@@ -72,8 +72,6 @@ public class AdminAjaxController {
 	public ModelAndView editEmployee(HttpServletRequest request, @ModelAttribute("user") User user2) {
 		int userId = Integer.parseInt(request.getParameter("id"));
 		User user = repo.getOne(userId);
-		System.out.println(user);
-
 		ModelAndView mav = new ModelAndView("register");
 		mav.addObject("user", user);
 		return mav;

@@ -204,6 +204,7 @@ public class UserController {
 		ModelAndView mav = new ModelAndView("employeeProfile");
 				System.out.println(user);
 		mav.addObject("user", user);
+		mav.addObject("id",user.getId());
 		return mav;
 	}
 

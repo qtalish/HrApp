@@ -1,22 +1,21 @@
 $(document).ready(function() {
 	$('#submit').click(function(e) {
 		// Initializing Variables With Form Element Values
-		alert("test")
-		var firstname = $('#fname').val();
+		var fname = $('#fname').val();
+//		alert(fname)
 		var addr = $('#address').val();
 		var email = $('#email').val();
-		// Initializing Variables With Regular Expressions
 		var name_regex = /^[a-zA-Z\-]+$/;
-		var email_regex = /^[w-.+]+@[a-zA-Z0-9.-]+.[a-zA-z0-9]{2,4}$/;
+		var email_regex =/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 		var add_regex = /^[0-9a-zA-Z]+$/;
-		// To Check Empty Form Fields.
-		if (firstname.length == 0) {
+		if (fname.length === 0) {
 			$('#head').text("* All fields are mandatory *"); 
 			$("#fname").focus();
+//			alert("hi")
 			return false;
 		}
 		// Validating Name Field.
-		else if (!firstname.match(name_regex) || firstname.length == 0) {
+		else if (!fname.match(name_regex) || fname.length == 0) {
 			$('#p1').text("* For your name please use alphabets only *");
 			$("#fname").focus();
 			return false;
@@ -32,9 +31,6 @@ $(document).ready(function() {
 			$('#p3').text("* For Address please use numbers and letters *"); 
 			$("#address").focus();
 			return false;
-		} else {
-			alert("Form Submitted Successfuly!");
-			return true;
 		}
 	});
 });

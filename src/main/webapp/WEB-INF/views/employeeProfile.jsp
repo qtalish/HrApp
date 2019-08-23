@@ -44,7 +44,6 @@ button:hover, a:hover {
 </style>
 </head>
 <body>
-
 <h2 style="text-align:center">User Profile Card</h2>
 
 <div class="card">
@@ -61,6 +60,7 @@ button:hover, a:hover {
     <a href="#"><i class="fa fa-facebook"></i></a> 
   </div>
   <p><button>Contact</button></p>
+  <p><a href="editEmployeeAjax?id=${id}">Edit</a></p>
 </div>
 
 </body>
