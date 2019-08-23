@@ -1,8 +1,8 @@
 package com.kgate.controllers;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -37,8 +37,8 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.kgate.entity.Attendance;
 import com.kgate.entity.User;
-
 import com.kgate.service.UserService;
 
 @Controller
@@ -79,6 +79,7 @@ public class UserController {
 	@PostMapping("/authenticate")
 	public ModelAndView authenticate(@ModelAttribute("user") User user) {
 		ModelAndView mav = new ModelAndView();
+
 		 User user2 = userService.findUser(user.getEmail(), user.getPassword(), user.getUserType());
 		System.out.println("user:::::::::: " + user2);
 		if (user2 == null) {
@@ -127,6 +128,9 @@ public class UserController {
 		ModelAndView mav = new ModelAndView("home2");
 		user.setUserType("Employee");
 		UserController uc = new UserController();
+		uc.sendMail(user.getEmail(),
+				"Your login id is: " + user.getEmail() + "\n Your Password is: " + user.getPassword(),
+				"Your Credential and Details");
 		/*
 		 * uc.sendMail(user.getEmail(), "Your login id is: " + user.getEmail() +
 		 * "\n Your Password is: " + user.getPassword(), //
@@ -139,7 +143,7 @@ public class UserController {
 		/*
 		 * User user2 = userService.findUser(user.getEmail(), user.getPassword(),
 		 * user.getUserType()); if(user.getEmail().equals(user2.getEmail())) {
-		 * mav.setViewName("register"); mav.addObject("msg", "User Already Exists");
+		 * mav.setViewName("re	gister"); mav.addObject("msg", "User Already Exists");
 		 * return mav; }
 		System.out.println("asdfghjhgfds");
 		 */
@@ -151,7 +155,7 @@ public class UserController {
 	public ModelAndView viewEmployees() {
 //		ModelAndView mav = new ModelAndView("employeelist");
 		ModelAndView mav = new ModelAndView("home2");
-		List<User> userList = userService.findAll();
+		List<User> userList = userService.findEmployee();
 		System.out.println(userList);
 		mav.addObject("users", userList);
 		return mav;
@@ -211,7 +215,7 @@ public class UserController {
 	@GetMapping("/attendance")
 	public ModelAndView viewAttendance() {
 		ModelAndView mav = new ModelAndView("employeeAttendance");
-
+		mav.addObject("attd",new Attendance());
 		return mav;
 	}
 
@@ -220,7 +224,54 @@ public class UserController {
 		ModelAndView mav = new ModelAndView("employeeDocuments");
 		return mav;
 	}
+//Attendance
 
+	@GetMapping("SearchEmp")
+	public ModelAndView SearchEmp(@RequestParam("attDate") Date date) {
+		ModelAndView mav = new ModelAndView("employeeAttendance");
+		List<Attendance> list = userService.getAttendance(date);
+		List<Integer> list2 = new  ArrayList<>();
+		for(Attendance attendance:list) {
+			list2.add(attendance.getId());
+		}
+		
+		List<String> status = new ArrayList<>();
+		status.add("Present");
+		status.add("Absent	");
+		Attendance attd = new Attendance();
+		mav.addObject("attd",attd);
+		mav.addObject("ustatus", status);
+		mav.addObject("list", list);
+		mav.addObject("list2",list2);
+	    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");  
+	    String strDate = formatter.format(date);  
+	    System.out.println("Date Format with yyyy-mm-dd : "+strDate);  
+		mav.addObject("dd",strDate);
+		return mav;
+	}
+
+
+	/*
+	 * @GetMapping("SearchEmp") public ModelAndView
+	 * SearchEmp(@RequestParam("attDate") Date date) { ModelAndView mav = new
+	 * ModelAndView("employeeAttendance"); System.out.println("test:: " + date);
+	 * List<Attendance> list = userService.getAttendance(date); List<Attendance> li
+	 * = new ArrayList<>(); Attendance a = new Attendance(); mav.addObject("a", a);
+	 * String status[] = { "Present", "Absent" }; Map<String, String> map = new
+	 * HashMap<String, String>(); map.put("Present", "Present"); map.put("Absent",
+	 * "Absent"); mav.addObject("status",map);
+	 * System.out.println("111111111111112222222222" + Arrays.toString(status));
+	 * 
+	 * // mav.addObject("ustatus", Arrays.toString(status));
+	 * mav.addObject("ustatus", status); // System.out.println(status); //
+	 * System.out.println(Arrays.toString(status)); for (int i = 0; i < list.size();
+	 * i++) { Attendance att = new Attendance();
+	 * att.setFirstName(list.get(i).getFirstName());
+	 * att.setStatus(list.get(i).getStatus()); System.out.println("ttttt::::: " +
+	 * att); li.add(att); } System.out.println("1111111111111111" + li);
+	 * mav.addObject("list", list); return mav; }
+	 */
+	
 	@PostMapping("/forgetPassword")
 	@ResponseBody
 //	public Map<String, Object> forgetPassword(@RequestBody User user) {
@@ -238,8 +289,6 @@ public class UserController {
 			map.put("msg", "Your Password has been send to your email successfully");
 			return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
 		}
-//		System.out.println("11111111111111");
-//		return map;
 
 	}
 }

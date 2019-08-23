@@ -6,18 +6,12 @@
 <meta charset="ISO-8859-1">
 <title>Employee DashBoard</title>
 </head>
-<body >
-<%@include file="logout.jsp" %>
-<center>
-	<a href="/HrApp/profile">Profile</a>
-	<br>
-	<br>
-	<a href="/HrApp/attendance">Attendance</a>
-	<br>
-	<br>
-	<a href="/HrApp/documents">Documents</a>
-	<br>
-	<br>
-</center>
+<body>
+	<%@include file="logout.jsp"%>
+	<div align="center">
+		<a href="/HrApp/profile">Profile</a> <br> <br> <a
+			href="/HrApp/attendance">Attendance</a> <br> <br> <a
+			href="/HrApp/documents">Documents</a> <br> <br>
+	</div>
 </body>
 </html>

@@ -13,16 +13,13 @@ import com.kgate.entity.User;
 public interface UserRepository extends JpaRepository<User, Integer> {
 
 	@Query("select u from User u where u.email=:email and u.password=:password and u.userType=:userType")
-	User findUser(@Param("email") String email, @Param("password") String password,@Param("userType") String userType);
+	User findUser(@Param("email") String email, @Param("password") String password, @Param("userType") String userType);
 
-	
 	@Query("select u from User u where u.email=:email")
 	User fetchPassword(@Param("email") String email);
-	
-	
-	@Query(value = "select * from user as u where u.usertype='Employee'",nativeQuery=true)
+
+	@Query(value = "select * from user as u where u.usertype='Employee'", nativeQuery = true)
 	List<User> findEmployee();
 
-	
 	public String findByEmail(String email);
 }
