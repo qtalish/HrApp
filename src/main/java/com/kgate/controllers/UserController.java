@@ -1,6 +1,7 @@
 package com.kgate.controllers;
 
-import java.text.SimpleDateFormat;	
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -15,6 +16,7 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -27,8 +29,12 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.kgate.entity.Attendance;
@@ -36,11 +42,20 @@ import com.kgate.entity.User;
 import com.kgate.service.UserService;
 
 @Controller
+@SessionAttributes("user")
 public class UserController {
 
+	
+	
 	@Autowired
 	UserService userService;
 
+//	@InitBinder
+//	public void bindingPreparation(WebDataBinder binder) {
+//		DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+//		CustomDateEditor orderDateEditor = new CustomDateEditor(dateFormat, true);
+//		binder.registerCustomEditor(Date.class, orderDateEditor);
+//	}
 	@InitBinder
 	public void initConverter(WebDataBinder binder) {
 		CustomDateEditor dateEditor = new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd"), true);
@@ -50,9 +65,13 @@ public class UserController {
 	@GetMapping("/")
 	public ModelAndView login() {
 		ModelAndView mav = new ModelAndView("login");
+		System.out.println("abc");
 		User user = new User();
+		user.setEmail("qtalish97@gmail.com");
+		user.setPassword("1234");
 		String userType[] = { "Admin", "Employee" };
 		mav.addObject("userType", userType);
+		System.out.println(userType);
 		mav.addObject("user", user);
 		return mav;
 	}
@@ -60,7 +79,8 @@ public class UserController {
 	@PostMapping("/authenticate")
 	public ModelAndView authenticate(@ModelAttribute("user") User user) {
 		ModelAndView mav = new ModelAndView();
-		User user2 = userService.findUser(user.getEmail(), user.getPassword(), user.getUserType());
+
+		 User user2 = userService.findUser(user.getEmail(), user.getPassword(), user.getUserType());
 		System.out.println("user:::::::::: " + user2);
 		if (user2 == null) {
 			mav.setViewName("login");
@@ -69,14 +89,32 @@ public class UserController {
 			mav.addObject("userType", userType);
 			return mav;
 		}
+		System.out.println(user);
 		System.out.println(user.getEmail());
 		if (user.getUserType().equals("Employee")) {
 			System.out.println("Employee Login");
-			mav.setViewName("empDash");
+			if(user.getEmail().equals("vartakakshay@rediffmail.com")) {
+			mav.setViewName("birthday");
+			}
+			else
+			{
+				mav.addObject("user", user2);
+				mav.setViewName("empDash"); 
+			}
 		} else {
 			mav.setViewName("adminDash");
 		}
 		return mav;
+	}
+
+	@RequestMapping(value = "/logout", method = RequestMethod.GET)
+	public String logout(HttpServletRequest request) {
+		return "redirect:/";
+	}
+
+	@RequestMapping(value = "/home", method = RequestMethod.GET)
+	public String home(HttpServletRequest request) {
+		return "adminDash";
 	}
 
 	@GetMapping("/register")
@@ -86,16 +124,32 @@ public class UserController {
 	}
 
 	@PostMapping("/save")
-	public ModelAndView save(@ModelAttribute("user") User user) {
+	public ModelAndView save(@ModelAttribute("user") User user) throws ParseException {
 		ModelAndView mav = new ModelAndView("home2");
 		user.setUserType("Employee");
 		UserController uc = new UserController();
 		uc.sendMail(user.getEmail(),
 				"Your login id is: " + user.getEmail() + "\n Your Password is: " + user.getPassword(),
 				"Your Credential and Details");
+		/*
+		 * uc.sendMail(user.getEmail(), "Your login id is: " + user.getEmail() +
+		 * "\n Your Password is: " + user.getPassword(), //
+		 * "Your Credential and Details");
+		 * 
+		 * String email = user.getEmail(); String email2 = userService.findByEmail(email);
+		 * if(email.equals(email2)) { ModelAndView mav2 = new ModelAndView("register");
+		 * } else {
+		 */
+		/*
+		 * User user2 = userService.findUser(user.getEmail(), user.getPassword(),
+		 * user.getUserType()); if(user.getEmail().equals(user2.getEmail())) {
+		 * mav.setViewName("re	gister"); mav.addObject("msg", "User Already Exists");
+		 * return mav; }
+		System.out.println("asdfghjhgfds");
+		 */
 		userService.save(user);
-		return mav;
-	}
+	return mav;
+}
 
 	@GetMapping("/viewEmployees")
 	public ModelAndView viewEmployees() {
@@ -150,8 +204,10 @@ public class UserController {
 	}
 
 	@GetMapping("/profile")
-	public ModelAndView viewProfile() {
+	public ModelAndView viewProfile(HttpServletRequest request,@SessionAttribute("user") User user) {
 		ModelAndView mav = new ModelAndView("employeeProfile");
+				System.out.println(user);
+		mav.addObject("user", user);
 		return mav;
 	}
 

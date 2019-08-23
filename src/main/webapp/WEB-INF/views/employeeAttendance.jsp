@@ -3,6 +3,7 @@
 	pageEncoding="ISO-8859-1" isELIgnored="false"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c'%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,43 +14,41 @@
 <script src="./resources/JS/sweetalert.min.js" type="text/javascript"></script>
 </head>
 <body>
+	<div class="container">
+		<div align="center">
+			<form:form action="SearchEmp" method="get" modelAttribute="attd">
+				<form:input path="attDate" type="date" value="${dd}" />
+				<input type="submit" value="Search">
+			</form:form>
+			<button class="btn btn-primary" onclick="saveRemarks(${list2})">Save</button>
 
-	 
-<div class="container">
-	<div align="center">
-		<form:form action="SearchEmp" method="get" modelAttribute="attd">
-			<form:input path="attDate"  type="date"  value="${dd}"/> 
-			<input type="submit"
-				value="Search">
-		</form:form>
-				<button class="btn btn-primary" onclick="saveRemarks(${list2})">Save</button>
-			 
-		<table class="table">
-			<thead>
+			<table class="table">
+				<thead>
 
-				<th>Name</th>
-				<th>Status</th>
-				<th>Remarks</th>
-			</thead>
-			<br>
-			<tbody>
-				<form:form modelAttribute="attd">
-					<c:forEach items="${list}" var="li" varStatus="s">
-						<tr>
-							<td>${li.firstName} ${li.lastName}</td>
-<%-- 							<td>${li.status}</td> --%>
-							<td><form:select path="status" 
-									onchange="getval(this,${li.id});" id="${li.id}">
-									 <form:option value="${li.status} " />
-									 <form:options items="${ustatus}"  />
-								</form:select></td>
-							<td><input type="text" id="${li.id+1000}" value="${li.remarks}"></td>
-					</c:forEach>
-				</form:form>
-			</tbody>
-		</table>
+					<th>Name</th>
+					<th>Status</th>
+					<th>Remarks</th>
+				</thead>
+				<br>
+				<tbody>
+					<form:form modelAttribute="attd">
+						<c:forEach items="${list}" var="li" varStatus="s">
+							<tr>
+								<td>${li.firstName}${li.lastName}</td>
+								<%-- 							<td>${li.status}</td> --%>
+								<td><form:select path="status"
+										onchange="getval(this,${li.id});" id="${li.id}">
+										<form:option value="${li.status} " />
+										<form:options items="${ustatus}" />
+									</form:select></td>
+								<td><input type="text" id="${li.id+1000}"
+									value="${li.remarks}"></td>
+						</c:forEach>
+					</form:form>
+				</tbody>
+			</table>
+		</div>
 	</div>
-</div>
 	<script>
 
 function saveRemarks(list){

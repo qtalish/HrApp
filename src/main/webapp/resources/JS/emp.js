@@ -4,9 +4,10 @@ $(document).ready(function() {
 	load();
 });
 
-load = function() {
-	var url2 = "listEmp";
+load = function(page) {
+	var url2 = "listEmp?page=" + page;
 	// alert("Hello")
+	console.log(url2);
 	$
 			.ajax({
 				url : url2,
@@ -18,20 +19,28 @@ load = function() {
 						$('#tbl')
 								.append(
 										"<tr class='tr'><td>"
-												+ response.list[i].fname
-												+ "</td><td>"
-												+ response.list[i].lname
+										        + response.list[i].empCode
+										        + "</td><td>"
+												+ response.list[i].fname+"  "+response.list[i].lname
 												+ "</td><td>"
 												+ response.list[i].email
 												+ "</td><td>"
-												+ response.list[i].address
+												+ response.list[i].designation
+												+ "</td><td>"
+												+ response.list[i].mob
 												+ "</td><td><a href='editEmployeeAjax?id="
 												+ response.list[i].id
-												+ "' >Edit</a>&nbsp&nbsp<a href='#' onclick='deleteEmp("
+												+ "' >Edit |</a>&nbsp&nbsp<a href='#' onclick='deleteEmp("
 												+ response.list[i].id + ",`"
 												+ response.list[i].email
-												+ "`);'>Delete</a></td>");
+												+ "`);'>|  Delete</a></td>");
 					}
+					 pagenumber = "";
+ 			            for (i = 0; i < response.pno; i++) {
+			                j = i + 1;
+			                pagenumber += "<a href='#' onclick=load(" + j + ");>" + j + "</a>" + "&nbsp";
+			            }
+			            $("#n").html(pagenumber);
 				}
 			});
 };
@@ -68,10 +77,10 @@ forgot = function() {
 		    closeModal: false,
 		  },
 		})
-		 
- 	.then(name => {  
- 		swal.stopLoading();
- 	    swal.close();
+	.then(name => {
+// if (!name) throw null;
+// console.log(name)
+// console.log(name2)
 		$.ajax({
 		url : 'forgetPassword',
 		type : 'POST',
@@ -84,18 +93,17 @@ forgot = function() {
 			});
 		},
 		error: function(err){
-			 if (!err.responseJSON.msg==="") {
-				 console.log("AJAX error in request: " +err.responseJSON.msg);
-				 swal(err.responseJSON.msg,{
-					 icon : "error",
-				 });
-		} else {
-		    swal.stopLoading();
-		    swal.close();
-		 }
-			 
+// console.log("AJAX error in request: " + JSON.stringify(err, null, 2));
+// console.log("AJAX error in request: " + JSON.stringify(err.responseJSON.msg,
+// null, 2));
+			console.log("AJAX error in request: " +err.responseJSON.msg);
+// console.log("failed")
+// console.log(response)
+// console.log(response.msg2)
+			swal(err.responseJSON.msg,{
+				icon : "error",
+			});
 		  }
 	});
 })
-
 }

@@ -27,7 +27,10 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Integer>
 	@Modifying
 	@Query(value = "update Attendance a set a.remarks=:remarks where a.id=:id", nativeQuery = true)
 	void updateRemarks(@Param("id") Integer id, @Param("remarks") String remarks);
-	
+
 	@Query(value = "select * from Attendance a where a.attDate=:date", nativeQuery = true)
 	List<Attendance> findAttendanceDate(@Param("date") Date date);
+
+	@Query("select att from Attendance att")
+	List<Attendance> getAttendance();
 }
