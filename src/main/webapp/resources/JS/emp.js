@@ -68,10 +68,10 @@ forgot = function() {
 		    closeModal: false,
 		  },
 		})
-	.then(name => {
-// if (!name) throw null;
-// console.log(name)
-// console.log(name2)
+		 
+ 	.then(name => {  
+ 		swal.stopLoading();
+ 	    swal.close();
 		$.ajax({
 		url : 'forgetPassword',
 		type : 'POST',
@@ -84,16 +84,16 @@ forgot = function() {
 			});
 		},
 		error: function(err){
-// console.log("AJAX error in request: " + JSON.stringify(err, null, 2));
-// console.log("AJAX error in request: " + JSON.stringify(err.responseJSON.msg,
-// null, 2));
-			console.log("AJAX error in request: " +err.responseJSON.msg);
-// console.log("failed")
-// console.log(response)
-// console.log(response.msg2)
-			swal(err.responseJSON.msg,{
-				icon : "error",
-			});
+			 if (!err.responseJSON.msg==="") {
+				 console.log("AJAX error in request: " +err.responseJSON.msg);
+				 swal(err.responseJSON.msg,{
+					 icon : "error",
+				 });
+		} else {
+		    swal.stopLoading();
+		    swal.close();
+		 }
+			 
 		  }
 	});
 })
