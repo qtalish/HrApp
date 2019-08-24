@@ -61,6 +61,7 @@ button:hover, a:hover {
     <a href="#"><i class="fa fa-facebook"></i></a> 
   </div>
   <p><button>Contact</button></p>
+      <p><a href="editEmployeeAjax?id=${id}">Edit</a></p>
 </div>
 
 </body>

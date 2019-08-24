@@ -45,8 +45,6 @@ import com.kgate.service.UserService;
 @SessionAttributes("user")
 public class UserController {
 
-	
-	
 	@Autowired
 	UserService userService;
 
@@ -80,7 +78,7 @@ public class UserController {
 	public ModelAndView authenticate(@ModelAttribute("user") User user) {
 		ModelAndView mav = new ModelAndView();
 
-		 User user2 = userService.findUser(user.getEmail(), user.getPassword(), user.getUserType());
+		User user2 = userService.findUser(user.getEmail(), user.getPassword(), user.getUserType());
 		System.out.println("user:::::::::: " + user2);
 		if (user2 == null) {
 			mav.setViewName("login");
@@ -93,13 +91,11 @@ public class UserController {
 		System.out.println(user.getEmail());
 		if (user.getUserType().equals("Employee")) {
 			System.out.println("Employee Login");
-			if(user.getEmail().equals("vartakakshay@rediffmail.com")) {
-			mav.setViewName("birthday");
-			}
-			else
-			{
+			if (user.getEmail().equals("vartakakshay@rediffmail.com")) {
+				mav.setViewName("birthday");
+			} else {
 				mav.addObject("user", user2);
-				mav.setViewName("empDash"); 
+				mav.setViewName("empDash");
 			}
 		} else {
 			mav.setViewName("adminDash");
@@ -136,20 +132,19 @@ public class UserController {
 		 * "\n Your Password is: " + user.getPassword(), //
 		 * "Your Credential and Details");
 		 * 
-		 * String email = user.getEmail(); String email2 = userService.findByEmail(email);
-		 * if(email.equals(email2)) { ModelAndView mav2 = new ModelAndView("register");
-		 * } else {
+		 * String email = user.getEmail(); String email2 =
+		 * userService.findByEmail(email); if(email.equals(email2)) { ModelAndView mav2
+		 * = new ModelAndView("register"); } else {
 		 */
 		/*
 		 * User user2 = userService.findUser(user.getEmail(), user.getPassword(),
 		 * user.getUserType()); if(user.getEmail().equals(user2.getEmail())) {
 		 * mav.setViewName("re	gister"); mav.addObject("msg", "User Already Exists");
-		 * return mav; }
-		System.out.println("asdfghjhgfds");
+		 * return mav; } System.out.println("asdfghjhgfds");
 		 */
 		userService.save(user);
-	return mav;
-}
+		return mav;
+	}
 
 	@GetMapping("/viewEmployees")
 	public ModelAndView viewEmployees() {
@@ -204,17 +199,37 @@ public class UserController {
 	}
 
 	@GetMapping("/profile")
-	public ModelAndView viewProfile(HttpServletRequest request,@SessionAttribute("user") User user) {
+	public ModelAndView viewProfile(HttpServletRequest request, @SessionAttribute("user") User user) {
 		ModelAndView mav = new ModelAndView("employeeProfile");
-				System.out.println(user);
+		System.out.println(user);
 		mav.addObject("user", user);
+		mav.addObject("id", user.getId());
 		return mav;
 	}
 
 	@GetMapping("/attendance")
 	public ModelAndView viewAttendance() {
 		ModelAndView mav = new ModelAndView("employeeAttendance");
-		mav.addObject("attd",new Attendance());
+		mav.addObject("attd", new Attendance());
+		Date date = new Date();
+		List<Attendance> list = userService.getAttendance(date);
+		List<Integer> list2 = new ArrayList<>();
+		for (Attendance attendance : list) {
+			list2.add(attendance.getId());
+		}
+
+		List<String> status = new ArrayList<>();
+		status.add("Present");
+		status.add("Absent	");
+		Attendance attd = new Attendance();
+		mav.addObject("attd", attd);
+		mav.addObject("ustatus", status);
+		mav.addObject("list", list);
+		mav.addObject("list2", list2);
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		String strDate = formatter.format(date);
+		System.out.println("Date Format with yyyy-mm-dd : " + strDate);
+		mav.addObject("dd", strDate);
 		return mav;
 	}
 
@@ -229,26 +244,25 @@ public class UserController {
 	public ModelAndView SearchEmp(@RequestParam("attDate") Date date) {
 		ModelAndView mav = new ModelAndView("employeeAttendance");
 		List<Attendance> list = userService.getAttendance(date);
-		List<Integer> list2 = new  ArrayList<>();
-		for(Attendance attendance:list) {
+		List<Integer> list2 = new ArrayList<>();
+		for (Attendance attendance : list) {
 			list2.add(attendance.getId());
 		}
-		
+
 		List<String> status = new ArrayList<>();
 		status.add("Present");
 		status.add("Absent	");
 		Attendance attd = new Attendance();
-		mav.addObject("attd",attd);
+		mav.addObject("attd", attd);
 		mav.addObject("ustatus", status);
 		mav.addObject("list", list);
-		mav.addObject("list2",list2);
-	    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");  
-	    String strDate = formatter.format(date);  
-	    System.out.println("Date Format with yyyy-mm-dd : "+strDate);  
-		mav.addObject("dd",strDate);
+		mav.addObject("list2", list2);
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		String strDate = formatter.format(date);
+		System.out.println("Date Format with yyyy-mm-dd : " + strDate);
+		mav.addObject("dd", strDate);
 		return mav;
 	}
-
 
 	/*
 	 * @GetMapping("SearchEmp") public ModelAndView
@@ -270,7 +284,7 @@ public class UserController {
 	 * att); li.add(att); } System.out.println("1111111111111111" + li);
 	 * mav.addObject("list", list); return mav; }
 	 */
-	
+
 	@PostMapping("/forgetPassword")
 	@ResponseBody
 //	public Map<String, Object> forgetPassword(@RequestBody User user) {
