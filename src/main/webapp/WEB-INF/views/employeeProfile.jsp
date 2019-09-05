@@ -62,6 +62,7 @@ button:hover, a:hover {
     <a href="#"><i class="fa fa-linkedin"></i></a>  
     <a href="https://www.facebook.com/"><i class="fa fa-facebook"></i></a> 
   </div>
+<<<<<<< HEAD
   <p><button>Contact: ${user.mob}</button></p>
   <p><button onclick="location.href='editEmployeeAjax?id=${id}'" type="button">Edit</button></p>
   <p><button onclick="location.href='uploadForm'" >Upload Picture</button></p>

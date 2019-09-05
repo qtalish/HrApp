@@ -214,6 +214,7 @@ public class UserController {
 	@GetMapping("/profile")
 	public ModelAndView viewProfile(HttpServletRequest request, @SessionAttribute("user") User user)
 			throws UnsupportedEncodingException {
+
 		ModelAndView mav = new ModelAndView("employeeProfile");
 		System.out.println(user);
 		if (user.getImage() == null) {
@@ -233,6 +234,25 @@ public class UserController {
 	public ModelAndView viewAttendance() {
 		ModelAndView mav = new ModelAndView("employeeAttendance");
 		mav.addObject("attd", new Attendance());
+		Date date = new Date();
+		List<Attendance> list = userService.getAttendance(date);
+		List<Integer> list2 = new ArrayList<>();
+		for (Attendance attendance : list) {
+			list2.add(attendance.getId());
+		}
+
+		List<String> status = new ArrayList<>();
+		status.add("Present");
+		status.add("Absent	");
+		Attendance attd = new Attendance();
+		mav.addObject("attd", attd);
+		mav.addObject("ustatus", status);
+		mav.addObject("list", list);
+		mav.addObject("list2", list2);
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		String strDate = formatter.format(date);
+		System.out.println("Date Format with yyyy-mm-dd : " + strDate);
+		mav.addObject("dd", strDate);
 		return mav;
 	}
 
