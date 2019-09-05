@@ -30,16 +30,6 @@
     <version>1.4.5</version>
 </dependency>
 	
-	
-	<!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
-<dependency>
-    <groupId>org.projectlombok</groupId>
-    <artifactId>lombok</artifactId>
-    <version>1.18.6</version>
-    <scope>provided</scope>
-</dependency>
-	
-	
 		<!-- for encrypt -->
 		<dependency>
 			<groupId>org.bouncycastle</groupId>
@@ -154,6 +144,11 @@
 			<version>${jsp.version}</version>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+   <groupId>commons-fileupload</groupId>
+   <artifactId>commons-fileupload</artifactId>
+   <version>1.2.1</version> <!-- makesure correct version here -->
+</dependency>
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>

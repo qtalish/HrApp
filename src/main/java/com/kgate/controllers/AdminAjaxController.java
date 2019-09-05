@@ -1,7 +1,6 @@
 package com.kgate.controllers;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -15,8 +14,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -78,8 +77,8 @@ public class AdminAjaxController {
 		} catch (Exception e) {
 		}
 		Pageable pageable = PageRequest.of(initialPage, 3);
-		Page<User> userList = repo.findAll(pageable);
-		if (userList != null) {
+		Page<User> userList = userService.findEmployeePage(pageable);
+				if (userList != null) {
 			map.put("list", userList);
 		} else {
 			map.put("msg", "Empty data");
@@ -105,4 +104,23 @@ public class AdminAjaxController {
 		mav.addObject("user", user);
 		return mav;
 	}
+	  @RequestMapping(value = "/searchEmp", method = RequestMethod.GET)
+	    public @ResponseBody
+	    Map<String, Object> getAll(User user) {
+	        Map<String, Object> map = new HashMap<>();
+
+	        List<User> list = userService.searchEmployee();
+
+	        if (list != null) {
+	            map.put("status", "200");
+	            map.put("message", "Data found");
+	            map.put("list", list);
+	        } else {
+	            map.put("status", "404");
+	            map.put("message", "Data not found");
+
+	        }
+
+	        return map;
+	    }
 }

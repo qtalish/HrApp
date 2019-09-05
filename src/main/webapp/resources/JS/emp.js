@@ -107,3 +107,45 @@ forgot = function() {
 	});
 })
 }
+
+load1 = function () {
+    $.ajax({
+        url: 'searchEmp',
+        type: 'GET',
+        success: function (response) {
+            data = response.list;
+            $('.tr').remove();
+            for (i = 0; i < response.list.length; i++) {
+               
+                $('#tbl')
+				.append(
+						"<tr class='tr'><td>"
+						        + response.list[i].empCode
+						        + "</td><td>"
+								+ response.list[i].fname+"  "+response.list[i].lname
+								+ "</td><td>"
+								+ response.list[i].email
+								+ "</td><td>"
+								+ response.list[i].designation
+								+ "</td><td>"
+								+ response.list[i].mob
+								+ "</td><td><a href='editEmployeeAjax?id="
+								+ response.list[i].id
+								+ "' >Edit |</a>&nbsp&nbsp<a href='#' onclick='deleteEmp("
+								+ response.list[i].id + ",`"
+								+ response.list[i].email
+								+ "`);'>|  Delete</a></td>");
+	}
+        }
+    });
+};
+$(document).ready(function () {
+    $("#myInput").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+        console.log(value)
+        $(".tr").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+//            load();
+        });
+    });
+});

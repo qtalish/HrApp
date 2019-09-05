@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1" isELIgnored="false"%>
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+    <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -44,25 +45,27 @@ button:hover, a:hover {
 </style>
 </head>
 <body>
+<form:form action="backToEmployee" method="post"><input type="submit" value="Back"></form:form>
 <h2 style="text-align:center">User Profile Card</h2>
 
 <div class="card">
-  <img src="./resources/images/steve.jpg" alt="steve" style="width:100%">
+ <!--  <img src="./resources/images/steve.jpg" alt="steve" style="width:100%"> -->
+  <img src="data:image/jpeg;base64,${userImage}" style="width:100%">
   <h1>${user.fname} ${user.lname}</h1>
   <p class="title">CEO & Founder, Example</p>
-  <p>Harvard University</p>
+  <p>${user.designation}</p>
   
-  ${user.email}
+  ${user.email} 
   <div style="margin: 24px 0;">
     <a href="#"><i class="fa fa-dribbble"></i></a> 
     <a href="#"><i class="fa fa-twitter"></i></a>  
     <a href="#"><i class="fa fa-linkedin"></i></a>  
-    <a href="#"><i class="fa fa-facebook"></i></a> 
+    <a href="https://www.facebook.com/"><i class="fa fa-facebook"></i></a> 
   </div>
-  <p><button>Contact</button></p>
-  <p><a href="editEmployeeAjax?id=${id}">Edit</a></p>
+  <p><button>Contact: ${user.mob}</button></p>
+  <p><button onclick="location.href='editEmployeeAjax?id=${id}'" type="button">Edit</button></p>
+  <p><button onclick="location.href='uploadForm'" >Upload Picture</button></p>
 </div>
-
 </body>
 </html>
 <%--     <%@ page language="java" contentType="text/html; charset=ISO-8859-1"

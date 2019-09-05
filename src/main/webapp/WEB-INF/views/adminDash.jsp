@@ -12,9 +12,10 @@
 	<div align="center">
 		<h1>Hello Hr</h1>
 
-		<br> <br> <br> <a href="/HrApp/viewEmployees">View
-			All Employees</a><br> <br> <a href="/HrApp/register">Add
-			Employee</a> <br> <a href="/HrApp/attendance">View Attendance</a>
+		<br> <br> <br> 
+		<a href="/HrApp/viewEmployees">View	All Employees</a><br> <br> <a href="/HrApp/register">AddEmployee</a> <br><br> 
+			<a href="/HrApp/attendance">View Attendance</a> <br><br> 
+			<a href="/HrApp/messageEmployee">Message</a>
 	</div>
 </body>
 </html>

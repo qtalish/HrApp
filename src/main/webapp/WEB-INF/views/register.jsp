@@ -42,6 +42,7 @@ function validate(id)
 <body>
 <div class="container">
 	<p style="color: red;">${msg}</p>
+ <form:form action="backToAdmin" method="post"><input type="submit" value="Back"></form:form> 
 	<%@include file="home.jsp"%>
 	<%@include file="logout.jsp"%>
 	<h2>Registration Form</h2>

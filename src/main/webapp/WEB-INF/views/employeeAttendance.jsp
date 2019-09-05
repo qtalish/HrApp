@@ -14,6 +14,10 @@
 <script src="./resources/JS/sweetalert.min.js" type="text/javascript"></script>
 </head>
 <body>
+	<%@include file="home.jsp"%>
+	<%@include file="logout.jsp"%>
+	<form:form action="backToAdmin" method="post"><input type="submit" value="Back"></form:form> 
+	
 	<div class="container">
 		<div align="center">
 			<form:form action="SearchEmp" method="get" modelAttribute="attd">
