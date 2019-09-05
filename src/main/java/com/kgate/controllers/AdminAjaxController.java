@@ -27,7 +27,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.kgate.entity.User;
+import com.kgate.entity.UserDocument;
 import com.kgate.repository.AttendanceRepository;
+import com.kgate.repository.UserDocumentRepository;
 import com.kgate.repository.UserRepository;
 import com.kgate.service.UserService;
 
@@ -39,8 +41,12 @@ public class AdminAjaxController {
 
 	@Autowired
 	UserService userService;
+
 	@Autowired
 	AttendanceRepository attrepo;
+
+	@Autowired
+	UserDocumentRepository userDocumentRepository;
 
 	@GetMapping("/changeStatus")
 	@ResponseBody
@@ -107,4 +113,6 @@ public class AdminAjaxController {
 		mav.addObject("user", user);
 		return mav;
 	}
+
+
 }

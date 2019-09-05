@@ -33,17 +33,69 @@ public class Salary {
 	private Float professionalTax;
 	private Float totalDeduction;
 	private Float additionalDeduction;
+	private Float providentFund;
 	private Float additionalBonus;
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumns({ @JoinColumn(name = "empcode", referencedColumnName = "empCode") })
-	private User user;
+	private String empCode;
+	private Float unpaidLeave;
+	private Float netSalary;
+	private Float totalMonthlySalary;
+	private String month;
+	private Integer year;
 
-	public User getUser() {
-		return user;
+	public String getMonth() {
+		return month;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setMonth(String month) {
+		this.month = month;
+	}
+
+	public Integer getYear() {
+		return year;
+	}
+
+	public void setYear(Integer year) {
+		this.year = year;
+	}
+
+	public Float getTotalMonthlySalary() {
+		return totalMonthlySalary;
+	}
+
+	public void setTotalMonthlySalary(Float totalMonthlySalary) {
+		this.totalMonthlySalary = totalMonthlySalary;
+	}
+
+	public Float getNetSalary() {
+		return netSalary;
+	}
+
+	public void setNetSalary(Float netSalary) {
+		this.netSalary = netSalary;
+	}
+
+	public Float getUnpaidLeave() {
+		return unpaidLeave;
+	}
+
+	public void setUnpaidLeave(Float unpaidLeave) {
+		this.unpaidLeave = unpaidLeave;
+	}
+
+	public Float getProvidentFund() {
+		return providentFund;
+	}
+
+	public void setProvidentFund(Float providentFund) {
+		this.providentFund = providentFund;
+	}
+
+	public String getEmpCode() {
+		return empCode;
+	}
+
+	public void setEmpCode(String empCode) {
+		this.empCode = empCode;
 	}
 
 	public Integer getId() {
@@ -140,7 +192,9 @@ public class Salary {
 				+ conveyanceAllowances + ", medicalAllowances=" + medicalAllowances + ", otherAllowances="
 				+ otherAllowances + ", monthlySalary=" + monthlySalary + ", professionalTax=" + professionalTax
 				+ ", totalDeduction=" + totalDeduction + ", additionalDeduction=" + additionalDeduction
-				+ ", additionalBonus=" + additionalBonus + ", user=" + user + "]";
+				+ ", providentFund=" + providentFund + ", additionalBonus=" + additionalBonus + ", empCode=" + empCode
+				+ ", unpaidLeave=" + unpaidLeave + ", netSalary=" + netSalary + ", totalMonthlySalary="
+				+ totalMonthlySalary + ", month=" + month + ", year=" + year + "]";
 	}
 
 }

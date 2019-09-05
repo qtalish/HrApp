@@ -14,10 +14,23 @@ public class UserLeaves {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 	private Integer workingDays;
-	private Integer totalDaysWorked;
-	private Integer totalLeaves;
-	private Integer paidLeaves;
-	private Integer balanceLeaves;
+	private Float totalDaysWorked;
+	private Float totalLeaves;
+	private Float paidLeaves;
+	private Float balanceLeaves;
+	private String empCode;
+	private String month;
+	private Float unpaidLeaves;
+	
+	public Float getUnpaidLeaves() {
+		return unpaidLeaves;
+	}
+
+	public void setUnpaidLeaves(Float unpaidLeaves) {
+		this.unpaidLeaves = unpaidLeaves;
+	}
+
+	private Integer year;
 
 	public Integer getId() {
 		return id;
@@ -35,43 +48,67 @@ public class UserLeaves {
 		this.workingDays = workingDays;
 	}
 
-	public Integer getTotalDaysWorked() {
+	public Float getTotalDaysWorked() {
 		return totalDaysWorked;
 	}
 
-	public void setTotalDaysWorked(Integer totalDaysWorked) {
+	public void setTotalDaysWorked(Float totalDaysWorked) {
 		this.totalDaysWorked = totalDaysWorked;
 	}
 
-	public Integer getTotalLeaves() {
+	public Float getTotalLeaves() {
 		return totalLeaves;
 	}
 
-	public void setTotalLeaves(Integer totalLeaves) {
+	public void setTotalLeaves(Float totalLeaves) {
 		this.totalLeaves = totalLeaves;
 	}
 
-	public Integer getPaidLeaves() {
+	public Float getPaidLeaves() {
 		return paidLeaves;
 	}
 
-	public void setPaidLeaves(Integer paidLeaves) {
+	public void setPaidLeaves(Float paidLeaves) {
 		this.paidLeaves = paidLeaves;
 	}
 
-	public Integer getBalanceLeaves() {
+	public Float getBalanceLeaves() {
 		return balanceLeaves;
 	}
 
-	public void setBalanceLeaves(Integer balanceLeaves) {
+	public void setBalanceLeaves(Float balanceLeaves) {
 		this.balanceLeaves = balanceLeaves;
+	}
+
+	public String getEmpCode() {
+		return empCode;
+	}
+
+	public void setEmpCode(String empCode) {
+		this.empCode = empCode;
+	}
+
+	public String getMonth() {
+		return month;
+	}
+
+	public void setMonth(String month) {
+		this.month = month;
+	}
+
+	public Integer getYear() {
+		return year;
+	}
+
+	public void setYear(Integer year) {
+		this.year = year;
 	}
 
 	@Override
 	public String toString() {
 		return "UserLeaves [id=" + id + ", workingDays=" + workingDays + ", totalDaysWorked=" + totalDaysWorked
 				+ ", totalLeaves=" + totalLeaves + ", paidLeaves=" + paidLeaves + ", balanceLeaves=" + balanceLeaves
-				+ "]";
+				+ ", empCode=" + empCode + ", month=" + month + ", year=" + year + "]";
 	}
 
 }

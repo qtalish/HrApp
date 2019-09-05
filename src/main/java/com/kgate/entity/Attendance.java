@@ -22,6 +22,33 @@ public class Attendance {
 	public String status;
 	public String remarks;
 	public Date attDate;
+	public String empCode;
+	private String month;
+	private Integer year;
+
+	public String getMonth() {
+		return month;
+	}
+
+	public void setMonth(String month) {
+		this.month = month;
+	}
+
+	public Integer getYear() {
+		return year;
+	}
+
+	public void setYear(Integer year) {
+		this.year = year;
+	}
+
+	public String getEmpCode() {
+		return empCode;
+	}
+
+	public void setEmpCode(String empCode) {
+		this.empCode = empCode;
+	}
 
 	public String getStatus() {
 		return status;
@@ -74,7 +101,8 @@ public class Attendance {
 	@Override
 	public String toString() {
 		return "Attendance [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", status=" + status
-				+ ", remarks=" + remarks + ", attDate=" + attDate + "]";
+				+ ", remarks=" + remarks + ", attDate=" + attDate + ", empCode=" + empCode + ", month=" + month
+				+ ", year=" + year + "]";
 	}
 
 }

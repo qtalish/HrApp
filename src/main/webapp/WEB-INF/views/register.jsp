@@ -1,10 +1,11 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
-<%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>     
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%> 
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>    
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="ISO-8859-1">
+<meta charset="UTF-8">
 <title>Register</title>
 <!-- <script type="text/javascript" src="./resources/JS/bootstrap.min.js"></script> -->
 <link href="./resources/css/bootstrap.css" rel="stylesheet"/>
@@ -40,74 +41,86 @@ function validate(id)
 </script>
 </head>
 <body>
+
+
+<p align="center"><a href="register?mylocale=en">English</a> | <a href="register?mylocale=de">
+मराठी   </a> | <a href="register?mylocale=gj">ગુજરાતી</a> </p>
 <div class="container">
 	<p style="color: red;">${msg}</p>
-	<%@include file="home.jsp"%>
-	<%@include file="logout.jsp"%>
-	<h2>Registration Form</h2>
+	<center><h3><spring:message code="user.headerMessage"/></h3></center>
+<%-- 	<%@include file="home.jsp"%>
+	<%@include file="logout.jsp"%>  --%>
+	
 	<table class="table">
 <p id="head"></p>
 		<form:form action="save" method="post" modelAttribute="user">
 			<form:input path="id" type="hidden" />
 			<tr>
-				<td>Employee Code :</td>
+				<td><spring:message code="user.empCode"/></td>
 				<td><form:input path="empCode" /></td>
 			</tr>
 			<tr>
-				<td>First Name :</td>
+				<td><spring:message code="user.fname"/></td>
 				<td><form:input  id="fname" path="fname" vb ="myFunction(this)"/><p id="p1" style="color:red;"></p></td>
 			</tr>
 			<tr>
-				<td>Middle Name :</td>
+				<td><spring:message code="user.mname"/></td>
 				<td><form:input id="mname" path="mname" /></td>
 			</tr>
 
 			<tr>
-				<td>Last Name :</td>
+				<td><spring:message code="user.lname"/></td>
 				<td><form:input id=" lname" path="lname" /></td>
 			</tr>
 			<tr>
-				<td>Email :</td>
+				<td><spring:message code="user.email"/></td>
 				<td><form:input id="email" path="email" /><p id="p2" style="color:red;"></p></td>
 			</tr>
 			<tr>
-				<td>D.O.B :</td>
+				<td><spring:message code="user.dob"/></td>
 				<td><form:input path="dob" type="date" /></td>
 			</tr>
 			<tr>
-				<td>Blood Group :</td>
+				<td><spring:message code="user.bloodGroup"/></td>
 				<td><form:input path="bloodGroup" /></td>
 			</tr>
 			<tr>
-				<td>Aadhar Number :</td>
+				<td><spring:message code="user.aadhar"/></td>
 				<td><form:input path="aadhar" /></td>
 			</tr>
 			<tr>
-				<td>Pan Number :</td>
+				<td><spring:message code="user.pan"/></td>
 				<td><form:input path="pan" /></td>
 			</tr>
 			<tr>
-				<td>Designation :</td>
+				<td><spring:message code="user.designation"/></td>
 				<td><form:input path="designation" /></td>
 			</tr>
 			<tr>
-				<td>Joining Date :</td>
+			<td>	<spring:message code="user.joiningDate"/></td>
 				<td><form:input path="joiningDate" type="date" /></td>
 			</tr>
 			<tr>
-				<td>Address :</td>
+				<td><spring:message code="user.address"/></td>
 				<td><form:input id="address" path="address" /><p id="p3" style="color:red;"></p></td>
 			</tr>
+			
 			<tr>
-				<td>Salary :</td>
+				<td><spring:message code="user.mob"/></td>
+				<td><form:input path="mob" /></td>
+			</tr>
+			
+			<tr>
+				<td><spring:message code="user.salary"/></td>
 				<td><form:input path="salary" /></td>
 			</tr>
 			<tr>
-				<td>Password :</td>
+				<td><spring:message code="user.password"/></td>
 				<td><form:input path="password" /></td>
 			</tr>
 			<tr>
-				<td><input type="submit" id="submit" value="Register" /></td>
+			<td><spring:message code="user.submit" var="submit"/></td>
+				<td><input type="submit" id="submit" value="${submit}" /></td>
 			</tr>
 		</form:form>
 	</table>

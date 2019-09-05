@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 
@@ -65,7 +66,7 @@ public class UserController {
 		ModelAndView mav = new ModelAndView("login");
 		System.out.println("abc");
 		User user = new User();
-		user.setEmail("qtalish97@gmail.com");
+		user.setEmail("gulfarooqui1@gmail.com");
 		user.setPassword("1234");
 		String userType[] = { "Admin", "Employee" };
 		mav.addObject("userType", userType);
@@ -114,8 +115,10 @@ public class UserController {
 	}
 
 	@GetMapping("/register")
-	public ModelAndView register(@ModelAttribute("user") User user) {
+	public ModelAndView register() {
 		ModelAndView mav = new ModelAndView("register");
+		User user = new User();
+		mav.addObject("user", user);
 		return mav;
 	}
 
@@ -220,7 +223,10 @@ public class UserController {
 
 		List<String> status = new ArrayList<>();
 		status.add("Present");
-		status.add("Absent	");
+		status.add("Absent");
+		status.add("Half-Day");
+		status.add("Week-Off");
+		status.add("Holiday");
 		Attendance attd = new Attendance();
 		mav.addObject("attd", attd);
 		mav.addObject("ustatus", status);
@@ -251,7 +257,10 @@ public class UserController {
 
 		List<String> status = new ArrayList<>();
 		status.add("Present");
-		status.add("Absent	");
+		status.add("Absent");
+		status.add("Half-Day");
+		status.add("Week-Off");
+		status.add("Holiday");
 		Attendance attd = new Attendance();
 		mav.addObject("attd", attd);
 		mav.addObject("ustatus", status);

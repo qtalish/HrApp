@@ -1,6 +1,7 @@
 package com.kgate.service;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -22,6 +23,8 @@ public class UserServiceImp implements UserService {
 	@Override
 	public List<Attendance> getAttendance(Date date) {
 		// TODO Auto-generated method stub
+		String ddd [] = { "January", "February", "March", "April", "May", "June", "July", "August", "September",
+				"October", "November", "December" };
 		List<Attendance> listatt = new ArrayList<>();
 		List<User> listUser = repo.findEmployee();
 		List<Attendance> attDate = attrepo.findAttendanceDate(date);
@@ -32,7 +35,13 @@ public class UserServiceImp implements UserService {
 				Attendance att = new Attendance();
 				att.setFirstName(listUser.get(i).getFname());
 				att.setLastName(listUser.get(i).getLname());
+				att.setEmpCode(listUser.get(i).getEmpCode());
 				att.setAttDate(date);
+				Date d = new Date();
+				System.out.println("The current month is " + ddd[d.getMonth()]);
+				att.setMonth(ddd[d.getMonth()]);
+				int year = Calendar.getInstance().get(Calendar.YEAR);
+				att.setYear(year);
 				attrepo.save(att);
 //			listatt.add(att);
 

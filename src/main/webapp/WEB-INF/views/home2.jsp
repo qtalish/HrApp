@@ -9,6 +9,7 @@
 <meta charset="ISO-8859-1">
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="./resources/JS/jquery-3.3.1.min.js" type="text/javascript"></script>
 <title>Employee List</title>
 <spring:url value="/resources/JS/emp.js" var="c"></spring:url>
 <script src="${c}"></script>

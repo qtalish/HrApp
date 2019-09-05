@@ -1,6 +1,6 @@
 data = '';
 $(document).ready(function() {
-	console.log("test");
+	console.log("Test");
 	load();
 });
 
@@ -29,11 +29,21 @@ load = function(page) {
 												+ "</td><td>"
 												+ response.list[i].mob
 												+ "</td><td><a href='editEmployeeAjax?id="
+						
 												+ response.list[i].id
-												+ "' >Edit |</a>&nbsp&nbsp<a href='#' onclick='deleteEmp("
+												+ "' >Edit</a>&nbsp&nbsp<a href='#' onclick='deleteEmp("
 												+ response.list[i].id + ",`"
 												+ response.list[i].email
-												+ "`);'>|  Delete</a></td>");
+												+ "`);'>|  Delete</a>"
+												
+												+ "|&nbsp&nbsp <a href='viewSalary?empCode="
+												+ response.list[i].empCode
+												+"' >Salary</a>"
+												
+												+ "|&nbsp&nbsp<a href='uploadDocumentAjax?empCode="
+												+ response.list[i].empCode
+												+ "' >Upload </a></td>"
+												);
 					}
 					 pagenumber = "";
  			            for (i = 0; i < response.pno; i++) {
