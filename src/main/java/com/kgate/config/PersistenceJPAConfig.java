@@ -41,7 +41,7 @@ public class PersistenceJPAConfig {
 		return bean;
 
 	}
-
+	
 	private Properties jpaProperties() {
 		Properties prop = new Properties();
 		prop.setProperty("hibernate.hbm2ddl.auto", env.getProperty("hibernate.hbm2ddl.auto"));
@@ -50,6 +50,7 @@ public class PersistenceJPAConfig {
 		prop.setProperty("hibernate.cache.use_second_level_cache",
 				env.getProperty("hibernate.cache.use_second_level_cache"));
 		prop.setProperty("hibernate.cache.use_query_cache", env.getProperty("hibernate.cache.use_query_cache"));
+		prop.setProperty("hibernate.enable_lazy_load_no_trans", env.getProperty("hibernate.enable_lazy_load_no_trans"));
 		return prop;
 
 	}

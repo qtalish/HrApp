@@ -1,6 +1,6 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1" isELIgnored="false"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" isELIgnored="false"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,13 +8,13 @@
 <title>Documents</title>
 </head>
 <body>
-	
+
 	<form:form method="post" action="addDocument"
 		modelAttribute="userDocument" enctype="multipart/form-data">
 		<form:errors path="*" cssClass="error" />
 
-		
-	<form:input path="empCode" type="hidden"/> 
+
+		<form:input path="empCode" type="hidden" />
 
 		<table>
 			<tr>
@@ -35,8 +35,9 @@
 			</tr>
 		</table>
 	</form:form>
-<br>
-${msg}
-
+	<br> ${msg} 
+	<form:form action="backToEmployee" method="post">
+		<input type="submit" value="Back">
+	</form:form>
 </body>
 </html>

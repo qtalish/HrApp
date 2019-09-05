@@ -1,10 +1,13 @@
 package com.kgate.controllers;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -19,11 +22,13 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -36,10 +41,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.kgate.entity.Attendance;
+import com.kgate.entity.Leave;
+import com.kgate.entity.MessageEmployee;
 import com.kgate.entity.User;
+import com.kgate.repository.MessageRepository;
 import com.kgate.service.UserService;
 
 @Controller
@@ -48,6 +57,9 @@ public class UserController {
 
 	@Autowired
 	UserService userService;
+
+	@Autowired
+	MessageRepository msgrepo;
 
 //	@InitBinder
 //	public void bindingPreparation(WebDataBinder binder) {
@@ -145,6 +157,7 @@ public class UserController {
 		 * mav.setViewName("re	gister"); mav.addObject("msg", "User Already Exists");
 		 * return mav; } System.out.println("asdfghjhgfds");
 		 */
+
 		userService.save(user);
 		return mav;
 	}
@@ -202,12 +215,22 @@ public class UserController {
 	}
 
 	@GetMapping("/profile")
-	public ModelAndView viewProfile(HttpServletRequest request, @SessionAttribute("user") User user) {
+	public ModelAndView viewProfile(HttpServletRequest request, @SessionAttribute("user") User user)
+			throws UnsupportedEncodingException {
+
 		ModelAndView mav = new ModelAndView("employeeProfile");
 		System.out.println(user);
-		mav.addObject("user", user);
-		mav.addObject("id", user.getId());
-		return mav;
+		if (user.getImage() == null) {
+			mav.addObject("user", user);
+			mav.addObject("id", user.getId());
+			return mav;
+		} else {
+			mav.addObject("id", user.getId());
+			byte[] encodeBase64 = Base64.encodeBase64(user.getImage());
+			String base64Encoded = new String(encodeBase64, "UTF-8");
+			mav.addObject("userImage", base64Encoded);
+			return mav;
+		}
 	}
 
 	@GetMapping("/attendance")
@@ -313,4 +336,93 @@ public class UserController {
 		}
 
 	}
+
+	// Leave
+	@GetMapping("/leave")
+	public ModelAndView leave(@ModelAttribute("leave") Leave leave) {
+		ModelAndView mav = new ModelAndView("leave");
+		return mav;
+	}
+
+	@PostMapping("/send")
+	public ModelAndView send(@ModelAttribute("leave") Leave leave, @RequestParam("file") MultipartFile file)
+			throws ParseException, IOException {
+		ModelAndView mav = new ModelAndView("home2");
+		leave.setContent(file.getBytes());
+		userService.save(leave);
+		return mav;
+	}
+
+	@GetMapping("uploadForm")
+	public ModelAndView uploadForm() {
+		return new ModelAndView("uploadimage");
+	}
+
+	@PostMapping("/uploadImage")
+	public ModelAndView uploadImage(@ModelAttribute("user") User user, @RequestParam("file") MultipartFile file)
+			throws IOException {
+		ModelAndView mav = new ModelAndView();
+		user.setImage(file.getBytes());
+		userService.save(user);
+		mav = new ModelAndView("redirect:/profile");
+		return mav;
+	}
+
+	@RequestMapping(value = "/backToAdmin", method = RequestMethod.POST)
+	public ModelAndView backToAdmin() {
+		ModelAndView mav = new ModelAndView("adminDash");
+		return mav;
+	}
+
+	@RequestMapping(value = "/backToEmployee", method = RequestMethod.POST)
+	public ModelAndView back(@SessionAttribute("user") User user) {
+		ModelAndView mav = new ModelAndView("empDash");
+		return mav;
+	}
+
+	@GetMapping("/messageEmployee")
+	public ModelAndView messageEmployee() {
+		ModelAndView mav = new ModelAndView("message");
+		mav.addObject("message", new MessageEmployee());
+		List<User> userList = userService.findEmployee();
+		Map<String, String> emp = new HashMap<String, String>();
+		for (User user : userList) {
+			emp.put(user.getEmail(), user.getFname());
+		}
+		mav.addObject("userList", userList);
+		mav.addObject("emp", emp);
+		return mav;
+	}
+
+	@PostMapping("/sendMail")
+	public ModelAndView sendMail(@ModelAttribute("message") MessageEmployee message) {
+		ModelAndView mav = new ModelAndView("redirect:/messageEmployee");
+		Date date = new Date();
+		System.out.println("1111" + message.getSubjectMessage());
+		System.out.println("1111" + message.getMessageEmp());
+		System.out.println(message.getTo());
+		System.out.println("1111");
+		UserController uc = new UserController();
+		message.setDate(date);
+
+		msgrepo.save(message);
+		uc.sendMail(message.getTo(), message.getMessageEmp(), message.getSubjectMessage());
+		return mav;
+	}
+
+	@GetMapping("/searchEmployee")
+	public ModelAndView searchEmployee(@RequestParam("txt") String txt) {
+		List<User> listEmp = userService.searchEmployee(txt);
+		ModelAndView mav = new ModelAndView("home2");
+		mav.addObject("listEmp", listEmp);
+		return mav;
+	}
+	/*
+	 * @GetMapping("facebook") public ModelAndView facebook(String status) {
+	 * ModelAndView mav = new ModelAndView("home2");
+	 * 
+	 * String email = userService.findByEmail(status); System.out.println(email);
+	 * 
+	 * return mav; }
+	 */
 }

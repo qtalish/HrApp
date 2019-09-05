@@ -1,6 +1,5 @@
 package com.kgate.config;
 
-
 import java.io.IOException;
 import java.util.Locale;
 
@@ -21,10 +20,10 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackages="com")
+@ComponentScan(basePackages = "com")
 
-public class WebMvcConfig implements WebMvcConfigurer{
-	
+public class WebMvcConfig implements WebMvcConfigurer {
+
 	@Bean(name = "multipartResolver")
 	public CommonsMultipartResolver getResolver() throws IOException {
 		CommonsMultipartResolver resolver = new CommonsMultipartResolver();
@@ -43,34 +42,35 @@ public class WebMvcConfig implements WebMvcConfigurer{
 		view.setPrefix("/WEB-INF/views/");
 		view.setSuffix(".jsp");
 		return view;
-}
+	}
 
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
 	}
-	
-	 @Bean
-	    public MessageSource messageSource() {
-	        ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-	        messageSource.setBasename("/i18n/usermsg");
-	        messageSource.setDefaultEncoding("UTF-8");
-	        return messageSource;
-	    }
-	    @Bean
-		public LocaleResolver localeResolver(){
-			CookieLocaleResolver resolver = new CookieLocaleResolver();
-			resolver.setDefaultLocale(new Locale("en"));
-			resolver.setCookieName("myLocaleCookie");
-			resolver.setCookieMaxAge(4800);
-			return resolver;
-		}
-		@Override
-		public void addInterceptors(InterceptorRegistry registry) {
-			LocaleChangeInterceptor interceptor = new LocaleChangeInterceptor();
-			interceptor.setParamName("mylocale");
-		    registry.addInterceptor(interceptor);
-		}
-	
-	
+
+	@Bean
+	public MessageSource messageSource() {
+		ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
+		messageSource.setBasename("/i18n/usermsg");
+		messageSource.setDefaultEncoding("UTF-8");
+		return messageSource;
+	}
+
+	@Bean
+	public LocaleResolver localeResolver() {
+		CookieLocaleResolver resolver = new CookieLocaleResolver();
+		resolver.setDefaultLocale(new Locale("en"));
+		resolver.setCookieName("myLocaleCookie");
+		resolver.setCookieMaxAge(4800);
+		return resolver;
+	}
+
+	@Override
+	public void addInterceptors(InterceptorRegistry registry) {
+		LocaleChangeInterceptor interceptor = new LocaleChangeInterceptor();
+		interceptor.setParamName("mylocale");
+		registry.addInterceptor(interceptor);
+	}
+
 }

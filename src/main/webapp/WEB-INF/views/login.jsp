@@ -18,7 +18,10 @@
 <title>Login</title>
 <script type="text/javascript" src="./resources/JS/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="./resources/JS/emp.js"></script>
+<script src="./resources/JS/script.js"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+ <!-- <link rel="stylesheet" href="./resources/css/bootstrap.min.css">
+  <link rel="stylesheet" href="./resources/css/bootstrap.css"> -->
 </head>
 
 <body bgcolor="#ADD8E6">
@@ -47,11 +50,17 @@
 				<!-- <td><input type="submit" value="Login" /></td> -->
 				<td><input type="submit"   class="btn btn-success" value="Login" /></td>
 				
+				<!-- <p><button type="submit">Login With Facebook</button></p> -->
+				<!-- <button class="btn btn-facebook"><i class="fa fa-facebook"></i> | Connect with Facebook</button> -->
+
+				<p><button type="submit">Login With Google</button></p>
 			</tr>
 		</form:form>
 		<a href="#" onclick="forgot()">Forgot Password</a>
 	</table>
-
+ <button id="login">Login with Facebook</button>
+    <button style="display:none;" id="logout">Logout</button>           
+    <div id="status"></div>
 
 
 
