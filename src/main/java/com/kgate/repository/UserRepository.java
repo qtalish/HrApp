@@ -27,7 +27,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 	@Query(value = "select * from User as u where u.usertype='Employee'", nativeQuery = true)
 	Page<User> findEmployeePage(Pageable pageable);
 
-	@Query(value = "select * from user as u where u.usertype='Employee'", nativeQuery = true)
+	@Query(value = "select * from User as u where u.usertype='Employee'", nativeQuery = true)
 	List<User> findEmployee();
 
 	public String findByEmail(String email);
