@@ -17,7 +17,7 @@ import org.hibernate.annotations.Proxy;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
-@Table(name="emp_leave")
+@Table
 @Proxy(lazy=false)	
 public class Leave {
 

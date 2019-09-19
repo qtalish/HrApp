@@ -8,7 +8,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,7 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.kgate.entity.Attendance;
 import com.kgate.entity.Salary;
-import com.kgate.entity.User;
+
 import com.kgate.entity.UserLeaves;
 import com.kgate.repository.LeavesRepository;
 import com.kgate.service.LeavesService;
@@ -112,7 +112,7 @@ public class SalaryController {
 	public ModelAndView calculcate() {
 		ModelAndView mav = new ModelAndView("calculcate");
 		// return mav;
-		// balance leave claculationby awes
+		// balance leave claculation by awes
 		String months[] = { "January", "February", "March", "April", "May", "June", "July", "August", "September",
 				"October", "November", "December" };
 		Date d = new Date();
@@ -179,4 +179,6 @@ public class SalaryController {
 		}
 		return mav;
 	}
+	
+	
 }

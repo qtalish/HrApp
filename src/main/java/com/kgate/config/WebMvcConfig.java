@@ -21,7 +21,6 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 @Configuration
 @EnableWebMvc
 @ComponentScan(basePackages = "com")
-
 public class WebMvcConfig implements WebMvcConfigurer {
 
 	@Bean(name = "multipartResolver")

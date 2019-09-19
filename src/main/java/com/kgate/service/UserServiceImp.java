@@ -66,9 +66,9 @@ public class UserServiceImp implements UserService {
 	}
 
 	@Override
-	public User findUser(String email, String password, String userType) {
+	public User findUser(String email, String password) {
 		// TODO Auto-generated method stub
-		return repo.findUser(email, password, userType);
+		return repo.findUser(email, password);
 	}
 
 	@Override

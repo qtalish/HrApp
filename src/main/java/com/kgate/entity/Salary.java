@@ -18,7 +18,7 @@ import org.hibernate.annotations.Fetch;
 import lombok.Data;
 
 @Entity
-@Table(name = "user_salary")
+@Table
 public class Salary {
 
 	@Id

@@ -14,7 +14,7 @@ public interface UserService {
 
 	public List<Attendance> getAttendance(Date date);
 
-	public User findUser(String email, String password, String userType);
+	public User findUser(String email, String password);
 
 	public User save(User user);
 	

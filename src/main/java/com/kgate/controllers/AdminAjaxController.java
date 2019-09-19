@@ -111,6 +111,15 @@ public class AdminAjaxController {
 		return mav;
 	}
 
+	@RequestMapping(value = "/editEmployeeProfile", method = RequestMethod.GET)
+	public ModelAndView editEmployeeProfile(HttpServletRequest request, @ModelAttribute("user") User user2) {
+		int userId = Integer.parseInt(request.getParameter("id"));
+		User user = repo.getOne(userId);
+		ModelAndView mav = new ModelAndView("employeeEdit");
+		mav.addObject("user", user);
+		return mav;
+	}
+
 	@RequestMapping(value = "/searchEmp", method = RequestMethod.GET)
 	public @ResponseBody Map<String, Object> getAll(User user) {
 		Map<String, Object> map = new HashMap<>();

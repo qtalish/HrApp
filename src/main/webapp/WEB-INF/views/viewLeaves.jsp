@@ -4,28 +4,86 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
+
 <head>
+<title>Leaves & Salary</title>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Users List</title>
+
 <link href="<c:url value='/static/css/bootstrap.css' />"
 	rel="stylesheet"></link>
 <link href="<c:url value='/static/css/app.css' />" rel="stylesheet"></link>
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <meta charset="ISO-8859-1">
-<title>Leaves</title>
+<script src="./resources/JS/jquery-3.3.1.min.js" type="text/javascript"></script>
+<title>Employee List</title>
+<script src="./resources/JS/emp.js" type="text/javascript"></script>
+<link href="./resources/images/kgate.png" rel="shortcut icon"
+	type="image/png" />
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+	integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+	crossorigin="anonymous">
+<script
+	src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+	integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+	crossorigin="anonymous"></script>
+
+<!-- <script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> -->
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
 </head>
+
+
 <body>
+
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+			<a class="navbar-brand" href ="https://www.kgate.in/">K-Gate</a>
+
+			<ul class="navbar-nav">
+				<li class="nav-item"><a class="nav-link"
+					href="/HrApp/attendance">Attendence</a></li>
+				<li class="nav-item"><a class="nav-link"
+					href="/HrApp/messageEmployee">Message</a></li>
+				<li class="nav-item"><a class="nav-link"
+					href="/HrApp/workReport">Work Report</a></li>
+
+				<li class="nav-item dropdown"><a
+					class="nav-link dropdown-toggle" href="#" id="navbardrop"
+					data-toggle="dropdown"> Employee </a>
+					<div class="dropdown-menu">
+						<a class="dropdown-item" href="/HrApp/register">Add Employee</a> <a
+							class="dropdown-item" href="/HrApp/viewEmployees">View All
+							Employees </a>
+					</div></li>
+			</ul>
+			<div class="navbar-collapse collapse w-25 order-3 dual-collapse2">
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item">
+						<form action="logout" method="get">
+							<button class="btn btn-link" style="color: white;">Log
+								Out</button>
+						</form>
+					</li>
+				</ul>
+			</div>
+		</nav>
+
+
 	<%-- ${userLeaves} --%>
 
 	<div class="generic-container">
 		<div class="panel panel-default">
 			<!-- Default panel contents -->
 			<div class="panel-heading">
-				<span class="lead"><h1>Leaves Calendar</h1> </span>
+				<span class="lead"></span>
 			</div>
 			<div class="tablecontainer">
-				<table class="table table-hover" border="1">
+				<table class="table">
 					<thead>
 						<th>Working Day</th>
 						<th>Total Days Worked</th>
@@ -49,7 +107,7 @@
 	</div>
 
 
-	<form:form action="saveSalary" modelAttribute="salary" method="post">
+	<form:form action="saveSalary" modelAttribute="salary" method="post" >
 		<form:input path="empCode" type="hidden" />
 		<form:input path="id" type="hidden" />
 		<form:input path="month" type="hidden" />
@@ -57,40 +115,40 @@
 		<table>
 			<tr>
 				<td>Basic Salary :</td>
-				<td><form:input path="basicSalary" id="bsalary" readonly="true" /></td>
+				<td><form:input path="basicSalary" id="bsalary" readonly="true"  class="form-control"/></td>
 			</tr>
 
 			<tr>
 				<td>HRA :</td>
-				<td><form:input path="hra" id="hra" readonly="true" /></td>
+				<td><form:input path="hra" id="hra" readonly="true" class="form-control" /></td>
 			</tr>
 
 			<tr>
 				<td>Conveyance Allowances :</td>
 				<td><form:input path="conveyanceAllowances" id="ca"
-						value="1600" readonly="true" /></td>
+						value="1600" readonly="true" class="form-control" /></td>
 			</tr>
 
 			<tr>
 				<td>Medical Allowances :</td>
 				<td><form:input path="medicalAllowances" id="ma" value="1250"
-						readonly="true" /></td>
+						readonly="true" class="form-control"/></td>
 			</tr>
 
 			<tr>
 				<td>Other Allowances :</td>
-				<td><form:input path="otherAllowances" id="oa" readonly="true" /></td>
+				<td><form:input path="otherAllowances" id="oa" readonly="true" class="form-control" /></td>
 			</tr>
 			<tr>
 				<td>Gross Salary :</td>
 				<td><form:input path="monthlySalary" id="msalary"
-						onkeyup="calculate()" /></td>
+						onkeyup="calculate()" class="form-control" /></td>
 			</tr>
 
 			<tr>
 				<td>Additional Bonus :</td>
 				<td><form:input path="additionalBonus" id="ab"
-						onkeyup="totalSalary()" /></td>
+						onkeyup="totalSalary()" class="form-control"/></td>
 			</tr>
 
 
@@ -98,47 +156,47 @@
 			<tr>
 				<td>Total Earnings For the Month :</td>
 				<td><form:input path="totalMonthlySalary" id="tms"
-						readonly="true" /></td>
+						readonly="true" class="form-control"/></td>
 			</tr>
 
 
 			<tr>
 				<td>professional Tax :</td>
 				<td><form:input path="professionalTax" id="ptax" value="200"
-						readonly="true" onkeyup="totalDeduct()" /></td>
+						readonly="true" onkeyup="totalDeduct()" class="form-control" /></td>
 			</tr>
 
 			<tr>
 				<td>Provident Fund :</td>
 				<td><form:input path="providentFund" id="pf"
-						onkeyup="totalDeduct1()" /></td>
+						onkeyup="totalDeduct1()" class="form-control" /></td>
 			</tr>
 
 			<tr>
 				<td>Additional Deduction :</td>
 				<td><form:input path="additionalDeduction" id="ad"
-						onkeyup="totalDeduct2()" /></td>
+						onkeyup="totalDeduct2()" class="form-control" /></td>
 			</tr>
 
 
 			<tr>
 				<td>Unpaid Leave:</td>
-				<td><form:input path="unpaidLeave" id="ul" /></td>
+				<td><form:input path="unpaidLeave" id="ul" class="form-control" /></td>
 			</tr>
 
 			<tr>
 				<td>Total Deduction :</td>
-				<td><form:input path="totalDeduction" id="td" readonly="true" /></td>
+				<td><form:input path="totalDeduction" id="td" readonly="true" class="form-control" /></td>
 			</tr>
 
 			<tr>
 				<td>Net Salary :</td>
-				<td><form:input path="netSalary" id="nsal" readonly="true" /></td>
+				<td><form:input path="netSalary" id="nsal" readonly="true" class="form-control" /></td>
 			</tr>
-
+<tr><td><button class="btn btn-primary">Submit</button></td></tr>
 
 		</table>
-		<input type="submit" value="submit" />
+		
 
 	</form:form>
 

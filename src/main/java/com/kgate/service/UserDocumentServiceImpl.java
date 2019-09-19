@@ -1,6 +1,7 @@
 package com.kgate.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,10 +14,11 @@ public class UserDocumentServiceImpl implements UserDocumentService {
 
 	@Autowired
 	UserDocumentRepository userDocumentRepository;
+
 	@Override
-	public UserDocument findById(int id) {
+	public UserDocument download(int docCode) {
 		// TODO Auto-generated method stub
-		return null;
+		return userDocumentRepository.download(docCode);
 	}
 
 	@Override
@@ -35,6 +37,12 @@ public class UserDocumentServiceImpl implements UserDocumentService {
 	public void deleteById(int id) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public List<UserDocument> findDoc(String empCode) {
+		// TODO Auto-generated method stub
+		return userDocumentRepository.findDoc(empCode);
 	}
 
 }
