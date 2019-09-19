@@ -32,16 +32,15 @@ load = function(page) {
 						
 												+ response.list[i].id
 												+ "' >Edit</a>&nbsp&nbsp<a href='#' onclick='deleteEmp("
-												+ response.list[i].id + ",`"
-												+ response.list[i].email
-												+ "`);'>|  Delete</a>"
+												+ response.list[i].id  
+												+ ");'>|  Delete</a>"
 												
 												+ "|&nbsp&nbsp <a href='viewSalary?empCode="
 												+ response.list[i].empCode
 												+"' >Salary</a>"
 												
 												+ "|&nbsp&nbsp<a href='uploadDocumentAjax?empCode="
-												+ response.list[i].empCode
+												+ response.list[i].empCode +"&userType="+ response.list[i].userType
 												+ "' >Upload </a></td>"
 												);
 					}
@@ -51,10 +50,28 @@ load = function(page) {
 			                pagenumber += "<a href='#' onclick=load(" + j + ");>" + j + "</a>" + "&nbsp";
 			            }
 			            $("#n").html(pagenumber);
+				
 				}
+			
 			});
 };
-deleteEmp = function(id, email) {
+
+function myFunction() {
+    $("#myInput").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+        console.log(value)
+        load1();
+        $(".tr1").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+//            load();
+        });
+    });
+    
+};
+
+
+deleteEmp = function(id) {
+	console.log("111")
 	var con = confirm("Do you want to delete this Employee");
 	if (con === true) {
 		$.ajax({
@@ -62,7 +79,6 @@ deleteEmp = function(id, email) {
 			type : 'POST',
 			data : JSON.stringify({
 				id : id,
-				email : email
 			}),
 			beforeSend : function(xhr) {
 				xhr.setRequestHeader("Accept", "application/json");
@@ -118,44 +134,50 @@ forgot = function() {
 })
 }
 
-load1 = function () {
-    $.ajax({
-        url: 'searchEmp',
-        type: 'GET',
-        success: function (response) {
-            data = response.list;
-            $('.tr').remove();
-            for (i = 0; i < response.list.length; i++) {
-               
-                $('#tbl')
-				.append(
-						"<tr class='tr'><td>"
-						        + response.list[i].empCode
-						        + "</td><td>"
-								+ response.list[i].fname+"  "+response.list[i].lname
-								+ "</td><td>"
-								+ response.list[i].email
-								+ "</td><td>"
-								+ response.list[i].designation
-								+ "</td><td>"
-								+ response.list[i].mob
-								+ "</td><td><a href='editEmployeeAjax?id="
-								+ response.list[i].id
-								+ "' >Edit |</a>&nbsp&nbsp<a href='#' onclick='deleteEmp("
-								+ response.list[i].id + ",`"
-								+ response.list[i].email
-								+ "`);'>|  Delete</a></td>");
-	}
-        }
-    });
-};
-$(document).ready(function () {
-    $("#myInput").on("keyup", function () {
-        var value = $(this).val().toLowerCase();
-        console.log(value)
-        $(".tr").filter(function () {
-            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-//            load();
-        });
-    });
-});
+myFunction2 = function(page){
+	console.log(page);
+	var val = $("#myInput").val();
+	console.log(val)
+	 $.ajax({
+	        url: 'searchEmp?val='+val+  "&page="+page,
+	        type: 'GET',
+	        success: function (response) {
+	            data = response.list;
+	            $('.tr').remove();
+	            for (i = 0; i < response.list.length; i++) {
+	                $('#tbl')
+					.append(
+							"<tr class='tr'><td>"
+							        + response.list[i].empCode
+							        + "</td><td>"
+									+ response.list[i].fname+"  "+response.list[i].lname
+									+ "</td><td>"
+									+ response.list[i].email
+									+ "</td><td>"
+									+ response.list[i].designation
+									+ "</td><td>"
+									+ response.list[i].mob
+									+ "</td><td><a href='editEmployeeAjax?id="
+									+ response.list[i].id
+									+ "' >Edit</a>&nbsp&nbsp<a href='#' onclick='deleteEmp("
+									+ response.list[i].id  
+									+ ");'>|  Delete</a>"
+									
+									+ "|&nbsp&nbsp <a href='viewSalary?empCode="
+									+ response.list[i].empCode
+									+"' >Salary</a>"
+									
+									+ "|&nbsp&nbsp<a href='uploadDocumentAjax?empCode="
+									+ response.list[i].empCode
+									+ "' >Upload </a></td>"
+									);
+		}
+	            pagenumber = "";
+		            for (i = 0; i < response.pno; i++) {
+	                j = i + 1;
+	                pagenumber += "<a href='#' onclick=myFunction2(" + j + ");>" + j + "</a>" + "&nbsp";
+	            }
+	            $("#n").html(pagenumber);
+	        }
+	    });	
+}

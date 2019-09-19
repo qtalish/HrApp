@@ -24,13 +24,13 @@
 		
 <%-- 		<form action="<spring:url value="/searchEmployee"/>">
 
-		Search Employee: <input type="text" name="txt" placeholder="Enter Name To Search" value="${param.txt}" />
+		Search Employee: <input id="myInput" type="text" name="txt" placeholder="Enter Name To Search" value="${param.txt}" />
 
 			<button>
 				<div id="bt">Find</div>
 			</button>
 		</form> --%>
-<br><br>		 <input id="myInput" type="text" placeholder="Search Employee Here.."  /><br></br> 
+<br><br>		 <input id="myInput"  onkeyup="myFunction2()" type="text" placeholder="Search Employee Here.."  /><br></br> 
 		<table border="1" id="tbl">
 
 			<!-- <th style="color: red">First Name</th> -->

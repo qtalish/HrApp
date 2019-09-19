@@ -65,12 +65,18 @@ public class UserServiceImp implements UserService {
 		return repo.findEmployeePage(pageable);
 	}
 
+	/*
+	 * @Override public User findUser(String email, String password, String
+	 * userType) { // TODO Auto-generated method stub return repo.findUser(email,
+	 * password, userType); }
+	 */
+	
 	@Override
-	public User findUser(String email, String password, String userType) {
+	public User findUser(String email, String password) {
 		// TODO Auto-generated method stub
-		return repo.findUser(email, password, userType);
+		return repo.findUser(email, password);
 	}
-
+	
 	@Override
 	public User save(User user) {
 		// TODO Auto-generated method stub
@@ -95,11 +101,16 @@ public class UserServiceImp implements UserService {
 	}
 
 	@Override
+	public Page<User> searchEmployee(Pageable pageable, String txt) {
+		// TODO Auto-generated method stub
+		return repo.searchEmployee(pageable, txt);
+	}
+	@Override
 	public List<User> searchEmployee(String txt) {
 		// TODO Auto-generated method stub
 		return repo.searchEmployee(txt);
 	}
-
+	
 	@Override
 	public List<User> searchEmployee() {
 		// TODO Auto-generated method stub

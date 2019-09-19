@@ -14,7 +14,9 @@ public interface UserService {
 
 	public List<Attendance> getAttendance(Date date);
 
-	public User findUser(String email, String password, String userType);
+//	public User findUser(String email, String password, String userType);
+	
+	public User findUser(String email, String password);
 
 	public User save(User user);
 	
@@ -26,10 +28,12 @@ public interface UserService {
 
 	public Page<User> findEmployeePage(Pageable pageable);
 
-	public List<User> searchEmployee(String txt);
-
+	public Page<User> searchEmployee(Pageable pageable, String txt);
+	
 	public List<User> searchEmployee();
 
 	public String findByEmail(String status);
+
+	List<User> searchEmployee(String txt);
 
 }

@@ -16,4 +16,6 @@ public interface SalaryService {
 
 	public List<Attendance> getAllEmployee(String month,Integer year);
 
+	public Salary findSalary(String empCode, String month, Integer year);
+
 }

@@ -16,7 +16,7 @@
 
 
 		<form:input path="empCode" type="hidden" />
-
+		<form:input path="userType" type="hidden" />
 		<table>
 			<tr>
 				<td><form:label path="dname">Name</form:label></td>
@@ -41,7 +41,7 @@
 		<input type="submit" value="Back">
 	</form:form> --%>
 
-	<h1>List of Documents Employee</h1>
+	<h1>List of Documents Admin</h1>
 	
 	<div class="container">
 			<table class="table" border="1">
@@ -58,12 +58,7 @@
 							<td>${doc.dname}</td>
 							<td>${doc.description}</td>
 							<td>${doc.documentType}</td>
-							<%-- 
-							<td><a href="<c:url value='/downloadDoc-${doc.id}' />"
-								class="btn btn-success custom-width">Download</a>
-							<a href="<c:url value='/delete-user-${user.id}' />"
-								class="btn btn-danger custom-width">delete</a></td>
- --%>
+								
 						<td><a href="<c:url value='/downloadDoc-${doc.id}' />"
 									class="btn btn-success custom-width">Download</a>
 								<a href="<c:url value='/delete-document-${doc.id}' />"

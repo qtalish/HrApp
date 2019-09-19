@@ -37,31 +37,18 @@
 				<td>Password:</td>
 				<td><form:input path="password" type="password" /></td>
 			</tr>
-			<tr>
-
-				<td><form:select path="userType" name="userType">
-
-						<form:options items="${userType}" />
-
-					</form:select></td>
-			</tr>
-			<tr>
+		<tr>
 				<td></td>
-				<!-- <td><input type="submit" value="Login" /></td> -->
 				<td><input type="submit"   class="btn btn-success" value="Login" /></td>
 				
-				<!-- <p><button type="submit">Login With Facebook</button></p> -->
-				<!-- <button class="btn btn-facebook"><i class="fa fa-facebook"></i> | Connect with Facebook</button> -->
 
-				<p><button type="submit">Login With Google</button></p>
 			</tr>
 		</form:form>
 		<a href="#" onclick="forgot()">Forgot Password</a>
 	</table>
- <button id="login">Login with Facebook</button>
-    <button style="display:none;" id="logout">Logout</button>           
+<!--     <button style="display:none;" id="logout">Logout</button>           
     <div id="status"></div>
-
+ -->
 
 
 </body>

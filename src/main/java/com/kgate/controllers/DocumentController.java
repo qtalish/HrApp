@@ -2,6 +2,7 @@ package com.kgate.controllers;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -29,32 +31,38 @@ public class DocumentController {
 
 	@Autowired
 	UserDocumentRepository repo;
+	
+	@Autowired
+	UserDocumentService uds;
 
 	@RequestMapping(value = "/uploadDocumentAjax", method = RequestMethod.GET)
 	public ModelAndView uploadDocuments(HttpServletRequest request,
-			@ModelAttribute("userDocument") UserDocument userDocument, @RequestParam(name = "empCode") String empCode) {
+			@ModelAttribute("userDocument") UserDocument userDocument, @RequestParam(name = "empCode") String empCode, @RequestParam(name = "userType") String userType) {
 
-//		String abc = request.getParameter("empCode");
+		System.out.println("usertype "+userType);
 		System.out.println("Employee Code " + empCode);
-
-		ModelAndView mav = new ModelAndView("employeeDocuments");
+		List<UserDocument> uc = uds.findByString(empCode);
+		ModelAndView mav = new ModelAndView("adminDocuments");
+		mav.addObject("uc", uc);
 		mav.addObject("empCode", empCode);
+		mav.addObject("userType", userType);
 		return mav;
 	}
 
 	@PostMapping("/addDocument")
 	public ModelAndView addDocument(@ModelAttribute("userDocument") UserDocument userDocument,
-			@RequestParam("file") MultipartFile file) {
-		ModelAndView mav = new ModelAndView("employeeDocuments");
-		
+			@RequestParam("file") MultipartFile file, @SessionAttribute("user") User user) {
+		ModelAndView mav = new ModelAndView();
+		System.out.println(user.getUserType());
+		if(user.getUserType().equals("Employee")) {
+			mav.setViewName("redirect:/documents");
+		}
+		else {
+			mav.setViewName("redirect:/uploadDocumentAjax");
+		}
 		if (!file.getOriginalFilename().isEmpty()) 
 		{
 		userDocument.setCreated(new Date());
-	/*	System.out.println("Name:" + userDocument.getDname());
-		System.out.println("Desc:" + userDocument.getDescription());
-		System.out.println("File:" + file.getOriginalFilename());
-		System.out.println("ContentType:" + file.getContentType());
-*/
 		
 		try {
 			userDocument.setDocument(file.getBytes());
@@ -78,8 +86,7 @@ public class DocumentController {
 		{
 			mav.addObject("msg", "Please select valid file");
 		}
-
 		return mav;
+		
 	}
-
 }

@@ -33,6 +33,9 @@
       <li class="nav-item">
         <a class="nav-link" href="/HrApp/attendance">Attendence</a>
       </li>
+       <li class="nav-item">
+        <a class="nav-link" href="/HrApp/messageEmployee">Message</a>
+      
 	</div>
 	</nav>
 		<h1>Hello HR</h1>

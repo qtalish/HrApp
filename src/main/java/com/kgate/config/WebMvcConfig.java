@@ -17,6 +17,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
+import org.springframework.web.servlet.view.ResourceBundleViewResolver;
 
 @Configuration
 @EnableWebMvc
@@ -41,6 +42,14 @@ public class WebMvcConfig implements WebMvcConfigurer {
 		InternalResourceViewResolver view = new InternalResourceViewResolver();
 		view.setPrefix("/WEB-INF/views/");
 		view.setSuffix(".jsp");
+		return view;
+	}
+
+	@Bean
+	public ResourceBundleViewResolver res() {
+		ResourceBundleViewResolver view = new ResourceBundleViewResolver();
+		view.setBasename("view11");
+		view.setOrder(0);
 		return view;
 	}
 

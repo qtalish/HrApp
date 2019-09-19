@@ -14,9 +14,9 @@ public class UserDocumentServiceImpl implements UserDocumentService {
 	@Autowired
 	UserDocumentRepository userDocumentRepository;
 	@Override
-	public UserDocument findById(int id) {
+	public List<UserDocument> findByString(String empCode) {
 		// TODO Auto-generated method stub
-		return null;
+		return userDocumentRepository.findDoc(empCode);
 	}
 
 	@Override
@@ -33,8 +33,14 @@ public class UserDocumentServiceImpl implements UserDocumentService {
 
 	@Override
 	public void deleteById(int id) {
-		// TODO Auto-generated method stub
 
+		userDocumentRepository.deleteById(id);
+	}
+
+	@Override
+	public UserDocument findById(int docId) {
+		// TODO Auto-generated method stub
+		return userDocumentRepository.getOne(docId);
 	}
 
 }

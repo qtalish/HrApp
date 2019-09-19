@@ -21,18 +21,22 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.codec.binary.Base64;
+import org.dom4j.util.UserDataAttribute;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,7 +52,9 @@ import com.kgate.entity.Attendance;
 import com.kgate.entity.Leave;
 import com.kgate.entity.MessageEmployee;
 import com.kgate.entity.User;
+import com.kgate.entity.UserDocument;
 import com.kgate.repository.MessageRepository;
+import com.kgate.service.UserDocumentService;
 import com.kgate.service.UserService;
 
 @Controller
@@ -60,6 +66,9 @@ public class UserController {
 
 	@Autowired
 	MessageRepository msgrepo;
+	
+	@Autowired
+	UserDocumentService uds;
 
 //	@InitBinder
 //	public void bindingPreparation(WebDataBinder binder) {
@@ -91,30 +100,25 @@ public class UserController {
 	public ModelAndView authenticate(@ModelAttribute("user") User user) {
 		ModelAndView mav = new ModelAndView();
 
-		User user2 = userService.findUser(user.getEmail(), user.getPassword(), user.getUserType());
+//		User user2 = userService.findUser(user.getEmail(), user.getPassword(), user.getUserType());
+		User user2 = userService.findUser(user.getEmail(), user.getPassword());
 		System.out.println("user:::::::::: " + user2);
+		
 		if (user2 == null) {
 			mav.setViewName("login");
 			mav.addObject("msg", "User Name or Password is invalid");
-			String userType[] = { "Admin", "Employee" };
-			mav.addObject("userType", userType);
 			return mav;
 		}
-		System.out.println(user);
-		System.out.println(user.getEmail());
-		if (user.getUserType().equals("Employee")) {
-			System.out.println("Employee Login");
-			if (user.getEmail().equals("vartakakshay@rediffmail.com")) {
-				mav.setViewName("birthday");
-			} else {
-				mav.addObject("user", user2);
-				mav.setViewName("empDash");
-			}
-		} else {
+				
+		if(user2.getUserType().equalsIgnoreCase("Employee")) {
+			mav.addObject("user", user2);
+			mav.setViewName("empDash");
+		}
+		 else {
 			mav.setViewName("adminDash");
 		}
 		return mav;
-	}
+		}
 
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	public String logout(HttpServletRequest request) {
@@ -263,9 +267,39 @@ public class UserController {
 	}
 
 	@GetMapping("/documents")
-	public ModelAndView viewDocuments() {
-		ModelAndView mav = new ModelAndView("employeeDocuments");
+	public ModelAndView viewDocuments(@ModelAttribute("userDocument") UserDocument userDocument,@SessionAttribute("user") User user) {
+		ModelAndView mav = new ModelAndView();
+			
+		System.out.println(">>>>"+user.getEmpCode());
+		userDocument.setEmpCode(user.getEmpCode());
+		List<UserDocument> uc = uds.findByString(user.getEmpCode());
+		
+		if(user.getUserType().equals("Employee")) {
+		mav.addObject("uc", uc);
+		mav.setViewName("employeeDocuments");
+		}
+		else {
+			mav.addObject("uc", uc);
+			mav.setViewName("adminDocuments");
+		}
 		return mav;
+    }
+	
+	@RequestMapping(value = "/downloadDoc-{docId}", method = RequestMethod.GET)
+	public String downloadDocument(@PathVariable int docId, HttpServletResponse response)
+			throws IOException {
+		UserDocument document = uds.findById(docId);
+		response.setContentType(document.getDocumentType());
+		response.setContentLength(document.getDocument().length);
+		response.setHeader("Content-Disposition", "attachment; filename=\"" + document.getDname() + "\"");
+		FileCopyUtils.copy(document.getDocument(), response.getOutputStream());
+		return "redirect:/documents";
+	}
+
+	@GetMapping("/delete-document-{docId}")
+	public String delteDocument(@PathVariable int docId) {
+		uds.deleteById(docId);
+		return "redirect:/documents";
 	}
 //Attendance
 
@@ -410,13 +444,15 @@ public class UserController {
 		return mav;
 	}
 
+	
 	@GetMapping("/searchEmployee")
 	public ModelAndView searchEmployee(@RequestParam("txt") String txt) {
 		List<User> listEmp = userService.searchEmployee(txt);
-		ModelAndView mav = new ModelAndView("home2");
+		ModelAndView mav = new ModelAndView("employeelist");
 		mav.addObject("listEmp", listEmp);
 		return mav;
 	}
+	 
 	/*
 	 * @GetMapping("facebook") public ModelAndView facebook(String status) {
 	 * ModelAndView mav = new ModelAndView("home2");

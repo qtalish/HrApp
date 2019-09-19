@@ -7,11 +7,13 @@ import com.kgate.entity.UserDocument;
 public interface UserDocumentService {
 
 	
-	UserDocument findById(int id);
+	List<UserDocument> findByString(String empCode);
 
 	List<UserDocument> findAll();
 
 	void saveDocument(UserDocument userDocument);
 
 	void deleteById(int id);
+
+	UserDocument findById(int docId);
 }

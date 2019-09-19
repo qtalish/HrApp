@@ -49,9 +49,19 @@ public class UserDocument {
 	private Date created;
 
 	private String empCode;
+	
+	private String userType;
 
 	public Integer getId() {
 		return id;
+	}
+
+	public String getUserType() {
+		return userType;
+	}
+
+	public void setUserType(String userType) {
+		this.userType = userType;
 	}
 
 	public void setId(Integer id) {
@@ -110,7 +120,6 @@ public class UserDocument {
 	public String toString() {
 		return "UserDocument [id=" + id + ", dname=" + dname + ", description=" + description + ", document="
 				+ Arrays.toString(document) + ", documentType=" + documentType + ", created=" + created + ", empCode="
-				+ empCode + "]";
+				+ empCode + ", userType=" + userType + "]";
 	}
-
 }

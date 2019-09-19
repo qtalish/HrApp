@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.kgate.entity.Attendance;
 import com.kgate.entity.Salary;
-import com.kgate.entity.User;
 import com.kgate.repository.SalaryRepository;
 
 @Service
@@ -43,6 +42,12 @@ public class SalaryServiceImpl implements SalaryService {
 		// TODO Auto-generated method stub
 		List<Attendance> user=salaryRepository.getAllEmployee(month,year);
 		return user;
+	}
+
+	@Override
+	public Salary findSalary(String empCode, String month, Integer year) {
+		// TODO Auto-generated method stub
+		return salaryRepository.findSalary(empCode,month,year);
 	}
 
 }

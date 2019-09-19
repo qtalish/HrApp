@@ -6,16 +6,21 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.kgate.entity.Attendance;
+import com.kgate.entity.Leave;
 import com.kgate.entity.Salary;
 import com.kgate.entity.User;
 import com.kgate.entity.UserLeaves;
@@ -25,6 +30,7 @@ import com.kgate.service.SalaryService;
 import com.kgate.service.UserService;
 
 @Controller
+@SessionAttributes("user")
 public class SalaryController {
 
 	@Autowired
@@ -179,4 +185,42 @@ public class SalaryController {
 		}
 		return mav;
 	}
+	
+	@GetMapping("/downloadSalarySlip")
+	public ModelAndView downloadSalarySlip(@ModelAttribute("user") User user) {
+		ModelAndView mav = new ModelAndView("salaryslip");
+		DateFormatSymbols dfs = new DateFormatSymbols();
+		String[] arr = dfs.getMonths();
+		List<String> months = new ArrayList<>();
+		for (int i = 0; i < arr.length - 1; i++) {
+			months.add(arr[i]);
+		}
+		List<Integer> years = new ArrayList<>();
+		for (int i = 2018; i <= 2028; i++) {
+			years.add(i);
+		}
+		mav.addObject("years", years);
+		String eCode = user.getEmpCode();
+		System.out.println(eCode);
+		mav.addObject("empCode", eCode);
+		mav.addObject("months", months);
+		return mav;
+	}
+
+	
+	@GetMapping("/downloadSlip")
+	@ResponseBody
+	public ModelAndView downloadPDF(@RequestParam("month") String month,@RequestParam("year") Integer year, @RequestParam("empCode") String empCode, @SessionAttribute("user") User user) {
+		Salary list = salaryService.findSalary(empCode, month, year);
+		ModelAndView mav = new ModelAndView("pdfView");
+		UserLeaves uleave = leavesService.getLeavesDetails(empCode, month, year);
+		System.out.println("bbb"+uleave);
+		mav.addObject("list", list);
+		mav.addObject("user", user);
+		mav.addObject("leave", uleave);
+		mav.addObject("month", month);
+		String year1 = Integer.toString(year);
+		mav.addObject("year", year1);
+		return mav;
+	}  
 }

@@ -12,8 +12,8 @@
 		<a href="/HrApp/profile">Profile</a> <br> <br> 
 		<a href="/HrApp/attendance">Attendance</a> <br> <br> 
 		<a href="/HrApp/documents">Documents</a> <br> <br>
-		<a href="/HrApp/leave">Leave</a>
-		<a href="/HrApp/messageEmployee">Message</a>
+		<a href="/HrApp/leave">Leave</a><br> <br>
+		<a href="/HrApp/downloadSalarySlip">Download Salary Slip</a>
 	</div>
 </body>
 </html>
