@@ -14,22 +14,20 @@ public interface UserService {
 
 	public List<Attendance> getAttendance(Date date);
 
-//	public User findUser(String email, String password, String userType);
-	
 	public User findUser(String email, String password);
 
 	public User save(User user);
-	
+
 	public Leave save(Leave leave);
 
 	public List<User> findEmployee();
-	
+
 	public User fetchPassword(String email);
 
 	public Page<User> findEmployeePage(Pageable pageable);
 
 	public Page<User> searchEmployee(Pageable pageable, String txt);
-	
+
 	public List<User> searchEmployee();
 
 	public String findByEmail(String status);

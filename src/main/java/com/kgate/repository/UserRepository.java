@@ -15,29 +15,22 @@ import com.kgate.entity.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
 
-	/*
-	 * @Query("select u from User u where u.email=:email and u.password=:password and u.userType=:userType"
-	 * ) User findUser(@Param("email") String email, @Param("password") String
-	 * password, @Param("userType") String userType);
-	 */
-
 	@Query("select u from User u where u.email=:email and u.password=:password")
 	User findUser(@Param("email") String email, @Param("password") String password);
-	
+
 	@Query("select u from User u where u.email=:email")
 	User fetchPassword(@Param("email") String email);
-	
-	
+
 	@Query("select u from User u where u.fname=:fname")
 	List<User> searchEmployee(@Param("fname") String fname);
 
-	@Query(value="SELECT * FROM user u WHERE CONCAT(u.fname,u.designation,u.address,u.lname,u.mname,u.aadhar,u.email) LIKE %:txt%",nativeQuery=true)
+	@Query(value = "SELECT * FROM user u WHERE CONCAT(u.fname,u.designation,u.address,u.lname,u.mname,u.aadhar,u.email) LIKE %:txt%", nativeQuery = true)
 	Page<User> searchEmployee(Pageable pageable, @Param("txt") String txt);
 
 	@Query(value = "select * from user as u where u.usertype='Employee'", nativeQuery = true)
 	Page<User> findEmployeePage(Pageable pageable);
-	
-	@Query(value = "select * from user as u where u.usertype='Employee'", nativeQuery = true)
+
+	@Query(value = "select * from User as u where u.usertype='Employee'", nativeQuery = true)
 	List<User> findEmployee();
 
 	public String findByEmail(String email);

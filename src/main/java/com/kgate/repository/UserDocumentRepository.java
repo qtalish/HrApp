@@ -12,7 +12,10 @@ import com.kgate.entity.UserDocument;
 
 @Repository
 @Transactional
-public interface UserDocumentRepository extends JpaRepository<UserDocument,Integer > {
+public interface UserDocumentRepository extends JpaRepository<UserDocument, Integer> {
+
+	@Query("select u from UserDocument u where u.id=:docCode")
+	UserDocument download(@Param("docCode") int docCode);
 
 	@Query("select u from UserDocument u where u.empCode=:empCode")
 	List<UserDocument> findDoc(@Param("empCode") String empCode);

@@ -6,10 +6,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+//github.com/Vartak1905/HrApp.git
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.kgate.entity.Attendance;
-import com.kgate.entity.Leave;
 import com.kgate.entity.Salary;
 import com.kgate.entity.User;
 import com.kgate.entity.UserLeaves;
@@ -41,7 +39,7 @@ public class SalaryController {
 
 	@Autowired
 	SalaryService salaryService;
-	
+
 	@Autowired
 	LeavesRepository repo;
 
@@ -118,40 +116,38 @@ public class SalaryController {
 	public ModelAndView calculcate() {
 		ModelAndView mav = new ModelAndView("calculcate");
 		// return mav;
-		// balance leave claculationby awes
+		// balance leave claculation by awes
 		String months[] = { "January", "February", "March", "April", "May", "June", "July", "August", "September",
 				"October", "November", "December" };
 		Date d = new Date();
-		String month = months[d.getMonth() - 1];//get previous month
-		String monthLeaves=months[d.getMonth() - 2];//to get previous bal leave
-		Integer year = (Integer) Calendar.getInstance().get(Calendar.YEAR);//current year
+		String month = months[d.getMonth() - 1];// get previous month
+		String monthLeaves = months[d.getMonth() - 2];// to get previous bal leave
+		Integer year = (Integer) Calendar.getInstance().get(Calendar.YEAR);// current year
 
-		List<String> list = salaryService.getEmployeeList();//to fetch unique emp_id
-		List<Attendance> user = salaryService.getAllEmployee(month, year);//to fetch all employee attendance
-		//List<UserLeaves> userLeaves=leavesService.getPreviousLeaves
-		 System.out.println(list);
-		 System.out.println(user);
-		for (int i = 0; i < list.size(); i++)
-		{
-		
+		List<String> list = salaryService.getEmployeeList();// to fetch unique emp_id
+		List<Attendance> user = salaryService.getAllEmployee(month, year);// to fetch all employee attendance
+		// List<UserLeaves> userLeaves=leavesService.getPreviousLeaves
+		System.out.println(list);
+		System.out.println(user);
+		for (int i = 0; i < list.size(); i++) {
+
 			int workingdays = 0;
 			Attendance atd;
 			String empc = (String) list.get(i);
-			UserLeaves userLeaves=leavesService.getPreviousLeaves(empc,monthLeaves,year);
+			UserLeaves userLeaves = leavesService.getPreviousLeaves(empc, monthLeaves, year);
 			System.out.println(userLeaves);
-			System.out.println("list: "+list.get(i).toString());
-			float total_leaves = 0, halfday = 0,total_days_worked=0,unpaid_leaves=0;
+			System.out.println("list: " + list.get(i).toString());
+			float total_leaves = 0, halfday = 0, total_days_worked = 0, unpaid_leaves = 0;
 			for (int j = 0; j < user.size(); j++) {
 				atd = new Attendance();
 
 				atd = user.get(j);
-				
-				
-				System.out.println("test::: "+empc);
+
+				System.out.println("test::: " + empc);
 				if (empc.equals(atd.getEmpCode())) {
 					if (atd.getStatus().equals("Present") || atd.getStatus().equals("Absent")
 							|| atd.getStatus().equals("Half-Day"))
-						workingdays = workingdays + 1; //total working days
+						workingdays = workingdays + 1; // total working days
 					if (atd.getStatus().equals("Present"))
 						total_days_worked = total_days_worked + 1;
 
@@ -160,16 +156,16 @@ public class SalaryController {
 				}
 
 			}
-			total_leaves=(float) (workingdays-total_days_worked-0.5*halfday);
-			float bal_leaves=(float) (userLeaves.getBalanceLeaves()+1.75-total_leaves);
-			if(bal_leaves<0) {
-				unpaid_leaves=Math.abs(bal_leaves);
-				bal_leaves=0;
+			total_leaves = (float) (workingdays - total_days_worked - 0.5 * halfday);
+			float bal_leaves = (float) (userLeaves.getBalanceLeaves() + 1.75 - total_leaves);
+			if (bal_leaves < 0) {
+				unpaid_leaves = Math.abs(bal_leaves);
+				bal_leaves = 0;
 			}
-			float paid_leaves=(float) (total_leaves-unpaid_leaves);
+			float paid_leaves = (float) (total_leaves - unpaid_leaves);
 			System.out.println("empCode" + ":" + workingdays + " " + halfday + " " + total_leaves);
-			float tdw=(float)workingdays-total_leaves;
-			UserLeaves ul=new UserLeaves();
+			float tdw = (float) workingdays - total_leaves;
+			UserLeaves ul = new UserLeaves();
 			ul.setBalanceLeaves(bal_leaves);
 			ul.setEmpCode(empc);
 			ul.setMonth(month);
@@ -180,12 +176,11 @@ public class SalaryController {
 			ul.setPaidLeaves(paid_leaves);
 			ul.setUnpaidLeaves(unpaid_leaves);
 			repo.save(ul);
-			
-			
+
 		}
 		return mav;
 	}
-	
+
 	@GetMapping("/downloadSalarySlip")
 	public ModelAndView downloadSalarySlip(@ModelAttribute("user") User user) {
 		ModelAndView mav = new ModelAndView("salaryslip");
@@ -207,14 +202,14 @@ public class SalaryController {
 		return mav;
 	}
 
-	
 	@GetMapping("/downloadSlip")
 	@ResponseBody
-	public ModelAndView downloadPDF(@RequestParam("month") String month,@RequestParam("year") Integer year, @RequestParam("empCode") String empCode, @SessionAttribute("user") User user) {
+	public ModelAndView downloadPDF(@RequestParam("month") String month, @RequestParam("year") Integer year,
+			@RequestParam("empCode") String empCode, @SessionAttribute("user") User user) {
 		Salary list = salaryService.findSalary(empCode, month, year);
 		ModelAndView mav = new ModelAndView("pdfView");
 		UserLeaves uleave = leavesService.getLeavesDetails(empCode, month, year);
-		System.out.println("bbb"+uleave);
+		System.out.println("bbb" + uleave);
 		mav.addObject("list", list);
 		mav.addObject("user", user);
 		mav.addObject("leave", uleave);
@@ -222,5 +217,5 @@ public class SalaryController {
 		String year1 = Integer.toString(year);
 		mav.addObject("year", year1);
 		return mav;
-	}  
+	}
 }

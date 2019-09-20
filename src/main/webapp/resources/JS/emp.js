@@ -31,16 +31,16 @@ load = function(page) {
 												+ "</td><td><a href='editEmployeeAjax?id="
 						
 												+ response.list[i].id
-												+ "' >Edit</a>&nbsp&nbsp<a href='#' onclick='deleteEmp("
+												+ "' >Edit </a>| &nbsp&nbsp<a href='#' onclick='deleteEmp("
 												+ response.list[i].id  
-												+ ");'>|  Delete</a>"
+												+ ");'>Delete</a>"
 												
-												+ "|&nbsp&nbsp <a href='viewSalary?empCode="
+												+ " |&nbsp&nbsp <a href='viewSalary?empCode="
 												+ response.list[i].empCode
 												+"' >Salary</a>"
 												
-												+ "|&nbsp&nbsp<a href='uploadDocumentAjax?empCode="
-												+ response.list[i].empCode +"&userType="+ response.list[i].userType
+												+ " |&nbsp&nbsp<a href='uploadDocumentAjax?empCode="
+												+ response.list[i].empCode 
 												+ "' >Upload </a></td>"
 												);
 					}

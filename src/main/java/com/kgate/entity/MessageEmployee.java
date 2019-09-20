@@ -14,7 +14,7 @@ import javax.persistence.Transient;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
-@Table(name="message_emp")
+@Table
 public class MessageEmployee {
 
 

@@ -19,7 +19,7 @@ import javax.persistence.Table;
 import org.springframework.lang.Nullable;
 
 @Entity
-@Table(name = "Documents")
+@Table
 public class UserDocument {
 
 	@Id

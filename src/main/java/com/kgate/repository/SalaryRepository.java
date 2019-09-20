@@ -16,11 +16,11 @@ import com.kgate.entity.User;
 @Transactional
 public interface SalaryRepository extends JpaRepository<Salary, Integer> {
 
-	@Query(value = "select * from user_salary a where empCode=:empCode and month=:month and year=:year", nativeQuery = true)
+	@Query(value = "select * from Salary a where empCode=:empCode and month=:month and year=:year", nativeQuery = true)
 	public Salary findByEmpCode(@Param("empCode") String empCode, @Param("month") String month,
 			@Param("year") Integer year);
 
-	@Query(value = "select distinct(empCode)from attendance", nativeQuery = true)
+	@Query(value = "select distinct(empCode)from Attendance", nativeQuery = true)
 	public List<String> getEmployeeList();
 
 	@Query(value = "select at from Attendance at where at.month=:month and at.year=:year order by at.empCode")

@@ -4,8 +4,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+<link
+	href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+	rel="stylesheet" id="bootstrap-css">
+<script
+	src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+
 <meta charset="ISO-8859-1">
 <script type="text/javascript">
 	history.pushState(null, null, location.href);
@@ -20,36 +26,41 @@
 <script type="text/javascript" src="./resources/JS/emp.js"></script>
 <script src="./resources/JS/script.js"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
- <!-- <link rel="stylesheet" href="./resources/css/bootstrap.min.css">
-  <link rel="stylesheet" href="./resources/css/bootstrap.css"> -->
+
+<!--  <link rel="stylesheet" href="./resources/css/bootstrap.min.css"> -->
+<link rel="stylesheet" href="./resources/css/login.css">
 </head>
 
-<body bgcolor="#ADD8E6">
-				<h3><center><p style="color: red">${msg}</p></center></h3>
-	<table align="center">
-		<form:form action="authenticate" method="post" modelAttribute="user">
+<body>
 
-			<tr>
-				<td>User:</td>
-				<td><form:input path="email" /></td>
-			</tr>
-			<tr>
-				<td>Password:</td>
-				<td><form:input path="password" type="password" /></td>
-			</tr>
-		<tr>
-				<td></td>
-				<td><input type="submit"   class="btn btn-success" value="Login" /></td>
-				
-
-			</tr>
-		</form:form>
-		<a href="#" onclick="forgot()">Forgot Password</a>
-	</table>
-<!--     <button style="display:none;" id="logout">Logout</button>           
-    <div id="status"></div>
- -->
+	<div class="sidenav">
+		<div class="login-main-text">
+			<h2>
+				<img src="./resources/images/LOGO.png">
+			</h2>
+		</div>
+	</div>
+	<div class="main">
+		<div class="col-md-5 col-sm-12">
+			<div class="login-form">
+				<p style="color: red" align="center">${msg}</p>
+				<form:form action="authenticate" method="post" modelAttribute="user">
+					<div class="form-group">
+						<label>User Name</label>
+						<form:input class="form-control" path="email" />
+					</div>
+					<div class="form-group">
+						<label>Password</label>
+						<form:input path="password" class="form-control" type="password" />
+					</div>
 
 
+					<button type="submit" class="btn btn-black">Login</button>
+					<a href="#" onclick="forgot()">Forgot Password</a>
+
+				</form:form>
+			</div>
+		</div>
+	</div>
 </body>
 </html>

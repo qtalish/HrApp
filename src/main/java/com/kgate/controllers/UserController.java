@@ -2,14 +2,13 @@ package com.kgate.controllers;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.text.DateFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 
@@ -24,13 +23,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.codec.binary.Base64;
-import org.dom4j.util.UserDataAttribute;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -48,12 +45,17 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.itextpdf.text.log.SysoCounter;
 import com.kgate.entity.Attendance;
+import com.kgate.entity.DailyReport;
 import com.kgate.entity.Leave;
 import com.kgate.entity.MessageEmployee;
 import com.kgate.entity.User;
 import com.kgate.entity.UserDocument;
 import com.kgate.repository.MessageRepository;
+import com.kgate.repository.UserDocumentRepository;
+import com.kgate.service.DailyReportService;
+//github.com/Vartak1905/HrApp.git
 import com.kgate.service.UserDocumentService;
 import com.kgate.service.UserService;
 
@@ -66,16 +68,18 @@ public class UserController {
 
 	@Autowired
 	MessageRepository msgrepo;
-	
+
 	@Autowired
 	UserDocumentService uds;
 
-//	@InitBinder
-//	public void bindingPreparation(WebDataBinder binder) {
-//		DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-//		CustomDateEditor orderDateEditor = new CustomDateEditor(dateFormat, true);
-//		binder.registerCustomEditor(Date.class, orderDateEditor);
-//	}
+	@Autowired
+	DailyReportService dailyReportService;
+
+	@Autowired
+	UserDocumentService userDocumentService;
+	@Autowired
+	UserDocumentRepository docRepo;
+
 	@InitBinder
 	public void initConverter(WebDataBinder binder) {
 		CustomDateEditor dateEditor = new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd"), true);
@@ -97,28 +101,29 @@ public class UserController {
 	}
 
 	@PostMapping("/authenticate")
-	public ModelAndView authenticate(@ModelAttribute("user") User user) {
+	public ModelAndView authenticate(@ModelAttribute("user") User user, @SessionAttribute("user") User userSession) {
 		ModelAndView mav = new ModelAndView();
 
-//		User user2 = userService.findUser(user.getEmail(), user.getPassword(), user.getUserType());
 		User user2 = userService.findUser(user.getEmail(), user.getPassword());
+		
+
 		System.out.println("user:::::::::: " + user2);
 		
 		if (user2 == null) {
 			mav.setViewName("login");
-			mav.addObject("msg", "User Name or Password is invalid");
+			mav.addObject("msg", "Please Enter Valid User Details");
 			return mav;
 		}
-				
-		if(user2.getUserType().equalsIgnoreCase("Employee")) {
+		if (user2.getUserType().equals("Employee")) {
+			System.out.println("Employee Login");
 			mav.addObject("user", user2);
-			mav.setViewName("empDash");
-		}
-		 else {
-			mav.setViewName("adminDash");
+			mav.setViewName("redirect:/profile");
+		} else {
+			mav.addObject("user",user2);
+			mav.setViewName("home2");
 		}
 		return mav;
-		}
+	}
 
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	public String logout(HttpServletRequest request) {
@@ -144,8 +149,14 @@ public class UserController {
 		user.setUserType("Employee");
 		UserController uc = new UserController();
 		uc.sendMail(user.getEmail(),
-				"Your login id is: " + user.getEmail() + "\n Your Password is: " + user.getPassword(),
-				"Your Credential and Details");
+				"<font color=\"red\">Hello </font> " + user.getFname() + ",<br>"
+						+ "<font color=\"red\">Your Username is: </font> " + user.getEmail() + "<br>"
+						+ "<font color=\"red\">Your Password is: </font>" + user.getPassword(),
+				"Login Details");
+		/*
+		 * uc.sendMail(user.getEmail(), "Your login id is: " + user.getEmail() +
+		 * "\n Your Password is: " + user.getPassword(), "Your Credential and Details");
+		 */
 		/*
 		 * uc.sendMail(user.getEmail(), "Your login id is: " + user.getEmail() +
 		 * "\n Your Password is: " + user.getPassword(), //
@@ -167,12 +178,12 @@ public class UserController {
 	}
 
 	@GetMapping("/viewEmployees")
-	public ModelAndView viewEmployees() {
+	public ModelAndView viewEmployees(@SessionAttribute("user") User user) {
 //		ModelAndView mav = new ModelAndView("employeelist");
 		ModelAndView mav = new ModelAndView("home2");
-		List<User> userList = userService.findEmployee();
-		System.out.println(userList);
-		mav.addObject("users", userList);
+//	List<User> userList = userService.findEmployee();
+//		System.out.println(userList);
+//		mav.addObject("users", userList);
 		return mav;
 	}
 
@@ -199,7 +210,7 @@ public class UserController {
 			message1.setFrom(new InternetAddress("test@gmail.com"));
 			message1.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
 			message1.setSubject(subject);
-			message1.setText(message);
+			message1.setContent(message, "text/html");
 
 			Transport.send(message1);
 
@@ -267,33 +278,15 @@ public class UserController {
 	}
 
 	@GetMapping("/documents")
-	public ModelAndView viewDocuments(@ModelAttribute("userDocument") UserDocument userDocument,@SessionAttribute("user") User user) {
-		ModelAndView mav = new ModelAndView();
-			
-		System.out.println(">>>>"+user.getEmpCode());
+
+	public ModelAndView viewDocuments(@ModelAttribute("userDocument") UserDocument userDocument,
+			@SessionAttribute("user") User user) {
+		ModelAndView mav = new ModelAndView("employeeDocuments");
 		userDocument.setEmpCode(user.getEmpCode());
-		List<UserDocument> uc = uds.findByString(user.getEmpCode());
-		
-		if(user.getUserType().equals("Employee")) {
-		mav.addObject("uc", uc);
-		mav.setViewName("employeeDocuments");
-		}
-		else {
-			mav.addObject("uc", uc);
-			mav.setViewName("adminDocuments");
-		}
+		List<UserDocument> ud = userDocumentService.findDoc(user.getEmpCode());
+		System.out.println("list" + ud);
+		mav.addObject("uc", ud);
 		return mav;
-    }
-	
-	@RequestMapping(value = "/downloadDoc-{docId}", method = RequestMethod.GET)
-	public String downloadDocument(@PathVariable int docId, HttpServletResponse response)
-			throws IOException {
-		UserDocument document = uds.findById(docId);
-		response.setContentType(document.getDocumentType());
-		response.setContentLength(document.getDocument().length);
-		response.setHeader("Content-Disposition", "attachment; filename=\"" + document.getDname() + "\"");
-		FileCopyUtils.copy(document.getDocument(), response.getOutputStream());
-		return "redirect:/documents";
 	}
 
 	@GetMapping("/delete-document-{docId}")
@@ -301,6 +294,7 @@ public class UserController {
 		uds.deleteById(docId);
 		return "redirect:/documents";
 	}
+
 //Attendance
 
 	@GetMapping("SearchEmp")
@@ -381,7 +375,7 @@ public class UserController {
 	@PostMapping("/send")
 	public ModelAndView send(@ModelAttribute("leave") Leave leave, @RequestParam("file") MultipartFile file)
 			throws ParseException, IOException {
-		ModelAndView mav = new ModelAndView("home2");
+		ModelAndView mav = new ModelAndView("redirect:/leave");
 		leave.setContent(file.getBytes());
 		userService.save(leave);
 		return mav;
@@ -444,7 +438,6 @@ public class UserController {
 		return mav;
 	}
 
-	
 	@GetMapping("/searchEmployee")
 	public ModelAndView searchEmployee(@RequestParam("txt") String txt) {
 		List<User> listEmp = userService.searchEmployee(txt);
@@ -452,13 +445,89 @@ public class UserController {
 		mav.addObject("listEmp", listEmp);
 		return mav;
 	}
-	 
-	/*
-	 * @GetMapping("facebook") public ModelAndView facebook(String status) {
-	 * ModelAndView mav = new ModelAndView("home2");
-	 * 
-	 * String email = userService.findByEmail(status); System.out.println(email);
-	 * 
-	 * return mav; }
-	 */
+
+	@GetMapping("/dailyReport")
+	public ModelAndView getDailyReport() {
+		ModelAndView mav = new ModelAndView("dailyReport");
+		mav.addObject("dailyReport", new DailyReport());
+		return mav;
+	}
+
+	@PostMapping("/submitDailyReport")
+	public ModelAndView submitDailyReport(@ModelAttribute("dailyReport") DailyReport dailyReport,
+			@SessionAttribute("user") User user) {
+		ModelAndView mav = new ModelAndView("dailyReport");
+		String months[] = { "January", "February", "March", "April", "May", "June", "July", "August", "September",
+				"October", "November", "December" };
+		Date date = dailyReport.getDate();
+		String month = months[date.getMonth()];
+		int year = dailyReport.getDate().getYear() + 1900;
+		System.out.println("Month " + month + " Year " + year);
+
+		dailyReport.setEmpCode(user.getEmpCode());
+		dailyReport.setFirstName(user.getFname());
+		dailyReport.setLastName(user.getLname());
+		dailyReport.setMonth(month);
+		dailyReport.setYear(year);
+		dailyReportService.saveReport(dailyReport);
+		mav.addObject("dailyReport", new DailyReport());
+		return mav;
+	}
+
+	@GetMapping("/workReport")
+	public ModelAndView dailyReport() {
+		ModelAndView mav = new ModelAndView("workReport");
+		DailyReport dailyReport = new DailyReport();
+		mav.addObject("dailyReport", dailyReport);
+		DateFormatSymbols dfs = new DateFormatSymbols();
+		String[] arr = dfs.getMonths();
+		List<String> months = new ArrayList<>();
+		for (int i = 0; i < arr.length - 1; i++) {
+			months.add(arr[i]);
+		}
+		mav.addObject("months", months);
+
+		List<Integer> years = new ArrayList<>();
+		for (int i = 2018; i <= 2028; i++) {
+			years.add(i);
+		}
+		mav.addObject("years", years);
+		return mav;
+	}
+
+	@GetMapping("/searchWorkReport")
+	public ModelAndView showDailyReport(@RequestParam("month") String month, @RequestParam("year") Integer year) {
+		ModelAndView mav = new ModelAndView("workReport");
+		DateFormatSymbols dfs = new DateFormatSymbols();
+		String[] arr = dfs.getMonths();
+		List<String> months = new ArrayList<>();
+		for (int i = 0; i < arr.length - 1; i++) {
+			months.add(arr[i]);
+		}
+		mav.addObject("months", months);
+
+		List<Integer> years = new ArrayList<>();
+		for (int i = 2018; i <= 2028; i++) {
+			years.add(i);
+		}
+		mav.addObject("years", years);
+		List<DailyReport> li = dailyReportService.getAllEmployee(month, year);
+		DailyReport dailyReport = new DailyReport();
+		mav.addObject("dailyReport", dailyReport);
+		mav.addObject("li", li);
+		return mav;
+	}
+
+	@RequestMapping(value = "/downloadDoc-{docId}", method = RequestMethod.GET)
+	public String downloadDocument(@PathVariable int docId, HttpServletResponse response) throws IOException {
+
+		UserDocument document = userDocumentService.download(docId);
+//		response.setContentType(document.getDocumentType());
+		System.out.println("ddd" + document);
+		response.setContentLength(document.getDocument().length);
+		response.setHeader("Content-Disposition", "attachment; filename=\"" + document.getDname() + "\"");
+		FileCopyUtils.copy(document.getDocument(), response.getOutputStream());
+		return "redirect:/documents";
+	}
+
 }

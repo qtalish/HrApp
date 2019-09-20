@@ -112,45 +112,15 @@ public class AdminAjaxController {
 		return mav;
 	}
 
-//	@RequestMapping(value = "/searchEmp", method = RequestMethod.GET)
-//	public @ResponseBody Map<String, Object> getAll(User user) {
-//		Map<String, Object> map = new HashMap<>();
-//
-//		List<User> list = userService.searchEmployee();
-//
-//		if (list != null) {
-//			map.put("status", "200");
-//			map.put("message", "Data found");
-//			map.put("list", list);
-//		} else {
-//			map.put("status", "404");
-//			map.put("message", "Data not found");
-//
-//		}
-//
-//		return map;
-//	}
-	
-	/*
-	 * @RequestMapping(value = "/searchEmp", method = RequestMethod.GET)
-	 * 
-	 * @ResponseBody public Map<String, Object> getAll(HttpServletRequest
-	 * request, @RequestParam("val") String st,User user) { Map<String, Object> map
-	 * = new HashMap<>(); System.out.println("TTTTTTTTTTT::: "+st); int initialPage
-	 * = 0; try { initialPage = Integer.parseInt(request.getParameter("page1"));
-	 * initialPage = initialPage - 1; } catch (Exception e) { } Pageable pageable =
-	 * PageRequest.of(initialPage, 2);
-	 * 
-	 * Page<User> list = userService.searchEmployee(pageable, st);
-	 * System.out.println("aaaaas"+list);
-	 * 
-	 * if (list != null) { map.put("status", "200"); map.put("message",
-	 * "Data found"); map.put("list", list); } else { map.put("status", "404");
-	 * map.put("message", "Data not found");
-	 * 
-	 * } map.put("list", list.getContent()); map.put("pnu", list.getTotalPages());
-	 * return map; }
-	 */
+	@RequestMapping(value = "/editEmployeeProfile", method = RequestMethod.GET)
+	public ModelAndView editEmployeeProfile(HttpServletRequest request, @ModelAttribute("user") User user2) {
+		int userId = Integer.parseInt(request.getParameter("id"));
+		User user = repo.getOne(userId);
+		ModelAndView mav = new ModelAndView("employeeEdit");
+		mav.addObject("user", user);
+		return mav;
+	}
+
 	@RequestMapping(value = "/searchEmp", method = RequestMethod.GET)
 	@ResponseBody 
 	public Map<String, Object> getAll(HttpServletRequest request, @RequestParam("val") String st,User user) {
