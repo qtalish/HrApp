@@ -1,5 +1,6 @@
 package com.kgate.entity;
 
+import java.util.Arrays;
 import java.util.Date;
 
 import javax.persistence.Basic;
@@ -29,9 +30,9 @@ public class User {
 	private String mname;
 	private String lname;
 	private String address;
-	@DateTimeFormat(pattern = "dd-MM-yyyy")
-	@Temporal(TemporalType.DATE)
-	private Date dob;
+	/*@DateTimeFormat(pattern = "dd-MM-yyyy")
+	@Temporal(TemporalType.DATE)*/
+	private String dob;
 	@Email
 	@Column(unique=true)
 	private String email;
@@ -44,9 +45,6 @@ public class User {
 	@DateTimeFormat(pattern = "dd-MM-yyyy")
 	@Temporal(TemporalType.DATE)
 	private Date joiningDate;
-	private Integer aLeave;
-	private Integer tLeave;
-	private Integer bLeave;
 	private Long salary;
 	private String userType;
 	private String password;
@@ -103,11 +101,11 @@ public class User {
 		this.address = address;
 	}
 
-	public Date getDob() {
+	public String getDob() {
 		return dob;
 	}
 
-	public void setDob(Date dob) {
+	public void setDob(String dob) {
 		this.dob = dob;
 	}
 
@@ -175,29 +173,6 @@ public class User {
 		this.joiningDate = joiningDate;
 	}
 
-	public Integer getaLeave() {
-		return aLeave;
-	}
-
-	public void setaLeave(Integer aLeave) {
-		this.aLeave = aLeave;
-	}
-
-	public Integer gettLeave() {
-		return tLeave;
-	}
-
-	public void settLeave(Integer tLeave) {
-		this.tLeave = tLeave;
-	}
-
-	public Integer getbLeave() {
-		return bLeave;
-	}
-
-	public void setbLeave(Integer bLeave) {
-		this.bLeave = bLeave;
-	}
 
 	public Long getSalary() {
 		return salary;
@@ -228,8 +203,10 @@ public class User {
 		return "User [id=" + id + ", fname=" + fname + ", mname=" + mname + ", lname=" + lname + ", address=" + address
 				+ ", dob=" + dob + ", email=" + email + ", mob=" + mob + ", designation=" + designation + ", empCode="
 				+ empCode + ", bloodGroup=" + bloodGroup + ", aadhar=" + aadhar + ", pan=" + pan + ", joiningDate="
-				+ joiningDate + ", aLeave=" + aLeave + ", tLeave=" + tLeave + ", bLeave=" + bLeave + ", salary="
-				+ salary + ", userType=" + userType + ", password=" + password + "]";
+				+ joiningDate + ", salary=" + salary + ", userType=" + userType + ", password=" + password + ", image="
+				+ Arrays.toString(image) + "]";
 	}
+
+	
 
 }

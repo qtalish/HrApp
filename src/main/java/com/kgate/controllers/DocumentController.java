@@ -31,13 +31,13 @@ public class DocumentController {
 	UserDocumentRepository repo;
 
 	@RequestMapping(value = "/uploadDocumentAjax", method = RequestMethod.GET)
-	public ModelAndView uploadDocuments(HttpServletRequest request,
+	public ModelAndView uploadDocuments(/* HttpServletRequest request, */
 			@ModelAttribute("userDocument") UserDocument userDocument, @RequestParam(name = "empCode") String empCode) {
 
 //		String abc = request.getParameter("empCode");
 		System.out.println("Employee Code " + empCode);
 
-		ModelAndView mav = new ModelAndView("employeeDocuments");
+		ModelAndView mav = new ModelAndView("adminDocuments");
 		mav.addObject("empCode", empCode);
 		return mav;
 	}
@@ -46,40 +46,64 @@ public class DocumentController {
 	public ModelAndView addDocument(@ModelAttribute("userDocument") UserDocument userDocument,
 			@RequestParam("file") MultipartFile file) {
 		ModelAndView mav = new ModelAndView("employeeDocuments");
-		
-		if (!file.getOriginalFilename().isEmpty()) 
-		{
-		userDocument.setCreated(new Date());
-	/*	System.out.println("Name:" + userDocument.getDname());
-		System.out.println("Desc:" + userDocument.getDescription());
-		System.out.println("File:" + file.getOriginalFilename());
-		System.out.println("ContentType:" + file.getContentType());
-*/
-		
-		try {
-			userDocument.setDocument(file.getBytes());
-			userDocument.setDocumentType(file.getContentType());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 
-		try {
-			
-			userDocumentService.saveDocument(userDocument);
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		System.out.println("upload Called");
-		mav.addObject("msg", "File Uploaded Successfully");
-		}
-		else
-		{
+		if (!file.getOriginalFilename().isEmpty()) {
+			userDocument.setCreated(new Date());
+			try {
+				userDocument.setDocument(file.getBytes());
+				userDocument.setDocumentType(file.getContentType());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+			try {
+
+				userDocumentService.saveDocument(userDocument);
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			System.out.println("upload Called");
+			mav.addObject("msg", "File Uploaded Successfully");
+		} else {
 			mav.addObject("msg", "Please select valid file");
 		}
 
 		return mav;
 	}
 
+	
+	@PostMapping("/addAdminDocument")
+	public ModelAndView addAdminDocument(@ModelAttribute("userDocument") UserDocument userDocument,
+			@RequestParam("file") MultipartFile file) {
+		ModelAndView mav = new ModelAndView("adminDocuments");
+
+		if (!file.getOriginalFilename().isEmpty()) {
+			userDocument.setCreated(new Date());
+			try {
+				userDocument.setDocument(file.getBytes());
+				userDocument.setDocumentType(file.getContentType());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+			try {
+
+				userDocumentService.saveDocument(userDocument);
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			System.out.println("upload Called");
+			mav.addObject("msg", "File Uploaded Successfully");
+		} else {
+			mav.addObject("msg", "Please select valid file");
+		}
+
+		return mav;
+	}
+
+	
 }

@@ -9,22 +9,88 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Attendance</title>
-<script type="text/javascript" src="./resources/JS/jquery-3.3.1.min.js"></script>
+<!-- <script type="text/javascript" src="./resources/JS/jquery-3.3.1.min.js"></script>
 <link href="./resources/css/bootstrap.css" rel="stylesheet" />
-<script src="./resources/JS/sweetalert.min.js" type="text/javascript"></script>
+<script src="./resources/JS/sweetalert.min.js" type="text/javascript"></script> -->
+
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+
+
+<link href="./resources/images/kgate.png" rel="shortcut icon"
+	type="image/png" />
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+	integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+	crossorigin="anonymous">
+<script
+	src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+	integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+	crossorigin="anonymous"></script>
+
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+
 </head>
 <body>
-	<%@include file="home.jsp"%>
-	<%@include file="logout.jsp"%>
-	<form:form action="backToAdmin" method="post"><input type="submit" value="Back"></form:form> 
 	
-	<div class="container">
-		<div align="center">
-			<form:form action="SearchEmp" method="get" modelAttribute="attd">
-				<form:input path="attDate" type="date" value="${dd}" />
-				<input type="submit" value="Search">
-			</form:form>
-			<button class="btn btn-primary" onclick="saveRemarks(${list2})">Save</button>
+		<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+			<a class="navbar-brand" href="https://www.kgate.in/">K-Gate</a>
+
+			<ul class="navbar-nav">
+				<li class="nav-item"><a class="nav-link"
+					href="/HrApp/attendance">Attendence</a></li>
+				<li class="nav-item"><a class="nav-link"
+					href="/HrApp/messageEmployee">Message</a></li>
+				<li class="nav-item"><a class="nav-link"
+					href="/HrApp/workReport">Work Report</a></li>
+					<li class="nav-item"><a class="nav-link"
+					href="/HrApp/hrWorkReport">HR Work Report</a></li>
+
+				<li class="nav-item dropdown"><a
+					class="nav-link dropdown-toggle" href="#" id="navbardrop"
+					data-toggle="dropdown"> Employee </a>
+					<div class="dropdown-menu">
+						<a class="dropdown-item" href="/HrApp/register">Add Employee</a><a
+							class="dropdown-item" href="/HrApp/viewEmployees">View All
+							Employees </a>
+					</div></li>
+			</ul>
+			<div class="navbar-collapse collapse w-25 order-3 dual-collapse2">
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item">
+						<form action="logout" method="get">
+							<button class="btn btn-link" style="color: white;">Log
+								Out</button>
+						</form>
+					</li>
+				</ul>
+			</div>
+		</nav>
+		<br> <br>
+
+ 		
+  		
+   
+	
+			
+		 <form:form   class="input-group mb-2" action="SearchEmp" method="get" modelAttribute="attd">
+				<%-- <form:input path="attDate" class="dropdown-header" type="date" value="${dd}" aria-describedby="basic-addon2" />  --%>
+				
+				<form:input  path="attDate" class="dropdown-header" value="${dd}" type="date" id="calender" aria-describedby="basic-addon2" />
+				<div class="input-group-append">
+				<button style='margin-right:16px' class="btn btn-primary">Search</button>
+				<button style='margin-right:16px' class="btn btn-primary" onclick="saveRemarks(${list2})">Save Remarks</button>
+				</div>
+			</form:form> 
+			
+			
+			
 
 			<table class="table">
 				<thead>
@@ -38,23 +104,27 @@
 					<form:form modelAttribute="attd">
 						<c:forEach items="${list}" var="li" varStatus="s">
 							<tr>
-								<td>${li.firstName}${li.lastName}</td>
-								<%-- 							<td>${li.status}</td> --%>
-								<td><form:select path="status"
+								<td>${li.firstName} ${li.lastName}</td>
+								<%-- <td>${li.status}</td> --%>
+								<td><form:select path="status" class="dropdown-header"
 										onchange="getval(this,${li.id});" id="${li.id}">
 										<form:option value="${li.status} " />
 										<form:options items="${ustatus}" />
 									</form:select></td>
-								<td><input type="text" id="${li.id+1000}"
-									value="${li.remarks}"></td>
+								
+									
+									<td>
+ 		<input type="text" id="${li.id+1000}"
+		value="${li.remarks}" class="form-control" aria-label="Recipient's username" />
+
+		</td>
 						</c:forEach>
 					</form:form>
 				</tbody>
 			</table>
-		</div>
-	</div>
-	<script>
+	
 
+<script>
 function saveRemarks(list){
 // 	var text =list;
 	console.log(list)
@@ -82,7 +152,6 @@ function saveRemarks(list){
 
 	
 		function getval(sel,id) {
-// 			alert(sel.value);
 			var status = sel.value;
 			console.log(id);
 			console.log(sel.value);
@@ -97,16 +166,18 @@ function saveRemarks(list){
 	
 	                    //Receiving the result of search here
 	                    }
-				});
-				
+				});				
 		};
-		// 				changeStatus=function(id) {
-
-		/* console.log(a); */
-		/* 	var a = $("#"+id).val(); */
-		// 				  	console.log(id);
-		// 				}
+		
+		
+	
+		
+		document.getElementById("datepickericon").onclick = function(e){
+		    document.getElementById("calendar").focus();
+		    // You could write code to toggle this
+		}
+		
 	</script>
-</body>
+ </body>
 
 </html>

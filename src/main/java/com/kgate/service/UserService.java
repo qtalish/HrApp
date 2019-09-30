@@ -1,5 +1,6 @@
 package com.kgate.service;
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
@@ -14,7 +15,7 @@ public interface UserService {
 
 	public List<Attendance> getAttendance(Date date);
 
-	public User findUser(String email, String password, String userType);
+	public User findUser(String email, String password);
 
 	public User save(User user);
 	
@@ -29,7 +30,5 @@ public interface UserService {
 	public List<User> searchEmployee(String txt);
 
 	public List<User> searchEmployee();
-
-	public String findByEmail(String status);
 
 }

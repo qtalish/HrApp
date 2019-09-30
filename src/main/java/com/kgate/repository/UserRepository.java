@@ -15,21 +15,21 @@ import com.kgate.entity.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
 
-	@Query("select u from User u where u.email=:email and u.password=:password and u.userType=:userType")
-	User findUser(@Param("email") String email, @Param("password") String password, @Param("userType") String userType);
+	@Query("select u from User u where u.email=:email and u.password=:password")
+	User findUser(@Param("email") String email, @Param("password") String password);
 
 	@Query("select u from User u where u.email=:email")
 	User fetchPassword(@Param("email") String email);
-	
+
 	@Query("select u from User u where u.fname=:fname")
 	List<User> searchEmployee(@Param("fname") String fname);
 
-	@Query(value = "select * from user as u where u.usertype='Employee'", nativeQuery = true)
+	@Query(value = "select * from user as u where u.usertype !='ADMIN'", nativeQuery = true)
 	Page<User> findEmployeePage(Pageable pageable);
-	
-	@Query(value = "select * from user as u where u.usertype='Employee'", nativeQuery = true)
+
+	@Query(value = "select * from user as u where u.usertype !='ADMIN'", nativeQuery = true)
 	List<User> findEmployee();
 
-	public String findByEmail(String email);
+	User findByEmail(String email);
 
 }
