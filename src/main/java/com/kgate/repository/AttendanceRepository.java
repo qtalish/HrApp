@@ -33,4 +33,7 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Integer>
 
 	@Query("select att from Attendance att")
 	List<Attendance> getAttendance();
+	
+	@Query("SELECT c FROM Attendance c WHERE c.empCode=:empCode")
+	Attendance findByeCode(@Param("empCode") String empCode);
 }

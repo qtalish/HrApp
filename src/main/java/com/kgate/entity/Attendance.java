@@ -9,6 +9,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 //@Data
 @Entity
@@ -21,6 +25,8 @@ public class Attendance {
 	public String lastName;
 	public String status;
 	public String remarks;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@Temporal(TemporalType.DATE)
 	public Date attDate;
 	public String empCode;
 	private String month;

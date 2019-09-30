@@ -1,0 +1,101 @@
+<?xml version="1.0"?>
+<workbook>
+	<worksheet name="Attendace_Upload">
+		<section endRow="0" startRow="0" />
+		<loop endRow="1" startRow="1"
+			varType="com.kgate.entity.AttendanceImport" var="att" items="result">
+
+			<section endRow="1" startRow="1">
+
+				<mapping col="0" row="1">att.empCode</mapping>
+
+				<mapping col="1" row="1">att.firstName</mapping>
+
+				<mapping col="2" row="1">att.lastName</mapping>
+
+				<mapping col="3" row="1">att.month</mapping>
+
+				<mapping col="4" row="1">att.year</mapping>
+
+				<mapping col="5" row="1">att.d1</mapping>
+
+				<mapping col="6" row="1">att.d2</mapping>
+
+				<mapping col="7" row="1">att.d3</mapping>
+
+				<mapping col="8" row="1">att.d4</mapping>
+
+				<mapping col="9" row="1">att.d5</mapping>
+
+				<mapping col="10" row="1">att.d6</mapping>
+
+				<mapping col="11" row="1">att.d7</mapping>
+
+				<mapping col="12" row="1">att.d8</mapping>
+
+				<mapping col="13" row="1">att.d9</mapping>
+
+				<mapping col="14" row="1">att.d10</mapping>
+
+				<mapping col="15" row="1">att.d11</mapping>
+
+				<mapping col="15" row="1">att.d12</mapping>
+
+				<mapping col="15" row="1">att.d13</mapping>
+
+				<mapping col="15" row="1">att.d14</mapping>
+
+				<mapping col="15" row="1">att.d15</mapping>
+
+				<mapping col="15" row="1">att.d16</mapping>
+
+				<mapping col="15" row="1">att.d17</mapping>
+
+				<mapping col="15" row="1">att.d18</mapping>
+
+				<mapping col="15" row="1">att.d19</mapping>
+
+				<mapping col="15" row="1">att.d20</mapping>
+
+				<mapping col="15" row="1">att.d21</mapping>
+
+				<mapping col="15" row="1">att.d22</mapping>
+
+				<mapping col="15" row="1">att.d23</mapping>
+
+				<mapping col="15" row="1">att.d24</mapping>
+
+				<mapping col="15" row="1">att.d25</mapping>
+
+				<mapping col="15" row="1">att.d26</mapping>
+
+				<mapping col="15" row="1">att.d27</mapping>
+
+				<mapping col="15" row="1">att.d28</mapping>
+
+				<mapping col="15" row="1">att.d29</mapping>
+
+				<mapping col="15" row="1">att.d30</mapping>
+
+				<mapping col="15" row="1">att.d31</mapping>
+			</section>
+
+
+
+			<loopbreakcondition>
+
+
+
+				<rowcheck offset="0">
+
+					<cellcheck offset="0">End Rows:</cellcheck>
+
+				</rowcheck>
+
+			</loopbreakcondition>
+
+		</loop>
+
+	</worksheet>
+
+</workbook>

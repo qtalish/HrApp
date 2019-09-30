@@ -26,8 +26,8 @@
 	integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
 	crossorigin="anonymous"></script>
 
-<!-- <script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> -->
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script
@@ -70,9 +70,14 @@
 	</nav>
 	<div align="center">
 		<h1 style="color: maroon">Employee List</h1>
-
+		<br>
+		<button style='margin-right:16px' class="btn btn-primary" onclick="showFileDialog();">Import</button>
 <br><br>		 <input id="myInput"  onkeyup="myFunction2()" type="text" placeholder="Search Employee Here.."  /><br></br> 
 		
+		<form id="fileFormEmp" method="POST" enctype="multipart/form-data" >
+					<input type="file" name="fileEmp" id="fileEmp" style="display:none" />
+				</form>
+
 		<table border="1" id="tbl" class="table">
 
 			<th style="color: red">Employee Code</th>
@@ -91,5 +96,64 @@
 
 		</tr>
 	</div>
+	<script>
+var isXlsx = function(name) {
+    return name.match(/xlsx$/i)
+    };
+    $("#btnfile").click(function () {
+	    $("#uploadfile").click();
+	});
+    
+    function showFileDialog(){
+	$("#fileEmp").click();
+	
+	}
+	    
+	    $(document).ready(function() {
+	    
+	    var file = $('[name="fileEmp"]');
+	    
+	    $('#uploadLink').on('click', function() {
+		});
+		
+	    var fileU = document.getElementById('fileEmp');
+		fileU.addEventListener("change", function () {
+			  if (fileU.files.length > 0) {
+			   var filename = $.trim(file.val());
+			
+			if (!(isXlsx(filename) )) {
+			    alert('Error', 'Please select an xlsx file to upload');
+			    return;
+			}
+			
+			$.ajax({
+			   xhr: function() {
+			    var xhr = new window.XMLHttpRequest();
+
+			  
+
+			    return xhr;
+			  },
+			   url: 'uploadEmp',
+			    type: "POST",
+			    data: new FormData(document.getElementById("fileFormEmp")),
+			    enctype: 'multipart/form-data',
+			    processData: false,
+			    contentType: false
+			  }).done(function(data) {
+			    alert('Success', 'File Upload Successful');
+			   
+			  }).fail(function(jqXHR, textStatus) {
+			      alert('Failure', 'File Upload Failed. Please contact Administrator');
+			  });
+			  document.getElementById('fileAttendance').value = null;
+			    return;
+			  }
+			 
+			});
+		  
+		});
+		
+	</script>
 </body>
 </html>

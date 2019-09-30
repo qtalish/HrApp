@@ -9,9 +9,9 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Attendance</title>
-<!-- <script type="text/javascript" src="./resources/JS/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="./resources/JS/jquery-3.3.1.min.js"></script>
 <link href="./resources/css/bootstrap.css" rel="stylesheet" />
-<script src="./resources/JS/sweetalert.min.js" type="text/javascript"></script> -->
+<script src="./resources/JS/sweetalert.min.js" type="text/javascript"></script>
 
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
@@ -71,23 +71,22 @@
 			</div>
 		</nav>
 		<br> <br>
-
- 		
-  		
-   
-	
 			
+				<div class="input-group-append">
 		 <form:form   class="input-group mb-2" action="SearchEmp" method="get" modelAttribute="attd">
-				<form:input path="attDate" class="dropdown-header" type="date" value="${dd}" aria-describedby="basic-addon2" /> 
+				<%-- <form:input path="attDate" class="dropdown-header" type="date" value="${dd}" aria-describedby="basic-addon2" />  --%>
 				
 				<form:input  path="attDate" class="dropdown-header" value="${dd}" type="date" id="calender" aria-describedby="basic-addon2" />
-				<div class="input-group-append">
 				<button style='margin-right:16px' class="btn btn-primary">Search</button>
 				<button style='margin-right:16px' class="btn btn-primary" onclick="saveRemarks(${list2})">Save Remarks</button>
-				</div>
 			</form:form> 
 			
+				<button style='margin-right:16px' class="btn btn-primary" onclick="showFileDialog();">Import</button>
 			
+			<form id="fileFormAttendance" method="POST" enctype="multipart/form-data" >
+					<input type="file" name="fileAttendance" id="fileAttendance" style="display:none" />
+				</form>
+				</div>
 			
 
 			<table class="table">
@@ -122,7 +121,70 @@
 			</table>
 	
 
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
 <script>
+var isXlsx = function(name) {
+    return name.match(/xlsx$/i)
+    };
+    $("#btnfile").click(function () {
+	    $("#uploadfile").click();
+	});
+    
+    function showFileDialog(){
+	$("#fileAttendance").click();
+	
+	}
+	    
+	    $(document).ready(function() {
+	    
+	    var file = $('[name="fileAttendance"]');
+	    
+	    $('#uploadLink').on('click', function() {
+		});
+		
+	    var fileU = document.getElementById('fileAttendance');
+		fileU.addEventListener("change", function () {
+			  if (fileU.files.length > 0) {
+			   var filename = $.trim(file.val());
+			
+			if (!(isXlsx(filename) )) {
+			    alert('Error', 'Please select an xlsx file to upload');
+			    return;
+			}
+			
+			$.ajax({
+			   xhr: function() {
+			    var xhr = new window.XMLHttpRequest();
+
+			  
+
+			    return xhr;
+			  },
+			   url: 'upload',
+			    type: "POST",
+			    data: new FormData(document.getElementById("fileFormAttendance")),
+			    enctype: 'multipart/form-data',
+			    processData: false,
+			    contentType: false
+			  }).done(function(data) {
+			    alert('Success', 'File Upload Successful');
+			   
+			  }).fail(function(jqXHR, textStatus) {
+			      alert('Failure', 'File Upload Failed. Please contact Administrator');
+			  });
+			  document.getElementById('fileAttendance').value = null;
+			    return;
+			  }
+			 
+			});
+		  
+		});
+		
+			
+	    
 function saveRemarks(list){
 // 	var text =list;
 	console.log(list)

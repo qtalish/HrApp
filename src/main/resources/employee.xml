@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<workbook>
+	<worksheet name="Employee_Upload">
+		<section endRow="0" startRow="0" />
+		<loop endRow="1" startRow="1"
+			varType="com.kgate.entity.User" var="emp" items="result">
+
+			<section endRow="1" startRow="1">
+
+				<mapping col="0" row="1">emp.fname</mapping>
+
+				<mapping col="1" row="1">emp.mname</mapping>
+
+				<mapping col="2" row="1">emp.lname</mapping>
+
+				<mapping col="3" row="1">emp.empCode</mapping>
+				
+				<mapping col="4" row="1">emp.designation</mapping>
+				
+				<mapping col="5" row="1">emp.mob</mapping>
+				
+				<mapping col="6" row="1">emp.email</mapping>
+				
+				<mapping col="7" row="1">emp.aadhar</mapping>
+				
+				<mapping col="8" row="1">emp.pan</mapping>
+				
+				<mapping col="9" row="1">emp.joiningDate</mapping>
+				
+				<mapping col="10" row="1">emp.salary</mapping>
+				
+				<mapping col="11" row="1">emp.address</mapping>
+
+				<mapping col="12" row="1">emp.dob</mapping>
+				
+				<mapping col="13" row="1">emp.bloodGroup</mapping>
+
+				<mapping col="14" row="1">emp.password</mapping>
+				
+				<mapping col="15" row="1">emp.userType</mapping>
+
+			</section>
+
+			<loopbreakcondition>
+
+				<rowcheck offset="0">
+
+					<cellcheck offset="0">End Rows:</cellcheck>
+
+				</rowcheck>
+
+			</loopbreakcondition>
+
+		</loop>
+
+	</worksheet>
+
+</workbook>

@@ -198,7 +198,7 @@ public class UserController {
 
 		Session session = Session.getInstance(props, new javax.mail.Authenticator() {
 			protected PasswordAuthentication getPasswordAuthentication() {
-				return new PasswordAuthentication("gulfarooqui1@gmail.com", "Gmail#7326");
+				return new PasswordAuthentication("gulfarooqui1@gmail.com", "Infinite#7326");
 			}
 
 		});
