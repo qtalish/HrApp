@@ -19,5 +19,8 @@ public interface UserDocumentRepository extends JpaRepository<UserDocument, Inte
 
 	@Query("select u from UserDocument u where u.empCode=:empCode")
 	List<UserDocument> findDoc(@Param("empCode") String empCode);
+	
+	List<UserDocument> findByEmpCode(String empcode);
+
 
 }

@@ -11,7 +11,6 @@
 <script
 	src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
-
 <meta charset="ISO-8859-1">
 <script type="text/javascript">
 	history.pushState(null, null, location.href);
@@ -27,39 +26,36 @@
 <script src="./resources/JS/script.js"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
-<!--  <link rel="stylesheet" href="./resources/css/bootstrap.min.css"> -->
-<link rel="stylesheet" href="./resources/css/login.css">
+  <link rel="stylesheet" href="./resources/css/login.css"> 
 </head>
 
 <body>
-	<div class="sidenav">
-		<div class="login-main-text">
-			<h2>
-				<img src="./resources/images/LOGO.png">
-			</h2>
-		</div>
-	</div>
-	<div class="main">
-		<div class="col-md-5 col-sm-12">
-			<div class="login-form">
-				<p style="color: red" align="center">${msg}</p>
-				<form:form action="authenticate" method="post" modelAttribute="user">
-					<div class="form-group">
-						<label>User Name</label>
-						<form:input class="form-control" path="email" />
-					</div>
-					<div class="form-group">
-						<label>Password</label>
-						<form:input path="password" class="form-control" type="password" />
-					</div>
-
-
-					<button type="submit" class="btn btn-black">Login</button>
-					<a href="#" onclick="forgot()">Forgot Password</a>
-
-				</form:form>
-			</div>
-		</div>
-	</div>
+<div class="sidenav">
+         <div class="login-main-text">
+            <h2><img src="./resources/images/LOGO.png"></h2> 
+         </div>
+      </div>
+      <div class="main">
+         <div class="col-md-5 col-sm-12">
+            <div class="login-form">
+            	<p style="color: red" align="center">${msg}</p>
+               <form:form action="authenticate" method="post" modelAttribute="user">
+                  <div class="form-group">
+                     <label>User Name</label>
+                     <form:input class="form-control" path="email" />
+                  </div>
+                  <div class="form-group">
+                     <label>Password</label>
+                     <form:input path="password" class="form-control" type="password" />  
+                  </div>
+                  
+       
+                    <button type="submit" class="btn btn-black">Login </button>
+                    <a href="#" onclick="forgot()">Forgot Password</a>
+                  
+               </form:form>
+            </div>
+         </div>
+      </div>
 </body>
 </html>

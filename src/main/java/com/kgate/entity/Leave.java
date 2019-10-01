@@ -1,5 +1,6 @@
 package com.kgate.entity;
 
+import java.util.Arrays;
 import java.util.Date;
 
 import javax.persistence.Basic;
@@ -16,10 +17,12 @@ import javax.persistence.TemporalType;
 import org.hibernate.annotations.Proxy;
 import org.springframework.format.annotation.DateTimeFormat;
 
-@Entity
-@Table
-@Proxy(lazy=false)	
+@Entity	
+@Table(name="emp_leave")
+//@Proxy(lazy=false)
 public class Leave {
+	
+	
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -40,20 +43,10 @@ public class Leave {
 	@Column(name="content")
 	@Basic(fetch=FetchType.EAGER)
 	private byte[] content;
-	
+
 	public Integer getId() {
 		return id;
 	}
-	
-	public byte[] getContent() {
-		return content;
-	}
-
-
-	public void setContent(byte[] content) {
-		this.content = content;
-	}
-
 
 	public void setId(Integer id) {
 		this.id = id;
@@ -91,9 +84,17 @@ public class Leave {
 		this.message = message;
 	}
 
+	public byte[] getContent() {
+		return content;
+	}
+
+	public void setContent(byte[] content) {
+		this.content = content;
+	}
+
 	@Override
 	public String toString() {
-		return "Leave [id=" + id + ", Subject=" + subject + ", fromDate=" + fromDate + ", toDate=" + toDate
-				+ ", message=" + message + "]";
-	}	
+		return "Leave [id=" + id + ", subject=" + subject + ", fromDate=" + fromDate + ", toDate=" + toDate
+				+ ", message=" + message + ", content=" + Arrays.toString(content) + "]";
+	}
 }

@@ -26,7 +26,8 @@
 
 </head>
 <body>
-		<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+	
+	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
 			<a class="navbar-brand" href ="https://www.kgate.in/">K-Gate</a>
 
 			<ul class="navbar-nav">
@@ -40,7 +41,7 @@
 					href="/HrApp/dailyReport">Daily Report</a></li>
 					
 					<li class="nav-item"><a class="nav-link"
-					href="/HrApp/dailyReport">Salary Slip Download</a></li>
+					href="/HrApp/downloadSalarySlip">Salary Slip Download</a></li>
 
 			</ul>
 			<div class="navbar-collapse collapse w-25 order-3 dual-collapse2">

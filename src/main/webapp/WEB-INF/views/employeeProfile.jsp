@@ -62,35 +62,65 @@ button:hover, a:hover {
 
 
 <body>
+
+<c:if test="${type == 'HR'}">
+
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-			<a class="navbar-brand" href ="https://www.kgate.in/">K-Gate</a>
+		<a class="navbar-brand" href="https://www.kgate.in/">K-Gate</a>
 
-			<ul class="navbar-nav">
+		<ul class="navbar-nav">
+			<li class="nav-item"><a class="nav-link" href="/HrApp/profile">Profile</a></li>
+			<li class="nav-item"><a class="nav-link" href="/HrApp/documents">Document</a></li>
+			<li class="nav-item"><a class="nav-link" href="/HrApp/leave">Leave
+					Application</a></li>
+			<li class="nav-item"><a class="nav-link"
+				href="/HrApp/hrDailyReport">Daily Report</a></li>
 				<li class="nav-item"><a class="nav-link"
-					href="/HrApp/profile">Profile</a></li>
-				<li class="nav-item"><a class="nav-link"
-					href="/HrApp/documents">Document</a></li>
-				<li class="nav-item"><a class="nav-link"
-					href="/HrApp/leave">Leave Application</a></li>
-					<li class="nav-item"><a class="nav-link"
-					href="/HrApp/dailyReport">Daily Report</a></li>
+				href="/HrApp/hrCallingSheet">Calling Sheet</a></li>
 
+		</ul>
+		<div class="navbar-collapse collapse w-25 order-3 dual-collapse2">
+			<ul class="navbar-nav ml-auto">
+				<li class="nav-item">
+					<form action="logout" method="get">
+						<button class="btn btn-link" style="color: white;">Log
+							Out</button>
+					</form>
+				</li>
 			</ul>
-			<div class="navbar-collapse collapse w-25 order-3 dual-collapse2">
-				<ul class="navbar-nav ml-auto">
-					<li class="nav-item">
-						<form action="logout" method="get">
-							<button class="btn btn-link" style="color: white;">Log
-								Out</button>
-						</form>
-					</li>
-				</ul>
-			</div>
-		</nav>
+		</div>
+	</nav>
+	<br>	
+	</c:if>
+		
+		
+		
+<c:if test="${type == 'DEVELOPER'}">
+	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+		<a class="navbar-brand" href="https://www.kgate.in/">K-Gate</a>
 
+		<ul class="navbar-nav">
+			<li class="nav-item"><a class="nav-link" href="/HrApp/profile">Profile</a></li>
+			<li class="nav-item"><a class="nav-link" href="/HrApp/documents">Document</a></li>
+			<li class="nav-item"><a class="nav-link" href="/HrApp/leave">Leave
+					Application</a></li>
+			<li class="nav-item"><a class="nav-link"
+				href="/HrApp/dailyReport">Daily Report</a></li>
 
-
-<%-- <form:form action="backToEmployee" method="post"><input type="submit" value="Back"></form:form> --%>
+		</ul>
+		<div class="navbar-collapse collapse w-25 order-3 dual-collapse2">
+			<ul class="navbar-nav ml-auto">
+				<li class="nav-item">
+					<form action="logout" method="get">
+						<button class="btn btn-link" style="color: white;">Log
+							Out</button>
+					</form>
+				</li>
+			</ul>
+		</div>
+	</nav>
+	<br>
+	</c:if>
 <h2 style="text-align:center">User Profile Card</h2>
 
 <div class="card">
@@ -111,4 +141,4 @@ button:hover, a:hover {
   <p><button onclick="location.href='uploadForm'" >Upload Picture</button></p>
 </div>
 </body>
-</html>
+</html>

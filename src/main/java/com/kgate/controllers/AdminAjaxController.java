@@ -1,6 +1,7 @@
 package com.kgate.controllers;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -23,8 +24,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.itextpdf.text.log.Logger;
 import com.kgate.entity.User;
 import com.kgate.entity.UserDocument;
 import com.kgate.repository.AttendanceRepository;
@@ -35,6 +38,7 @@ import com.kgate.service.UserService;
 @Controller
 public class AdminAjaxController {
 
+	private org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(AdminAjaxController.class);
 	@Autowired
 	UserRepository repo;
 
@@ -104,19 +108,39 @@ public class AdminAjaxController {
 	}
 
 	@RequestMapping(value = "/editEmployeeAjax", method = RequestMethod.GET)
-	public ModelAndView editEmployee(HttpServletRequest request, @ModelAttribute("user") User user2) {
+	public ModelAndView editEmployee(HttpServletRequest request, @ModelAttribute("user") User user2 ) {
 		int userId = Integer.parseInt(request.getParameter("id"));
 		User user = repo.getOne(userId);
 		ModelAndView mav = new ModelAndView("register");
+		
+		
+		List<String> userType = new ArrayList<>();
+		userType.add("DEVELOPER");
+		userType.add("HR");
+		userType.add("OPERATIONS");
+		userType.add("MARKETING");
+		userType.add("ACCOUNTS");
+		mav.addObject("userType", userType);
+
 		mav.addObject("user", user);
 		return mav;
 	}
 
 	@RequestMapping(value = "/editEmployeeProfile", method = RequestMethod.GET)
-	public ModelAndView editEmployeeProfile(HttpServletRequest request, @ModelAttribute("user") User user2) {
+	public ModelAndView editEmployeeProfile(HttpServletRequest request, @ModelAttribute("user") User user2,@SessionAttribute("user") User user3) {
 		int userId = Integer.parseInt(request.getParameter("id"));
 		User user = repo.getOne(userId);
 		ModelAndView mav = new ModelAndView("employeeEdit");
+		System.out.println("......................................."+user3.getUserType());
+		mav.addObject("type",user3.getUserType());
+		List<String> userType = new ArrayList<>();
+		userType.add("DEVELOPER");
+		userType.add("HR");
+		userType.add("OPERATIONS");
+		userType.add("MARKETING");
+		userType.add("ACCOUNTS");
+		mav.addObject("userType", userType);
+
 		mav.addObject("user", user);
 		return mav;
 	}

@@ -47,6 +47,8 @@
 				href="/HrApp/messageEmployee">Message</a></li>
 			<li class="nav-item"><a class="nav-link"
 				href="/HrApp/workReport">Work Report</a></li>
+				<li class="nav-item"><a class="nav-link"
+					href="/HrApp/hrWorkReport">HR Work Report</a></li>
 
 			<li class="nav-item dropdown"><a
 				class="nav-link dropdown-toggle" href="#" id="navbardrop"
@@ -77,6 +79,7 @@
 		<form id="fileFormEmp" method="POST" enctype="multipart/form-data" >
 					<input type="file" name="fileEmp" id="fileEmp" style="display:none" />
 				</form>
+
 
 		<table border="1" id="tbl" class="table">
 

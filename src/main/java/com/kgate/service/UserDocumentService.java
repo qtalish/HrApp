@@ -17,4 +17,5 @@ public interface UserDocumentService {
 	UserDocument findById(int docId);
 
 	List<UserDocument> findDoc(String empCode);
+
 }

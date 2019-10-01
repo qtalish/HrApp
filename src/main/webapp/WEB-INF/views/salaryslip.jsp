@@ -23,7 +23,6 @@
 				</c:forEach>
 			</select>
 			<br><br>
-		<!-- 	<a href="/HrApp/downloadSlip">Download</a> -->
 			<input type="submit" value="Download" />
 			</center>
 				</form:form>

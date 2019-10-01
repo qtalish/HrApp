@@ -37,7 +37,8 @@
 					href="/HrApp/messageEmployee">Message</a></li>
 				<li class="nav-item"><a class="nav-link"
 					href="/HrApp/workReport">Work Report</a></li>
-
+\					<li class="nav-item"><a class="nav-link"
+					href="/HrApp/hrWorkReport">HR Work Report</a></li>
 				<li class="nav-item dropdown"><a
 					class="nav-link dropdown-toggle" href="#" id="navbardrop"
 					data-toggle="dropdown"> Employee </a>

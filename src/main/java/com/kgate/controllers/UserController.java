@@ -23,6 +23,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.log4j.Logger;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.http.HttpStatus;
@@ -45,7 +47,6 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.itextpdf.text.log.SysoCounter;
 import com.kgate.entity.Attendance;
 import com.kgate.entity.DailyReport;
 import com.kgate.entity.Leave;
@@ -54,14 +55,21 @@ import com.kgate.entity.User;
 import com.kgate.entity.UserDocument;
 import com.kgate.repository.MessageRepository;
 import com.kgate.repository.UserDocumentRepository;
+import com.kgate.repository.UserRepository;
 import com.kgate.service.DailyReportService;
-//github.com/Vartak1905/HrApp.git
+import com.kgate.service.HrCallingSheetService;
+import com.kgate.service.HrDailyReportService;
 import com.kgate.service.UserDocumentService;
 import com.kgate.service.UserService;
 
 @Controller
 @SessionAttributes("user")
 public class UserController {
+	
+	private Logger log =  Logger.getLogger(UserController.class);
+
+	@Autowired
+	HrDailyReportService hrDailyReportService;
 
 	@Autowired
 	UserService userService;
@@ -69,16 +77,22 @@ public class UserController {
 	@Autowired
 	MessageRepository msgrepo;
 
-	@Autowired
-	UserDocumentService uds;
-
+	
 	@Autowired
 	DailyReportService dailyReportService;
 
 	@Autowired
-	UserDocumentService userDocumentService;
-	@Autowired
 	UserDocumentRepository docRepo;
+
+	@Autowired
+	UserDocumentService userDocumentService;
+	
+	@Autowired
+	HrCallingSheetService hrCallingSheetService;
+	@Autowired
+	UserRepository userRepo;
+
+	static int workload = 12;
 
 	@InitBinder
 	public void initConverter(WebDataBinder binder) {
@@ -93,38 +107,50 @@ public class UserController {
 		User user = new User();
 		user.setEmail("gulfarooqui1@gmail.com");
 		user.setPassword("1234");
-		String userType[] = { "Admin", "Employee" };
-		mav.addObject("userType", userType);
-		System.out.println(userType);
 		mav.addObject("user", user);
 		return mav;
 	}
-
+	
 	@PostMapping("/authenticate")
-	public ModelAndView authenticate(@ModelAttribute("user") User user, @SessionAttribute("user") User userSession) {
+	public ModelAndView authenticate(@ModelAttribute("user") User user) {
 		ModelAndView mav = new ModelAndView();
-
-		User user2 = userService.findUser(user.getEmail(), user.getPassword());
-		
-
-		System.out.println("user:::::::::: " + user2);
-		
-		if (user2 == null) {
+		User user2 = userRepo.findByEmail(user.getEmail());
+		System.out.println("........." + user2);
+		boolean validate = BCrypt.checkpw(user.getPassword(), user2.getPassword());
+		if (!validate) {
+			log.info("Invalid");
 			mav.setViewName("login");
 			mav.addObject("msg", "Please Enter Valid User Details");
 			return mav;
 		}
-		if (user2.getUserType().equals("Employee")) {
-			System.out.println("Employee Login");
-			mav.addObject("user", user2);
-			mav.setViewName("redirect:/profile");
-		} else {
-			mav.addObject("user",user2);
+		if (user2.getUserType().equalsIgnoreCase("DEVELOPER")) {
+			mav.addObject("user", user2); 	
+			mav.setViewName("empDash");
+			log.info("Developer Logged In");
+			System.out.println("Developer Logged In");
+		} else if (user2.getUserType().equalsIgnoreCase("ADMIN")) {
 			mav.setViewName("home2");
+			mav.addObject("user", user2);
+			System.out.println("Admin Logged In");
+		} else if (user2.getUserType().equalsIgnoreCase("HR")) {
+			mav.setViewName("hrDash");
+			mav.addObject("user", user2);
+			System.out.println("HR Logged In");
+		} else if (user2.getUserType().equalsIgnoreCase("OPERATIONS")) {
+			mav.setViewName("operationsDash");
+			mav.addObject("user", user2);
+			System.out.println("Operations Logged In");
+		} else if (user2.getUserType().equalsIgnoreCase("MARKETING")) {
+			mav.setViewName("marketingDash");
+			mav.addObject("user", user2);
+			System.out.println("Marketing Employee Logged In");
+		} else if (user2.getUserType().equalsIgnoreCase("ACCOUNTS")) {
+			mav.setViewName("accountsDash");
+			mav.addObject("user", user2);
+			System.out.println("Developer Logged In");
 		}
 		return mav;
 	}
-
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	public String logout(HttpServletRequest request) {
 		return "redirect:/";
@@ -139,51 +165,39 @@ public class UserController {
 	public ModelAndView register() {
 		ModelAndView mav = new ModelAndView("register");
 		User user = new User();
+
+		List<String> userType = new ArrayList<>();
+		userType.add("DEVELOPER");
+		userType.add("HR");
+		userType.add("OPERATIONS");
+		userType.add("MARKETING");
+		userType.add("ACCOUNTS");
+		mav.addObject("userType", userType);
+
 		mav.addObject("user", user);
 		return mav;
 	}
 
 	@PostMapping("/save")
 	public ModelAndView save(@ModelAttribute("user") User user) throws ParseException {
+
 		ModelAndView mav = new ModelAndView("home2");
-		user.setUserType("Employee");
 		UserController uc = new UserController();
+		String salt = BCrypt.gensalt(workload);
+		String hspwd = BCrypt.hashpw(user.getPassword(), salt);
+		user.setPassword(hspwd);
+		userService.save(user);
 		uc.sendMail(user.getEmail(),
 				"<font color=\"red\">Hello </font> " + user.getFname() + ",<br>"
 						+ "<font color=\"red\">Your Username is: </font> " + user.getEmail() + "<br>"
 						+ "<font color=\"red\">Your Password is: </font>" + user.getPassword(),
 				"Login Details");
-		/*
-		 * uc.sendMail(user.getEmail(), "Your login id is: " + user.getEmail() +
-		 * "\n Your Password is: " + user.getPassword(), "Your Credential and Details");
-		 */
-		/*
-		 * uc.sendMail(user.getEmail(), "Your login id is: " + user.getEmail() +
-		 * "\n Your Password is: " + user.getPassword(), //
-		 * "Your Credential and Details");
-		 * 
-		 * String email = user.getEmail(); String email2 =
-		 * userService.findByEmail(email); if(email.equals(email2)) { ModelAndView mav2
-		 * = new ModelAndView("register"); } else {
-		 */
-		/*
-		 * User user2 = userService.findUser(user.getEmail(), user.getPassword(),
-		 * user.getUserType()); if(user.getEmail().equals(user2.getEmail())) {
-		 * mav.setViewName("re	gister"); mav.addObject("msg", "User Already Exists");
-		 * return mav; } System.out.println("asdfghjhgfds");
-		 */
-
-		userService.save(user);
 		return mav;
 	}
 
 	@GetMapping("/viewEmployees")
 	public ModelAndView viewEmployees(@SessionAttribute("user") User user) {
-//		ModelAndView mav = new ModelAndView("employeelist");
 		ModelAndView mav = new ModelAndView("home2");
-//	List<User> userList = userService.findEmployee();
-//		System.out.println(userList);
-//		mav.addObject("users", userList);
 		return mav;
 	}
 
@@ -219,7 +233,6 @@ public class UserController {
 		} catch (MessagingException e1) {
 			throw new RuntimeException(e1);
 		}
-		// return "employeelist";
 
 	}
 
@@ -234,6 +247,7 @@ public class UserController {
 			throws UnsupportedEncodingException {
 
 		ModelAndView mav = new ModelAndView("employeeProfile");
+		mav.addObject("type",user.getUserType());
 		System.out.println(user);
 		if (user.getImage() == null) {
 			mav.addObject("user", user);
@@ -249,10 +263,14 @@ public class UserController {
 	}
 
 	@GetMapping("/attendance")
-	public ModelAndView viewAttendance() {
+	public ModelAndView viewAttendance() throws ParseException {
 		ModelAndView mav = new ModelAndView("employeeAttendance");
 		mav.addObject("attd", new Attendance());
 		Date date = new Date();
+		SimpleDateFormat sm = new SimpleDateFormat("MM-dd-yyyy");
+		String strDate2 = sm.format(date);
+		Date dt = sm.parse(strDate2);
+		System.out.println("............. " + date);
 		List<Attendance> list = userService.getAttendance(date);
 		List<Integer> list2 = new ArrayList<>();
 		for (Attendance attendance : list) {
@@ -272,33 +290,34 @@ public class UserController {
 		mav.addObject("list2", list2);
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		String strDate = formatter.format(date);
-		System.out.println("Date Format with yyyy-mm-dd : " + strDate);
 		mav.addObject("dd", strDate);
 		return mav;
 	}
 
 	@GetMapping("/documents")
-
 	public ModelAndView viewDocuments(@ModelAttribute("userDocument") UserDocument userDocument,
 			@SessionAttribute("user") User user) {
 		ModelAndView mav = new ModelAndView("employeeDocuments");
+
+        String type = user.getUserType();
+		mav.addObject("type", type);
 		userDocument.setEmpCode(user.getEmpCode());
 		List<UserDocument> ud = userDocumentService.findDoc(user.getEmpCode());
 		System.out.println("list" + ud);
 		mav.addObject("uc", ud);
+		mav.addObject("empCode", user.getEmpCode());
 		return mav;
 	}
 
 	@GetMapping("/delete-document-{docId}")
 	public String delteDocument(@PathVariable int docId) {
-		uds.deleteById(docId);
+		userDocumentService.deleteById(docId);
 		return "redirect:/documents";
 	}
 
 //Attendance
-
 	@GetMapping("SearchEmp")
-	public ModelAndView SearchEmp(@RequestParam("attDate") Date date) {
+	public ModelAndView SearchEmp(@RequestParam("attDate") Date date) throws ParseException {
 		ModelAndView mav = new ModelAndView("employeeAttendance");
 		List<Attendance> list = userService.getAttendance(date);
 		List<Integer> list2 = new ArrayList<>();
@@ -324,30 +343,8 @@ public class UserController {
 		return mav;
 	}
 
-	/*
-	 * @GetMapping("SearchEmp") public ModelAndView
-	 * SearchEmp(@RequestParam("attDate") Date date) { ModelAndView mav = new
-	 * ModelAndView("employeeAttendance"); System.out.println("test:: " + date);
-	 * List<Attendance> list = userService.getAttendance(date); List<Attendance> li
-	 * = new ArrayList<>(); Attendance a = new Attendance(); mav.addObject("a", a);
-	 * String status[] = { "Present", "Absent" }; Map<String, String> map = new
-	 * HashMap<String, String>(); map.put("Present", "Present"); map.put("Absent",
-	 * "Absent"); mav.addObject("status",map);
-	 * System.out.println("111111111111112222222222" + Arrays.toString(status));
-	 * 
-	 * // mav.addObject("ustatus", Arrays.toString(status));
-	 * mav.addObject("ustatus", status); // System.out.println(status); //
-	 * System.out.println(Arrays.toString(status)); for (int i = 0; i < list.size();
-	 * i++) { Attendance att = new Attendance();
-	 * att.setFirstName(list.get(i).getFirstName());
-	 * att.setStatus(list.get(i).getStatus()); System.out.println("ttttt::::: " +
-	 * att); li.add(att); } System.out.println("1111111111111111" + li);
-	 * mav.addObject("list", list); return mav; }
-	 */
-
 	@PostMapping("/forgetPassword")
 	@ResponseBody
-//	public Map<String, Object> forgetPassword(@RequestBody User user) {
 	public ResponseEntity<?> forgetPassword(@RequestBody User user) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		System.out.println("inside forgot");
@@ -367,16 +364,18 @@ public class UserController {
 
 	// Leave
 	@GetMapping("/leave")
-	public ModelAndView leave(@ModelAttribute("leave") Leave leave) {
+	public ModelAndView leave(@ModelAttribute("leave") Leave leave,@SessionAttribute("user")  User user) {
 		ModelAndView mav = new ModelAndView("leave");
+		mav.addObject("type",user.getUserType());
 		return mav;
 	}
 
 	@PostMapping("/send")
-	public ModelAndView send(@ModelAttribute("leave") Leave leave, @RequestParam("file") MultipartFile file)
-			throws ParseException, IOException {
+	public ModelAndView send(@ModelAttribute("leave") Leave leave, @RequestParam("file") MultipartFile file,
+			@SessionAttribute("user") User user) throws ParseException, IOException {
 		ModelAndView mav = new ModelAndView("redirect:/leave");
 		leave.setContent(file.getBytes());
+		UserController uc = new UserController();
 		userService.save(leave);
 		return mav;
 	}
@@ -446,80 +445,8 @@ public class UserController {
 		return mav;
 	}
 
-	@GetMapping("/dailyReport")
-	public ModelAndView getDailyReport() {
-		ModelAndView mav = new ModelAndView("dailyReport");
-		mav.addObject("dailyReport", new DailyReport());
-		return mav;
-	}
-
-	@PostMapping("/submitDailyReport")
-	public ModelAndView submitDailyReport(@ModelAttribute("dailyReport") DailyReport dailyReport,
-			@SessionAttribute("user") User user) {
-		ModelAndView mav = new ModelAndView("dailyReport");
-		String months[] = { "January", "February", "March", "April", "May", "June", "July", "August", "September",
-				"October", "November", "December" };
-		Date date = dailyReport.getDate();
-		String month = months[date.getMonth()];
-		int year = dailyReport.getDate().getYear() + 1900;
-		System.out.println("Month " + month + " Year " + year);
-
-		dailyReport.setEmpCode(user.getEmpCode());
-		dailyReport.setFirstName(user.getFname());
-		dailyReport.setLastName(user.getLname());
-		dailyReport.setMonth(month);
-		dailyReport.setYear(year);
-		dailyReportService.saveReport(dailyReport);
-		mav.addObject("dailyReport", new DailyReport());
-		return mav;
-	}
-
-	@GetMapping("/workReport")
-	public ModelAndView dailyReport() {
-		ModelAndView mav = new ModelAndView("workReport");
-		DailyReport dailyReport = new DailyReport();
-		mav.addObject("dailyReport", dailyReport);
-		DateFormatSymbols dfs = new DateFormatSymbols();
-		String[] arr = dfs.getMonths();
-		List<String> months = new ArrayList<>();
-		for (int i = 0; i < arr.length - 1; i++) {
-			months.add(arr[i]);
-		}
-		mav.addObject("months", months);
-
-		List<Integer> years = new ArrayList<>();
-		for (int i = 2018; i <= 2028; i++) {
-			years.add(i);
-		}
-		mav.addObject("years", years);
-		return mav;
-	}
-
-	@GetMapping("/searchWorkReport")
-	public ModelAndView showDailyReport(@RequestParam("month") String month, @RequestParam("year") Integer year) {
-		ModelAndView mav = new ModelAndView("workReport");
-		DateFormatSymbols dfs = new DateFormatSymbols();
-		String[] arr = dfs.getMonths();
-		List<String> months = new ArrayList<>();
-		for (int i = 0; i < arr.length - 1; i++) {
-			months.add(arr[i]);
-		}
-		mav.addObject("months", months);
-
-		List<Integer> years = new ArrayList<>();
-		for (int i = 2018; i <= 2028; i++) {
-			years.add(i);
-		}
-		mav.addObject("years", years);
-		List<DailyReport> li = dailyReportService.getAllEmployee(month, year);
-		DailyReport dailyReport = new DailyReport();
-		mav.addObject("dailyReport", dailyReport);
-		mav.addObject("li", li);
-		return mav;
-	}
-
 	@RequestMapping(value = "/downloadDoc-{docId}", method = RequestMethod.GET)
-	public String downloadDocument(@PathVariable int docId, HttpServletResponse response) throws IOException {
+	public String downloadDocument(@PathVariable int docId, HttpServletResponse response, @SessionAttribute("user") User user) throws IOException {
 
 		UserDocument document = userDocumentService.download(docId);
 //		response.setContentType(document.getDocumentType());
@@ -527,7 +454,11 @@ public class UserController {
 		response.setContentLength(document.getDocument().length);
 		response.setHeader("Content-Disposition", "attachment; filename=\"" + document.getDname() + "\"");
 		FileCopyUtils.copy(document.getDocument(), response.getOutputStream());
-		return "redirect:/documents";
+		if(user.getUserType().equals("ADMIN")) {
+			return "redirect:/documents";
+		}
+		else {
+			return "redirect:/uploadDocumentAjax";
 	}
-
+	}
 }

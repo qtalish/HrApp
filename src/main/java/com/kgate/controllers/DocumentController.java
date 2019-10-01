@@ -81,14 +81,15 @@ public class DocumentController {
 		}
 		
 		System.out.println(user.getUserType());
-		if(user.getUserType().equalsIgnoreCase("Employee")) 
+		if(user.getUserType().equalsIgnoreCase("ADMIN")) 
 		{
-		  mav.setViewName("redirect:/documents");	
-		 
+			
+		  mav.addObject("empCode", empCode);
+			mav.setViewName("redirect:/uploadDocumentAjax");
 		}
 		else {
 			mav.addObject("empCode", empCode);
-			mav.setViewName("redirect:/uploadDocumentAjax");
+			  mav.setViewName("redirect:/documents");	
 		}
 		return mav;
 	}

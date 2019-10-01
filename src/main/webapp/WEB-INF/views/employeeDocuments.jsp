@@ -29,38 +29,69 @@
 </head>
 <body>
 
+<c:if test="${type == 'HR'}">
+
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-			<a class="navbar-brand" href ="https://www.kgate.in/">K-Gate</a>
+		<a class="navbar-brand" href="https://www.kgate.in/">K-Gate</a>
 
-			<ul class="navbar-nav">
+		<ul class="navbar-nav">
+			<li class="nav-item"><a class="nav-link" href="/HrApp/profile">Profile</a></li>
+			<li class="nav-item"><a class="nav-link" href="/HrApp/documents">Document</a></li>
+			<li class="nav-item"><a class="nav-link" href="/HrApp/leave">Leave
+					Application</a></li>
+			<li class="nav-item"><a class="nav-link"
+				href="/HrApp/hrDailyReport">Daily Report</a></li>
 				<li class="nav-item"><a class="nav-link"
-					href="/HrApp/profile">Profile</a></li>
-				<li class="nav-item"><a class="nav-link"
-					href="/HrApp/documents">Document</a></li>
-				<li class="nav-item"><a class="nav-link"
-					href="/HrApp/leave">Leave Application</a></li>
-					<li class="nav-item"><a class="nav-link"
-					href="/HrApp/dailyReport">Daily Report</a></li>
+				href="/HrApp/hrCallingSheet">Calling Sheet</a></li>
 
+		</ul>
+		<div class="navbar-collapse collapse w-25 order-3 dual-collapse2">
+			<ul class="navbar-nav ml-auto">
+				<li class="nav-item">
+					<form action="logout" method="get">
+						<button class="btn btn-link" style="color: white;">Log
+							Out</button>
+					</form>
+				</li>
 			</ul>
-			<div class="navbar-collapse collapse w-25 order-3 dual-collapse2">
-				<ul class="navbar-nav ml-auto">
-					<li class="nav-item">
-						<form action="logout" method="get">
-							<button class="btn btn-link" style="color: white;">Log
-								Out</button>
-						</form>
-					</li>
-				</ul>
-			</div>
-		</nav>
-<br>
+		</div>
+	</nav>
+	<br>	
+	</c:if>
+		
+		
+		
+<c:if test="${type == 'DEVELOPER'}">
+	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+		<a class="navbar-brand" href="https://www.kgate.in/">K-Gate</a>
 
+		<ul class="navbar-nav">
+			<li class="nav-item"><a class="nav-link" href="/HrApp/profile">Profile</a></li>
+			<li class="nav-item"><a class="nav-link" href="/HrApp/documents">Document</a></li>
+			<li class="nav-item"><a class="nav-link" href="/HrApp/leave">Leave
+					Application</a></li>
+			<li class="nav-item"><a class="nav-link"
+				href="/HrApp/dailyReport">Daily Report</a></li>
+
+		</ul>
+		<div class="navbar-collapse collapse w-25 order-3 dual-collapse2">
+			<ul class="navbar-nav ml-auto">
+				<li class="nav-item">
+					<form action="logout" method="get">
+						<button class="btn btn-link" style="color: white;">Log
+							Out</button>
+					</form>
+				</li>
+			</ul>
+		</div>
+	</nav>
+	<br>
+	</c:if>
  <div class="alert alert-success" align="center" >
  	<strong>${msg}</strong> 
 	</div>
 <table class="table">
-	<form:form method="post" action="addDocument"
+	<form:form method="post" action="addAdminDocument"
 		modelAttribute="userDocument" enctype="multipart/form-data">
 		<form:errors path="*" cssClass="error" />
 
@@ -86,17 +117,11 @@
 			</tr>
 		
 	</form:form>
-	<br> ${msg} 
-<%-- 	<form:form action="backToEmployee" method="post">
-		<input type="submit" value="Back">
-	</form:form> --%>
-
-
+	</table>
 	<br> 
 	
-	<h1>List of Documents Employee</h1>
+	<h1>List of Documents</h1>
 	
-	<div class="container">
 			<table class="table" border="1">
 
 					<th style="color: red">Id</th>
@@ -105,21 +130,22 @@
 					<th style="color: red">Document Type</th>
 					<th style="color: red">Action</th>
 
-					<c:forEach items="${uc}" var="doc">
+		
+					  <c:forEach items="${uc}" var="doc">
 						<tr>
 							<td>${doc.id}</td>
 							<td>${doc.dname}</td>
 							<td>${doc.description}</td>
 							<td>${doc.documentType}</td>
 							
-						<td><a href="<c:url value='/downloadDoc-${doc.id}' />"
-									class="btn btn-success custom-width">Download</a>
-								<a href="<c:url value='/delete-document-${doc.id}' />"
+							<td><a href="<c:url value='/downloadDoc-${doc.id}' />"
+								class="btn btn-success custom-width">Download</a>
+							<a href="<c:url value='/delete-document-${doc.id}' />"
 									class="btn btn-danger custom-width">Delete</a></td>
 						</tr>
-					</c:forEach>
+					</c:forEach>  
+				</tbody>
 			</table>
-		</div> 
-	</table>
+	
 </body>
 </html>
