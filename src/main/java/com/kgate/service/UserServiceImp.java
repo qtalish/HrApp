@@ -106,11 +106,19 @@ public class UserServiceImp implements UserService {
 		return lrepo.save(leave);
 	}
 
+	
+	
+	
 	@Override
 	public Page<User> searchEmployee(Pageable pageable, String txt) {
 		// TODO Auto-generated method stub
 		return repo.searchEmployee(pageable, txt);
 	}
+	
+	
+	
+	
+	
 	@Override
 	public List<User> searchEmployee(String txt) {
 		// TODO Auto-generated method stub

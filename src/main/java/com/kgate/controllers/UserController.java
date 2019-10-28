@@ -2,6 +2,7 @@ package com.kgate.controllers;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.text.DateFormat;
 import java.text.DateFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -19,8 +20,10 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
@@ -65,8 +68,8 @@ import com.kgate.service.UserService;
 @Controller
 @SessionAttributes("user")
 public class UserController {
-	
-	private Logger log =  Logger.getLogger(UserController.class);
+
+	private Logger log = Logger.getLogger(UserController.class);
 
 	@Autowired
 	HrDailyReportService hrDailyReportService;
@@ -77,7 +80,6 @@ public class UserController {
 	@Autowired
 	MessageRepository msgrepo;
 
-	
 	@Autowired
 	DailyReportService dailyReportService;
 
@@ -86,7 +88,7 @@ public class UserController {
 
 	@Autowired
 	UserDocumentService userDocumentService;
-	
+
 	@Autowired
 	HrCallingSheetService hrCallingSheetService;
 	@Autowired
@@ -105,16 +107,21 @@ public class UserController {
 		ModelAndView mav = new ModelAndView("login");
 		System.out.println("abc");
 		User user = new User();
-		user.setEmail("gulfarooqui1@gmail.com");
-		user.setPassword("1234");
+		System.out.println("------------------->" + user);
 		mav.addObject("user", user);
 		return mav;
 	}
-	
+
 	@PostMapping("/authenticate")
 	public ModelAndView authenticate(@ModelAttribute("user") User user) {
 		ModelAndView mav = new ModelAndView();
 		User user2 = userRepo.findByEmail(user.getEmail());
+		System.out.println("user..........." + user2);
+		if (user2 == null) {
+			mav.addObject("msg", "Please Enter Valid User Details");
+			mav.setViewName("login");
+			return mav;
+		}
 		System.out.println("........." + user2);
 		boolean validate = BCrypt.checkpw(user.getPassword(), user2.getPassword());
 		if (!validate) {
@@ -124,7 +131,7 @@ public class UserController {
 			return mav;
 		}
 		if (user2.getUserType().equalsIgnoreCase("DEVELOPER")) {
-			mav.addObject("user", user2); 	
+			mav.addObject("user", user2);
 			mav.setViewName("empDash");
 			log.info("Developer Logged In");
 			System.out.println("Developer Logged In");
@@ -151,21 +158,28 @@ public class UserController {
 		}
 		return mav;
 	}
+
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
-	public String logout(HttpServletRequest request) {
+	public String logout(HttpServletRequest request, HttpServletResponse response) {
+		HttpSession session = request.getSession(false);
+		session.invalidate();
+		session = request.getSession(false);
+		if (session != null) {
+			session.invalidate();
+		}
+		for (Cookie cookie : request.getCookies()) {
+			cookie.setMaxAge(0);
+		}
+
 		return "redirect:/";
 	}
 
-	@RequestMapping(value = "/home", method = RequestMethod.GET)
-	public String home(HttpServletRequest request) {
-		return "adminDash";
-	}
-
 	@GetMapping("/register")
-	public ModelAndView register() {
+	public ModelAndView register(@SessionAttribute("user") User user) {
+		if (user.getUserType() == null) {
+			return new ModelAndView("redirect:/");
+		}
 		ModelAndView mav = new ModelAndView("register");
-		User user = new User();
-
 		List<String> userType = new ArrayList<>();
 		userType.add("DEVELOPER");
 		userType.add("HR");
@@ -173,14 +187,12 @@ public class UserController {
 		userType.add("MARKETING");
 		userType.add("ACCOUNTS");
 		mav.addObject("userType", userType);
-
-		mav.addObject("user", user);
+		mav.addObject("user", new User());
 		return mav;
 	}
 
 	@PostMapping("/save")
 	public ModelAndView save(@ModelAttribute("user") User user) throws ParseException {
-
 		ModelAndView mav = new ModelAndView("home2");
 		UserController uc = new UserController();
 		String salt = BCrypt.gensalt(workload);
@@ -197,6 +209,9 @@ public class UserController {
 
 	@GetMapping("/viewEmployees")
 	public ModelAndView viewEmployees(@SessionAttribute("user") User user) {
+		if (user.getUserType() == null) {
+			return new ModelAndView("redirect:/");
+		}
 		ModelAndView mav = new ModelAndView("home2");
 		return mav;
 	}
@@ -237,17 +252,23 @@ public class UserController {
 	}
 
 	@GetMapping("/employeeDash")
-	public ModelAndView viewEmployeeDash() {
-		ModelAndView mav = new ModelAndView("empDash");
-		return mav;
+	public ModelAndView viewEmployeeDash(@SessionAttribute("user") User user) {
+		System.out.println("before condition" + user.getUserType());
+		if (user.getUserType() == null) {
+			return new ModelAndView("redirect:/");
+		}
+		return new ModelAndView("empDash");
 	}
 
 	@GetMapping("/profile")
 	public ModelAndView viewProfile(HttpServletRequest request, @SessionAttribute("user") User user)
 			throws UnsupportedEncodingException {
+		if (user.getUserType() == null) {
+			return new ModelAndView("redirect:/");
+		}
 
 		ModelAndView mav = new ModelAndView("employeeProfile");
-		mav.addObject("type",user.getUserType());
+		mav.addObject("type", user.getUserType());
 		System.out.println(user);
 		if (user.getImage() == null) {
 			mav.addObject("user", user);
@@ -263,7 +284,10 @@ public class UserController {
 	}
 
 	@GetMapping("/attendance")
-	public ModelAndView viewAttendance() throws ParseException {
+	public ModelAndView viewAttendance(@SessionAttribute("user") User user) throws ParseException {
+		if (user.getUserType() == null) {
+			return new ModelAndView("redirect:/");
+		}
 		ModelAndView mav = new ModelAndView("employeeAttendance");
 		mav.addObject("attd", new Attendance());
 		Date date = new Date();
@@ -271,7 +295,11 @@ public class UserController {
 		String strDate2 = sm.format(date);
 		Date dt = sm.parse(strDate2);
 		System.out.println("............. " + date);
-		List<Attendance> list = userService.getAttendance(date);
+		DateFormat formatter2 = new SimpleDateFormat("dd/MM/yyyy");
+		Date today = new Date();
+		Date todayWithZeroTime = formatter2.parse(formatter2.format(today));
+		System.out.println(">>>>>>>>>>>> " + todayWithZeroTime);
+		List<Attendance> list = userService.getAttendance(todayWithZeroTime);
 		List<Integer> list2 = new ArrayList<>();
 		for (Attendance attendance : list) {
 			list2.add(attendance.getId());
@@ -297,9 +325,12 @@ public class UserController {
 	@GetMapping("/documents")
 	public ModelAndView viewDocuments(@ModelAttribute("userDocument") UserDocument userDocument,
 			@SessionAttribute("user") User user) {
+		if (user.getUserType() == null) {
+			return new ModelAndView("redirect:/");
+		}
 		ModelAndView mav = new ModelAndView("employeeDocuments");
 
-        String type = user.getUserType();
+		String type = user.getUserType();
 		mav.addObject("type", type);
 		userDocument.setEmpCode(user.getEmpCode());
 		List<UserDocument> ud = userDocumentService.findDoc(user.getEmpCode());
@@ -317,7 +348,11 @@ public class UserController {
 
 //Attendance
 	@GetMapping("SearchEmp")
-	public ModelAndView SearchEmp(@RequestParam("attDate") Date date) throws ParseException {
+	public ModelAndView SearchEmp(@RequestParam("attDate") Date date, @SessionAttribute("user") User user)
+			throws ParseException {
+		if (user.getUserType() == null) {
+			return new ModelAndView("redirect:/");
+		}
 		ModelAndView mav = new ModelAndView("employeeAttendance");
 		List<Attendance> list = userService.getAttendance(date);
 		List<Integer> list2 = new ArrayList<>();
@@ -364,29 +399,31 @@ public class UserController {
 
 	// Leave
 	@GetMapping("/leave")
-	public ModelAndView leave(@ModelAttribute("leave") Leave leave,@SessionAttribute("user")  User user) {
+	public ModelAndView leave(@ModelAttribute("leaveApplication") Leave leave, @SessionAttribute("user") User user) {
+		if (user.getUserType() == null) {
+			return new ModelAndView("redirect:/");
+		}
 		ModelAndView mav = new ModelAndView("leave");
-		mav.addObject("type",user.getUserType());
+		mav.addObject("type", user.getUserType());
 		return mav;
 	}
 
 	@PostMapping("/send")
-	public ModelAndView send(@ModelAttribute("leave") Leave leave, @RequestParam("file") MultipartFile file,
+	public ModelAndView send(@ModelAttribute("leaveApplication") Leave leave, @RequestParam("file") MultipartFile file,
 			@SessionAttribute("user") User user) throws ParseException, IOException {
 		ModelAndView mav = new ModelAndView("redirect:/leave");
 		leave.setContent(file.getBytes());
 		UserController uc = new UserController();
 		userService.save(leave);
+		uc.sendMail("vartak.m.akshay@gmail.com",
+				"<font color=\"red\"> DATE : </font> " + leave.getFromDate() + " TO " + leave.getToDate() + "<br>"
+						+ "<font color=\"red\"> Message : </font>" + leave.getMessage(),
+				"SUBJECT : " + leave.getSubject());
 		return mav;
 	}
 
-	@GetMapping("uploadForm")
-	public ModelAndView uploadForm() {
-		return new ModelAndView("uploadimage");
-	}
-
 	@PostMapping("/uploadImage")
-	public ModelAndView uploadImage(@ModelAttribute("user") User user, @RequestParam("file") MultipartFile file)
+	public ModelAndView uploadImage(@ModelAttribute("user") User user, @RequestParam("fileEmp") MultipartFile file)
 			throws IOException {
 		ModelAndView mav = new ModelAndView();
 		user.setImage(file.getBytes());
@@ -395,20 +432,11 @@ public class UserController {
 		return mav;
 	}
 
-	@RequestMapping(value = "/backToAdmin", method = RequestMethod.POST)
-	public ModelAndView backToAdmin() {
-		ModelAndView mav = new ModelAndView("adminDash");
-		return mav;
-	}
-
-	@RequestMapping(value = "/backToEmployee", method = RequestMethod.POST)
-	public ModelAndView back(@SessionAttribute("user") User user) {
-		ModelAndView mav = new ModelAndView("empDash");
-		return mav;
-	}
-
 	@GetMapping("/messageEmployee")
-	public ModelAndView messageEmployee() {
+	public ModelAndView messageEmployee(@SessionAttribute("user") User user2) {
+		if (user2.getUserType() == null) {
+			return new ModelAndView("redirect:/");
+		}
 		ModelAndView mav = new ModelAndView("message");
 		mav.addObject("message", new MessageEmployee());
 		List<User> userList = userService.findEmployee();
@@ -425,10 +453,6 @@ public class UserController {
 	public ModelAndView sendMail(@ModelAttribute("message") MessageEmployee message) {
 		ModelAndView mav = new ModelAndView("redirect:/messageEmployee");
 		Date date = new Date();
-		System.out.println("1111" + message.getSubjectMessage());
-		System.out.println("1111" + message.getMessageEmp());
-		System.out.println(message.getTo());
-		System.out.println("1111");
 		UserController uc = new UserController();
 		message.setDate(date);
 
@@ -437,28 +461,18 @@ public class UserController {
 		return mav;
 	}
 
-	@GetMapping("/searchEmployee")
-	public ModelAndView searchEmployee(@RequestParam("txt") String txt) {
-		List<User> listEmp = userService.searchEmployee(txt);
-		ModelAndView mav = new ModelAndView("employeelist");
-		mav.addObject("listEmp", listEmp);
-		return mav;
-	}
-
 	@RequestMapping(value = "/downloadDoc-{docId}", method = RequestMethod.GET)
-	public String downloadDocument(@PathVariable int docId, HttpServletResponse response, @SessionAttribute("user") User user) throws IOException {
+	public String downloadDocument(@PathVariable int docId, HttpServletResponse response,
+			@SessionAttribute("user") User user) throws IOException {
 
 		UserDocument document = userDocumentService.download(docId);
-//		response.setContentType(document.getDocumentType());
-		System.out.println("ddd" + document);
 		response.setContentLength(document.getDocument().length);
 		response.setHeader("Content-Disposition", "attachment; filename=\"" + document.getDname() + "\"");
 		FileCopyUtils.copy(document.getDocument(), response.getOutputStream());
-		if(user.getUserType().equals("ADMIN")) {
+		if (user.getUserType().equals("ADMIN")) {
 			return "redirect:/documents";
-		}
-		else {
+		} else {
 			return "redirect:/uploadDocumentAjax";
-	}
+		}
 	}
 }

@@ -27,9 +27,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.itextpdf.text.log.Logger;
 import com.kgate.entity.User;
-import com.kgate.entity.UserDocument;
 import com.kgate.repository.AttendanceRepository;
 import com.kgate.repository.UserDocumentRepository;
 import com.kgate.repository.UserRepository;
@@ -108,7 +106,11 @@ public class AdminAjaxController {
 	}
 
 	@RequestMapping(value = "/editEmployeeAjax", method = RequestMethod.GET)
-	public ModelAndView editEmployee(HttpServletRequest request, @ModelAttribute("user") User user2 ) {
+	public ModelAndView editEmployee(HttpServletRequest request, @ModelAttribute("user") User user2,@SessionAttribute("user") User user3 ) {
+		if(user3.getUserType() == null)
+		{
+		    return new ModelAndView("redirect:/");  
+		}
 		int userId = Integer.parseInt(request.getParameter("id"));
 		User user = repo.getOne(userId);
 		ModelAndView mav = new ModelAndView("register");
@@ -128,18 +130,15 @@ public class AdminAjaxController {
 
 	@RequestMapping(value = "/editEmployeeProfile", method = RequestMethod.GET)
 	public ModelAndView editEmployeeProfile(HttpServletRequest request, @ModelAttribute("user") User user2,@SessionAttribute("user") User user3) {
+		if(user3.getUserType() == null)
+		{
+		    return new ModelAndView("redirect:/");  
+		}
 		int userId = Integer.parseInt(request.getParameter("id"));
 		User user = repo.getOne(userId);
 		ModelAndView mav = new ModelAndView("employeeEdit");
 		System.out.println("......................................."+user3.getUserType());
 		mav.addObject("type",user3.getUserType());
-		List<String> userType = new ArrayList<>();
-		userType.add("DEVELOPER");
-		userType.add("HR");
-		userType.add("OPERATIONS");
-		userType.add("MARKETING");
-		userType.add("ACCOUNTS");
-		mav.addObject("userType", userType);
 
 		mav.addObject("user", user);
 		return mav;

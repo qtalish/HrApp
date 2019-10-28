@@ -5,41 +5,11 @@
 <!DOCTYPE html>
 <html>
 <head>
+<link href="./resources/css/font-awesome.min.css" rel="stylesheet"/>
+<link href="./resources/css/style.css" rel="stylesheet"/>
+<script src="./resources/JS/jquery-3.3.1.min.js" type="text/javascript"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<style>
-.card {
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  max-width: 300px;
-  margin: auto;
-  text-align: center;
-  font-family: arial;
-}
-
-.title {
-  color: grey;
-  font-size: 18px;
-}
-
-button {
-  border: none;
-  outline: 0;
-  display: inline-block;
-  padding: 8px;
-  color: white;
-  background-color: #000;
-  text-align: center;
-  cursor: pointer;
-  width: 100%;
-  font-size: 18px;
-}
-
-
-
-button:hover, a:hover {
-  opacity: 0.7;
-}
-</style>
-<link href="./resources/images/kgate.png" rel="shortcut icon"
+ <link href="./resources/images/kgate.png" rel="shortcut icon"
 	type="image/png" />
 <link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -77,6 +47,8 @@ button:hover, a:hover {
 				href="/HrApp/hrDailyReport">Daily Report</a></li>
 				<li class="nav-item"><a class="nav-link"
 				href="/HrApp/hrCallingSheet">Calling Sheet</a></li>
+				<li class="nav-item"><a class="nav-link"
+					href="/HrApp/downloadSalarySlip">Salary Slip Download</a></li>
 
 		</ul>
 		<div class="navbar-collapse collapse w-25 order-3 dual-collapse2">
@@ -90,7 +62,7 @@ button:hover, a:hover {
 			</ul>
 		</div>
 	</nav>
-	<br>	
+<!-- 	<br>	 -->
 	</c:if>
 		
 		
@@ -106,6 +78,8 @@ button:hover, a:hover {
 					Application</a></li>
 			<li class="nav-item"><a class="nav-link"
 				href="/HrApp/dailyReport">Daily Report</a></li>
+				<li class="nav-item"><a class="nav-link"
+					href="/HrApp/downloadSalarySlip">Salary Slip Download</a></li>
 
 		</ul>
 		<div class="navbar-collapse collapse w-25 order-3 dual-collapse2">
@@ -121,24 +95,185 @@ button:hover, a:hover {
 	</nav>
 	<br>
 	</c:if>
-<h2 style="text-align:center">User Profile Card</h2>
+	
+	
+	<c:if test="${type == 'OPERATIONS'}">
+	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+		<a class="navbar-brand" href="https://www.kgate.in/">K-Gate</a>
 
-<div class="card">
- <!--  <img src="./resources/images/steve.jpg" alt="steve" style="width:100%"> -->
-  <img src="data:image/jpeg;base64,${userImage}" style="width:100%">
-  <h1>${user.fname} ${user.lname}</h1>
-  <p>${user.designation}</p>
-  
-  ${user.email} 
-  <div style="margin: 24px 0;">
-    <a href="#"><i class="fa fa-dribbble"></i></a> 
-    <a href="#"><i class="fa fa-twitter"></i></a>  
-    <a href="#"><i class="fa fa-linkedin"></i></a>  
-  </div>
+		<ul class="navbar-nav">
+			<li class="nav-item"><a class="nav-link" href="/HrApp/profile">Profile</a></li>
+			<li class="nav-item"><a class="nav-link" href="/HrApp/documents">Document</a></li>
+			<li class="nav-item"><a class="nav-link" href="/HrApp/leave">Leave
+					Application</a></li>
+			<li class="nav-item"><a class="nav-link"
+				href="/HrApp/dailyReport">Daily Report</a></li>
+				<li class="nav-item"><a class="nav-link"
+					href="/HrApp/downloadSalarySlip">Salary Slip Download</a></li>
 
-  <p><button>Contact: ${user.mob}</button></p>
-  <p><button onclick="location.href='editEmployeeProfile?id=${id}'" type="button">Edit</button></p>
-  <p><button onclick="location.href='uploadForm'" >Upload Picture</button></p>
-</div>
+		</ul>
+		<div class="navbar-collapse collapse w-25 order-3 dual-collapse2">
+			<ul class="navbar-nav ml-auto">
+				<li class="nav-item">
+					<form action="logout" method="get">
+						<button class="btn btn-link" style="color: white;">Log
+							Out</button>
+					</form>
+				</li>
+			</ul>
+		</div>
+	</nav>
+	<br>
+	</c:if>
+	
+	
+	<c:if test="${type == 'ACCOUNTS'}">
+	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+		<a class="navbar-brand" href="https://www.kgate.in/">K-Gate</a>
+
+		<ul class="navbar-nav">
+			<li class="nav-item"><a class="nav-link" href="/HrApp/profile">Profile</a></li>
+			<li class="nav-item"><a class="nav-link" href="/HrApp/documents">Document</a></li>
+			<li class="nav-item"><a class="nav-link" href="/HrApp/leave">Leave
+					Application</a></li>
+			<li class="nav-item"><a class="nav-link"
+				href="/HrApp/dailyReport">Daily Report</a></li>
+				<li class="nav-item"><a class="nav-link"
+					href="/HrApp/downloadSalarySlip">Salary Slip Download</a></li>
+
+		</ul>
+		<div class="navbar-collapse collapse w-25 order-3 dual-collapse2">
+			<ul class="navbar-nav ml-auto">
+				<li class="nav-item">
+					<form action="logout" method="get">
+						<button class="btn btn-link" style="color: white;">Log
+							Out</button>
+					</form>
+				</li>
+			</ul>
+		</div>
+	</nav>
+	<br>
+	</c:if>
+	
+	
+	
+	<c:if test="${type == 'MARKETING'}">
+	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+		<a class="navbar-brand" href="https://www.kgate.in/">K-Gate</a>
+
+		<ul class="navbar-nav">
+			<li class="nav-item"><a class="nav-link" href="/HrApp/profile">Profile</a></li>
+			<li class="nav-item"><a class="nav-link" href="/HrApp/documents">Document</a></li>
+			<li class="nav-item"><a class="nav-link" href="/HrApp/leave">Leave
+					Application</a></li>
+			<li class="nav-item"><a class="nav-link"
+				href="/HrApp/dailyReport">Daily Report</a></li>
+				<li class="nav-item"><a class="nav-link"
+					href="/HrApp/downloadSalarySlip">Salary Slip Download</a></li>
+
+		</ul>
+		<div class="navbar-collapse collapse w-25 order-3 dual-collapse2">
+			<ul class="navbar-nav ml-auto">
+				<li class="nav-item">
+					<form action="logout" method="get">
+						<button class="btn btn-link" style="color: white;">Log
+							Out</button>
+					</form>
+				</li>
+			</ul>
+		</div>
+	</nav>
+	</c:if>
+<!-- 	<br> -->
+	
+	<!-- Hero section start -->
+	<section class="hero-section spad">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-xl-10 offset-xl-1">
+					<div class="row">
+						<div class="col-lg-6">
+							<div class="hero-text">
+								<h2 style="font-size: 52px;margin-bottom: 40px;">${user.fname} ${user.lname}</h2>
+								<p></p><p>${user.designation}</p>
+							</div>
+							<div class="hero-info">
+								<h2>General Info<button class="btn btn-link" onclick="location.href='editEmployeeProfile?id=${id}'" type="button">Edit</button> </h2>	
+								<ul>
+									<li><span>Date of Birth : </span>${user.dob}</li>
+									<li><span>Address : </span>${user.address}</li>
+									<li><span>E-mail : </span>${user.email}</li>
+									<li><span>Phone : </span>${user.mob}</li>
+								</ul>
+								
+							
+							
+							</div>
+						</div>
+						<div class="col-lg-6">
+							<figure class="hero-image">
+								<img style="width: 450px; height: 450px;" src="data:image/jpeg;base64,${userImage}" alt="5">
+								 
+							</figure>
+					<button class="btn btn-link" style='margin-right:16px' onclick="showFileDialog();" >Upload Picture</button>
+                  <form id="fileFormEmp" method="POST" enctype="multipart/form-data" >
+					<input type="file" name="fileEmp" id="fileEmp" style="display:none" />
+				</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+
+	<script>  
+    function showFileDialog(){
+	$("#fileEmp").click();
+	
+	}
+	    
+	    $(document).ready(function() {
+	    
+	    var file = $('[name="fileEmp"]');
+	    
+	    $('#uploadLink').on('click', function() {
+		});
+		
+	    var fileU = document.getElementById('fileEmp');
+		fileU.addEventListener("change", function () {
+			  if (fileU.files.length > 0) {
+			   var filename = $.trim(file.val());
+			
+			
+			$.ajax({
+			   xhr: function() {
+			    var xhr = new window.XMLHttpRequest();
+
+			  
+
+			    return xhr;
+			  },
+			   url: 'uploadImage',
+			    type: "POST",
+			    data: new FormData(document.getElementById("fileFormEmp")),
+			    enctype: 'multipart/form-data',
+			    processData: false,
+			    contentType: false
+			  }).done(function(data) {
+			    alert('Success', 'File Upload Successful');
+			   
+			  }).fail(function(jqXHR, textStatus) {
+			      alert('Failure', 'File Upload Failed. Please contact Administrator');
+			  });
+			  document.getElementById('fileEmp').value = null;
+			    return;
+			  }
+			 
+			});
+		  
+		});
+	    </script>
 </body>
 </html>

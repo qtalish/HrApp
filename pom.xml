@@ -21,18 +21,18 @@
 		<log4j.version>1.2.17</log4j.version>
 	</properties>
 	<dependencies>
-		
+
 		<dependency>
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time</artifactId>
 			<version>2.10</version>
 		</dependency>
-		
-	<dependency>
-	<groupId>org.jxls</groupId>
-	<artifactId>jxls-reader</artifactId>
-	<version>2.0.5</version>
-</dependency>
+
+		<dependency>
+			<groupId>org.jxls</groupId>
+			<artifactId>jxls-reader</artifactId>
+			<version>2.0.5</version>
+		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/org.mindrot/jbcrypt -->
 		<dependency>
@@ -87,6 +87,12 @@
 			<artifactId>itextpdf</artifactId>
 			<version>5.5.10</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.pdfbox</groupId>
+			<artifactId>pdfbox</artifactId>
+			<version>2.0.4</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.apache.pdfbox</groupId>
 			<artifactId>pdfbox</artifactId>

@@ -24,15 +24,15 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 	@Query("select u from User u where u.fname=:fname")
 	List<User> searchEmployee(@Param("fname") String fname);
 
-	@Query(value = "SELECT * FROM user u WHERE CONCAT(u.fname,u.designation,u.address,u.lname,u.mname,u.aadhar,u.email) LIKE %:txt%", nativeQuery = true)
+	@Query(value = "SELECT * FROM User u WHERE CONCAT(u.fname,u.designation,u.address,u.lname,u.mname,u.aadhar,u.email) LIKE %:txt%", nativeQuery = true)
 	Page<User> searchEmployee(Pageable pageable, @Param("txt") String txt);
 
 
-	@Query(value = "select * from user as u where u.usertype !='ADMIN'", nativeQuery = true)
+	@Query(value = "select * from User as u where u.usertype !='ADMIN'", nativeQuery = true)
 	Page<User> findEmployeePage(Pageable pageable);
 
 
-	@Query(value = "select * from user as u where u.usertype !='ADMIN'", nativeQuery = true)
+	@Query(value = "select * from User as u where u.usertype !='ADMIN'", nativeQuery = true)
 	List<User> findEmployee();
 
 	User findByEmail(String email);

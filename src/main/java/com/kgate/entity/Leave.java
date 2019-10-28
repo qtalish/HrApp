@@ -17,31 +17,28 @@ import javax.persistence.TemporalType;
 import org.hibernate.annotations.Proxy;
 import org.springframework.format.annotation.DateTimeFormat;
 
-@Entity	
-@Table(name="emp_leave")
-//@Proxy(lazy=false)
+@Entity
+@Table(name = "emp_leave")
 public class Leave {
-	
-	
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
-	
+
 	private String subject;
-	
+
 	@DateTimeFormat(pattern = "dd-MM-yyyy")
 	@Temporal(TemporalType.DATE)
 	private Date fromDate;
-	
+
 	@DateTimeFormat(pattern = "dd-MM-yyyy")
 	@Temporal(TemporalType.DATE)
 	private Date toDate;
-	
+
 	private String message;
 
-	@Column(name="content")
-	@Basic(fetch=FetchType.EAGER)
+	@Column(name = "content")
+	@Basic(fetch = FetchType.EAGER)
 	private byte[] content;
 
 	public Integer getId() {
@@ -97,4 +94,6 @@ public class Leave {
 		return "Leave [id=" + id + ", subject=" + subject + ", fromDate=" + fromDate + ", toDate=" + toDate
 				+ ", message=" + message + ", content=" + Arrays.toString(content) + "]";
 	}
+
+	
 }

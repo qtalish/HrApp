@@ -157,7 +157,7 @@
 			</tr>
 			
 			<tr>
-				<td><spring:message code="user.userType"/></td>
+				<td>User Type</td>
 				<td><form:select path="userType" class="dropdown-header" required="required"><form:options items="${userType}"/></form:select></td>   <td><p style="color: red" id="de"></p></td>
 			</tr>
 			

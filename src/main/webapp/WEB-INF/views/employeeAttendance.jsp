@@ -32,8 +32,8 @@
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-<script
-	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<!-- <script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script> -->
 
 
 </head>
@@ -43,12 +43,15 @@
 			<a class="navbar-brand" href="https://www.kgate.in/">K-Gate</a>
 
 			<ul class="navbar-nav">
+			
 				<li class="nav-item"><a class="nav-link"
 					href="/HrApp/attendance">Attendence</a></li>
 				<li class="nav-item"><a class="nav-link"
 					href="/HrApp/messageEmployee">Message</a></li>
 				<li class="nav-item"><a class="nav-link"
 					href="/HrApp/workReport">Work Report</a></li>
+					<li class="nav-item"><a class="nav-link"
+					href="/HrApp/hrWorkReport">HR Work Report</a></li>
 
 				<li class="nav-item dropdown"><a
 					class="nav-link dropdown-toggle" href="#" id="navbardrop"
@@ -105,11 +108,12 @@
 								<%-- <td>${li.status}</td> --%>
 								<td><form:select path="status" class="dropdown-header"
 										onchange="getval(this,${li.id});" id="${li.id}">
-										<form:option value="${li.status} " />
+										<form:option value="${li.status} "/>
 										<form:options items="${ustatus}" />
 									</form:select></td>
-								
 									
+								
+								
 									<td>
  		<input type="text" id="${li.id+1000}"
 		value="${li.remarks}" class="form-control" aria-label="Recipient's username" />

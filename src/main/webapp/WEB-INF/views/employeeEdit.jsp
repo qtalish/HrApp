@@ -100,6 +100,98 @@
 	</nav>
 	<br>
 	</c:if>
+	
+	
+	<c:if test="${type == 'OPERATIONS'}">
+	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+		<a class="navbar-brand" href="https://www.kgate.in/">K-Gate</a>
+
+		<ul class="navbar-nav">
+			<li class="nav-item"><a class="nav-link" href="/HrApp/profile">Profile</a></li>
+			<li class="nav-item"><a class="nav-link" href="/HrApp/documents">Document</a></li>
+			<li class="nav-item"><a class="nav-link" href="/HrApp/leave">Leave
+					Application</a></li>
+			<li class="nav-item"><a class="nav-link"
+				href="/HrApp/dailyReport">Daily Report</a></li>
+				<li class="nav-item"><a class="nav-link"
+					href="/HrApp/downloadSalarySlip">Salary Slip Download</a></li>
+
+		</ul>
+		<div class="navbar-collapse collapse w-25 order-3 dual-collapse2">
+			<ul class="navbar-nav ml-auto">
+				<li class="nav-item">
+					<form action="logout" method="get">
+						<button class="btn btn-link" style="color: white;">Log
+							Out</button>
+					</form>
+				</li>
+			</ul>
+		</div>
+	</nav>
+	<br>
+	</c:if>
+	
+	
+	<c:if test="${type == 'ACCOUNTS'}">
+	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+		<a class="navbar-brand" href="https://www.kgate.in/">K-Gate</a>
+
+		<ul class="navbar-nav">
+			<li class="nav-item"><a class="nav-link" href="/HrApp/profile">Profile</a></li>
+			<li class="nav-item"><a class="nav-link" href="/HrApp/documents">Document</a></li>
+			<li class="nav-item"><a class="nav-link" href="/HrApp/leave">Leave
+					Application</a></li>
+			<li class="nav-item"><a class="nav-link"
+				href="/HrApp/dailyReport">Daily Report</a></li>
+				<li class="nav-item"><a class="nav-link"
+					href="/HrApp/downloadSalarySlip">Salary Slip Download</a></li>
+
+		</ul>
+		<div class="navbar-collapse collapse w-25 order-3 dual-collapse2">
+			<ul class="navbar-nav ml-auto">
+				<li class="nav-item">
+					<form action="logout" method="get">
+						<button class="btn btn-link" style="color: white;">Log
+							Out</button>
+					</form>
+				</li>
+			</ul>
+		</div>
+	</nav>
+	<br>
+	</c:if>
+	
+	
+	
+	<c:if test="${type == 'MARKETING'}">
+	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+		<a class="navbar-brand" href="https://www.kgate.in/">K-Gate</a>
+
+		<ul class="navbar-nav">
+			<li class="nav-item"><a class="nav-link" href="/HrApp/profile">Profile</a></li>
+			<li class="nav-item"><a class="nav-link" href="/HrApp/documents">Document</a></li>
+			<li class="nav-item"><a class="nav-link" href="/HrApp/leave">Leave
+					Application</a></li>
+			<li class="nav-item"><a class="nav-link"
+				href="/HrApp/dailyReport">Daily Report</a></li>
+				<li class="nav-item"><a class="nav-link"
+					href="/HrApp/downloadSalarySlip">Salary Slip Download</a></li>
+
+		</ul>
+		<div class="navbar-collapse collapse w-25 order-3 dual-collapse2">
+			<ul class="navbar-nav ml-auto">
+				<li class="nav-item">
+					<form action="logout" method="get">
+						<button class="btn btn-link" style="color: white;">Log
+							Out</button>
+					</form>
+				</li>
+			</ul>
+		</div>
+	</nav>
+	<br>
+	</c:if>
+	
  
 	<p align="center">
 		<a href="editEmployeeProfile?mylocale=en">English</a> | <a
@@ -213,14 +305,6 @@
 					<td><p id="psw"></p></td>
 				</tr>
 
-
-				<tr>
-					<td><spring:message code="user.userType" /></td>
-					<td><form:select path="userType" class="dropdown-header">
-							<form:options items="${userType}" />
-						</form:select></td>
-					<td><p style="color: red" id="de"></p></td>
-				</tr>
 
 				<tr>
 					<td><spring:message code="user.submit" var="submit" /></td>
