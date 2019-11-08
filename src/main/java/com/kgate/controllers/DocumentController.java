@@ -1,5 +1,6 @@
 package com.kgate.controllers;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.kgate.entity.PropertiesConfig;
 import com.kgate.entity.User;
 import com.kgate.entity.UserDocument;
 import com.kgate.repository.UserDocumentRepository;
@@ -33,6 +35,9 @@ import com.kgate.service.UserService;
 public class DocumentController {
 
 	@Autowired
+	PropertiesConfig config;
+
+	@Autowired
 	UserDocumentService userDocumentService;
 
 	@Autowired
@@ -42,10 +47,10 @@ public class DocumentController {
 	UserDocumentService uds;
 
 	@RequestMapping(value = "/uploadDocumentAjax", method = RequestMethod.GET)
-	public ModelAndView uploadDocuments(@ModelAttribute("userDocument") UserDocument userDocument, 
-			                            @RequestParam(name = "empCode") String empCode) {
+	public ModelAndView uploadDocuments(@ModelAttribute("userDocument") UserDocument userDocument,
+			@RequestParam(name = "empCode") String empCode) {
 		ModelAndView mav = new ModelAndView("adminDocuments");
-		
+
 		List<UserDocument> ud = userDocumentService.findDoc(empCode);
 		mav.addObject("empCode", empCode);
 		mav.addObject("uc", ud);
@@ -54,48 +59,44 @@ public class DocumentController {
 
 	@PostMapping("/addAdminDocument")
 	public ModelAndView addAdminDocument(@ModelAttribute("userDocument") UserDocument userDocument,
-			@RequestParam("file") MultipartFile file, @SessionAttribute("user") User user, @RequestParam(name = "empCode") String empCode) {
+			@RequestParam("file") MultipartFile file, @SessionAttribute("user") User user,
+			@RequestParam(name = "empCode") String empCode) throws IllegalStateException, IOException {
 		ModelAndView mav = new ModelAndView();
 
 		if (!file.getOriginalFilename().isEmpty()) {
 			userDocument.setCreated(new Date());
-			try {
-				userDocument.setDocument(file.getBytes());
-				userDocument.setDocumentType(file.getContentType());
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 
-			try {
+			String destination = config.getFileLocation() + File.separator + "documents" + File.separator
+					+ file.getOriginalFilename();
+			File file2 = new File(destination);
+			file.transferTo(file2);
 
-				userDocumentService.saveDocument(userDocument);
-
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			String url = config.getFileUrl() + "doc/" + file.getOriginalFilename();
+			userDocument.setOriginalDocName(file.getOriginalFilename());
+			userDocument.setDocument(url);
+			userDocument.setDocumentType(file.getContentType());
+			userDocumentService.saveDocument(userDocument);
 
 			System.out.println("upload Called");
 			mav.addObject("msg", "File Uploaded Successfully");
 		} else {
 			mav.addObject("msg", "Please select valid file");
 		}
-		
+
 		System.out.println(user.getUserType());
-		if(user.getUserType().equalsIgnoreCase("ADMIN")) 
-		{
-			
-		  mav.addObject("empCode", empCode);
-			mav.setViewName("redirect:/uploadDocumentAjax");
-		}
-		else {
+		if (user.getUserType().equalsIgnoreCase("ADMIN")) {
+
 			mav.addObject("empCode", empCode);
-			  mav.setViewName("redirect:/documents");	
+			mav.setViewName("redirect:/uploadDocumentAjax");
+		} else {
+			mav.addObject("empCode", empCode);
+			mav.setViewName("redirect:/documents");
 		}
 		return mav;
 	}
 
 	@GetMapping("/delete-document1-{docId}")
-	public ModelAndView delteDocument(@PathVariable int docId,@RequestParam(name = "empCode") String empCode) {
+	public ModelAndView delteDocument(@PathVariable int docId, @RequestParam(name = "empCode") String empCode) {
 		ModelAndView mav = new ModelAndView("redirect:/uploadDocumentAjax");
 		uds.deleteById(docId);
 		mav.addObject("empCode", empCode);

@@ -1,31 +1,18 @@
 package com.kgate.entity;
 
-import java.util.Arrays;
 import java.util.Date;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
-import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Lob;
-import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.hibernate.annotations.Proxy;
-import org.hibernate.validator.constraints.Email;
 import org.springframework.format.annotation.DateTimeFormat;
 
-@Entity
-@Table
-@Proxy(lazy = false)
-public class User {
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer id;
+public class UserDTO {
+
 	private String fname;
 	private String mname;
 	private String lname;
@@ -34,14 +21,13 @@ public class User {
 	@DateTimeFormat(pattern = "dd-MM-yyyy")
 	@Temporal(TemporalType.DATE)
 	private Date dob;
-	@Email
-	@Column(unique = true)
+	
 	private String email;
-	private Long mob;
+	private String mob;
 	private String designation;
 	private String empCode;
 	private String bloodGroup;
-	private Long aadhar;
+	private String aadhar;
 	private String pan;
 	@DateTimeFormat(pattern = "dd-MM-yyyy")
 	@Temporal(TemporalType.DATE)
@@ -49,182 +35,119 @@ public class User {
 	private Long salary;
 	private String userType;
 	private String password;
-	@Lob
-	@Column(name = "image")
-	@Basic(fetch = FetchType.EAGER)
 	private String image;
-
-	private String imageUrl;
 	
-	private Date lastLogin;
-
-	
-	public Date getLastLogin() {
-		return lastLogin;
-	}
-
-	public void setLastLogin(Date lastLogin) {
-		this.lastLogin = lastLogin;
-	}
-
-	public String getImage() {
-		return image;
-	}
-
-	public void setImage(String image) {
-		this.image = image;
-	}
-	
-	public String getImageUrl() {
-		return imageUrl;
-	}
-
-	public void setImageUrl(String imageUrl) {
-		this.imageUrl = imageUrl;
-	}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
 	public String getFname() {
 		return fname;
 	}
-
 	public void setFname(String fname) {
 		this.fname = fname;
 	}
-
 	public String getMname() {
 		return mname;
 	}
-
 	public void setMname(String mname) {
 		this.mname = mname;
 	}
-
 	public String getLname() {
 		return lname;
 	}
-
 	public void setLname(String lname) {
 		this.lname = lname;
 	}
-
 	public String getAddress() {
 		return address;
 	}
-
 	public void setAddress(String address) {
 		this.address = address;
 	}
-
 	public Date getDob() {
 		return dob;
 	}
-
 	public void setDob(Date dob) {
 		this.dob = dob;
 	}
-
 	public String getEmail() {
 		return email;
 	}
-
 	public void setEmail(String email) {
 		this.email = email;
-	}
-
-	public Long getMob() {
-		return mob;
-	}
-
-	public void setMob(Long mob) {
-		this.mob = mob;
 	}
 
 	public String getDesignation() {
 		return designation;
 	}
-
 	public void setDesignation(String designation) {
 		this.designation = designation;
 	}
-
 	public String getEmpCode() {
 		return empCode;
 	}
-
 	public void setEmpCode(String empCode) {
 		this.empCode = empCode;
 	}
-
 	public String getBloodGroup() {
 		return bloodGroup;
 	}
-
 	public void setBloodGroup(String bloodGroup) {
 		this.bloodGroup = bloodGroup;
 	}
-
-	public Long getAadhar() {
+	
+	public String getMob() {
+		return mob;
+	}
+	public void setMob(String mob) {
+		this.mob = mob;
+	}
+	public String getAadhar() {
 		return aadhar;
 	}
-
-	public void setAadhar(Long aadhar) {
+	public void setAadhar(String aadhar) {
 		this.aadhar = aadhar;
 	}
-
 	public String getPan() {
 		return pan;
 	}
-
 	public void setPan(String pan) {
 		this.pan = pan;
 	}
-
 	public Date getJoiningDate() {
 		return joiningDate;
 	}
-
 	public void setJoiningDate(Date joiningDate) {
 		this.joiningDate = joiningDate;
 	}
-
 	public Long getSalary() {
 		return salary;
 	}
-
 	public void setSalary(Long salary) {
 		this.salary = salary;
 	}
-
 	public String getUserType() {
 		return userType;
 	}
-
 	public void setUserType(String userType) {
 		this.userType = userType;
 	}
-
 	public String getPassword() {
 		return password;
 	}
-
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
+	public String getImage() {
+		return image;
+	}
+	public void setImage(String image) {
+		this.image = image;
+	}
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", fname=" + fname + ", mname=" + mname + ", lname=" + lname + ", address=" + address
-				+ ", dob=" + dob + ", email=" + email + ", mob=" + mob + ", designation=" + designation + ", empCode="
-				+ empCode + ", bloodGroup=" + bloodGroup + ", aadhar=" + aadhar + ", pan=" + pan + ", joiningDate="
-				+ joiningDate + ", salary=" + salary + ", userType=" + userType + ", password=" + password + ", image="
-				+ image + ", imageUrl=" + imageUrl + ", lastLogin=" + lastLogin + "]";
+		return "UserDTO [fname=" + fname + ", mname=" + mname + ", lname=" + lname + ", address=" + address + ", dob="
+				+ dob + ", email=" + email + ", mob=" + mob + ", designation=" + designation + ", empCode=" + empCode
+				+ ", bloodGroup=" + bloodGroup + ", aadhar=" + aadhar + ", pan=" + pan + ", joiningDate=" + joiningDate
+				+ ", salary=" + salary + ", userType=" + userType + ", password=" + password + ", image=" + image + "]";
 	}
+
+	
 }

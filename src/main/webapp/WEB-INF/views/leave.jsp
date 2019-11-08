@@ -26,10 +26,25 @@
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
+<script type="text/javascript">
+            function leave(){
+            	var fromDate = document.getElementById("fromDate").value;
+            	var toDate= document.getElementById("toDate").value;
+            var date1 = new Date(fromDate)
+            var date2 = new Date(toDate)
 
+            var oneDay = 24 * 60 * 60 * 1000;
+            var days = Math.abs((date1.getTime() - date2.getTime()) / (oneDay));
+            var diffDays = days + 1;
+            	alert("You are applying for "+diffDays +" days of Leave");
+            	if(diffDays > "${ul.balanceLeaves}"){
+            		var extraleave = diffDays - ${ul.balanceLeaves};
+            		return confirm("You have taken "+extraleave +" leave more than your balance leave. It will be counted as paid leave");
+            	}
+            }
+        </script>
 </head>
 <body>
-
 <c:if test="${type == 'HR'}">
 
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
@@ -44,6 +59,9 @@
 				href="/HrApp/hrDailyReport">Daily Report</a></li>
 				<li class="nav-item"><a class="nav-link"
 				href="/HrApp/hrCallingSheet">Calling Sheet</a></li>
+				<li class="nav-item"><a class="nav-link"
+					href="/HrApp/downloadSalarySlip">Salary Slip Download</a></li>
+				
 
 		</ul>
 		<div class="navbar-collapse collapse w-25 order-3 dual-collapse2">
@@ -86,8 +104,15 @@
 			</ul>
 		</div>
 	</nav>
-	<br>
 	</c:if>
+	<br>
+	<div align="right">
+	<table border="1">
+	<th style="color: red">Balance Leave</th>
+	<tr>
+	<td> &nbsp; &nbsp; &nbsp; &nbsp; ${ul.balanceLeaves}</td>
+	</table>
+	</div>
 	<div class="container" align="center">
 		<p style="color: red;">${msg}</p>
 
@@ -95,7 +120,7 @@
 		<h2>Leave Application Form</h2>
 		<table class="table">
 			<form:form action="send" method="post" modelAttribute="leave"
-				enctype="multipart/form-data">
+				enctype="multipart/form-data" onsubmit="return leave()">
 				<form:input path="id" type="hidden" />
 
 				<tr>
@@ -105,12 +130,12 @@
 				<tr>
 					<td>From :</td>
 					<td><form:input path="fromDate" type="date"
-							class="dropdown-header" /></td>
+							class="dropdown-header" id="fromDate"/></td>
 				</tr>
 				<tr>
 					<td>To :</td>
 					<td><form:input path="toDate" type="date"
-							class="dropdown-header" /></td>
+							class="dropdown-header" id="toDate"/></td>
 				</tr>
 				<tr>
 					<td>Message :</td>
@@ -128,6 +153,7 @@
 				</tr>
 			</form:form>
 		</table>
+		<br>
 	</div>
 </body>
 </html>

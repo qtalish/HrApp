@@ -39,7 +39,6 @@
 					href="/HrApp/leave">Leave Application</a></li>
 					<li class="nav-item"><a class="nav-link"
 					href="/HrApp/dailyReport">Daily Report</a></li>
-					
 					<li class="nav-item"><a class="nav-link"
 					href="/HrApp/downloadSalarySlip">Salary Slip Download</a></li>
 

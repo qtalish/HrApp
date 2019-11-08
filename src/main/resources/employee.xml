@@ -3,7 +3,7 @@
 	<worksheet name="Employee_Upload">
 		<section endRow="0" startRow="0" />
 		<loop endRow="1" startRow="1"
-			varType="com.kgate.entity.User" var="emp" items="result">
+			varType="com.kgate.entity.UserDTO" var="emp" items="result">
 
 			<section endRow="1" startRow="1">
 

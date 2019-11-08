@@ -2,6 +2,7 @@
 	pageEncoding="ISO-8859-1" isELIgnored="false"%>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -68,9 +69,9 @@
 	<br>
 
 
-
 	<!-- <div class="container"> -->
 	<h2 align="center">Employee Notification</h2>
+	
 	<br>
 	<table class="table">
 		<form:form action="sendMail" method="post" modelAttribute="message">
@@ -88,7 +89,7 @@
 				<td>To :</td>
 				<td><form:select id="myslct" path="to" multiple="true"
 						name="myselect" class="form-control">
-						<form:options items="${emp}" />
+						<form:options items="${emp}" id="emp"/>
 					</form:select></td> 
 			</tr>
 			<tr>
@@ -96,11 +97,31 @@
 				<td>
 					<span class="btn btn-link" onclick="selectAll();">Select
 						All</span>
+					
+					<span class="btn btn-link" onclick="selectAllDeveloper();">Select
+						All Developer</span>	
+					
+					<span class="btn btn-link" onclick="selectAllIntern();">Select
+						All Intern</span>	
+						
+					<span class="btn btn-link" onclick="selectAllHr();">Select
+						All HR</span>
+					
+					<span class="btn btn-link" onclick="selectAllMarketing();">Select
+						All Marketing</span>
+					
+					<span class="btn btn-link" onclick="selectAllOperation();">Select
+						All Operartion Manager</span>
+						
+					<span class="btn btn-link" onclick="selectAllAccoutant();">Select
+						All Accountant</span>
+						
 					<span class="btn btn-link" onclick="deselectAll();">Deselect
 						All</span>
 				</td>
 			</tr>
 			<tr>
+			
 				<td></td>
 				<td>
 					<button class="btn btn-primary">Send</button>
@@ -120,6 +141,98 @@
 		deselectAll = function() {
 			$('#myslct option').prop('selected', false);
 		}
-	</script>
+		
+		selectAllDeveloper = function() {
+		$( "option" ).each(function( index ) {
+			  console.log(index + ": " + $( this ).text()  );
+			   var check = $( this ).text(). includes('Developer');
+			  console.log(check);
+			  if(check) {
+				  var list = $( this ).text() ;
+				  console.log(list);
+				  var id =   $( this ).attr('id');
+				  
+				  $('#'+id).prop('selected', true);
+			  }
+		});
+		}
+		
+		selectAllHr = function() {
+			$( "option" ).each(function( index ) {
+				  console.log(index + ": " + $( this ).text()  );
+				   var check = $( this ).text(). includes('HR');
+				  console.log(check);
+				  if(check) {
+					  var list = $( this ).text() ;
+					  console.log(list);
+					  var id =   $( this ).attr('id');
+					  
+					  $('#'+id).prop('selected', true);
+				  }
+			});
+			}
+		
+		
+		selectAllMarketing = function() {
+			$( "option" ).each(function( index ) {
+				  console.log(index + ": " + $( this ).text()  );
+				   var check = $( this ).text(). includes('Marketing');
+				  console.log(check);
+				  if(check) {
+					  var list = $( this ).text() ;
+					  console.log(list);
+					  var id =   $( this ).attr('id');
+					  
+					  $('#'+id).prop('selected', true);
+				  }
+			});
+			}
+		
+		selectAllOperation = function() {
+			$( "option" ).each(function( index ) {
+				  console.log(index + ": " + $( this ).text()  );
+				   var check = $( this ).text(). includes('Operation');
+				  console.log(check);
+				  if(check) {
+					  var list = $( this ).text() ;
+					  console.log(list);
+					  var id =   $( this ).attr('id');
+					  
+					  $('#'+id).prop('selected', true);
+				  }
+			});
+			}
+		
+		
+		selectAllAccoutant = function() {
+			$( "option" ).each(function( index ) {
+				  console.log(index + ": " + $( this ).text()  );
+				   var check = $( this ).text(). includes('Accoutant');
+				  console.log(check);
+				  if(check) {
+					  var list = $( this ).text() ;
+					  console.log(list);
+					  var id =   $( this ).attr('id');
+					  
+					  $('#'+id).prop('selected', true);
+				  }
+			});
+			}
+		
+		selectAllIntern = function() {
+			$( "option" ).each(function( index ) {
+				  console.log(index + ": " + $( this ).text()  );
+				    var check = $( this ).text(). includes('Intern');
+				  console.log(check);
+				  if(check) {
+					  var list = $( this ).text() ;
+					  console.log(list);
+					  var id =   $( this ).attr('id');
+					  
+					  $('#'+id).prop('selected', true);
+				  }
+			});
+			}
+		</script>
 </body>
 </html>

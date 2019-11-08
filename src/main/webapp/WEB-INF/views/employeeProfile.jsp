@@ -1,3 +1,4 @@
+
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1" isELIgnored="false"%>
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -5,6 +6,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<script src="./resources/JS/jquery-3.3.1.min.js" type="text/javascript"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <style>
 .card {
@@ -77,6 +79,9 @@ button:hover, a:hover {
 				href="/HrApp/hrDailyReport">Daily Report</a></li>
 				<li class="nav-item"><a class="nav-link"
 				href="/HrApp/hrCallingSheet">Calling Sheet</a></li>
+				<li class="nav-item"><a class="nav-link"
+					href="/HrApp/downloadSalarySlip">Salary Slip Download</a></li>
+				
 
 		</ul>
 		<div class="navbar-collapse collapse w-25 order-3 dual-collapse2">
@@ -124,8 +129,9 @@ button:hover, a:hover {
 <h2 style="text-align:center">User Profile Card</h2>
 
 <div class="card">
- <!--  <img src="./resources/images/steve.jpg" alt="steve" style="width:100%"> -->
-  <img src="data:image/jpeg;base64,${userImage}" style="width:100%">
+  <img src="${userImage}" alt="steve" style="width:100%">
+  <!-- <img src="./resources/images/steve.jpg" alt="steve" style="width:100%"> -->
+  <%-- <img src="data:image/jpeg;base64,${userImage}" style="width:100%"> --%>
   <h1>${user.fname} ${user.lname}</h1>
   <p>${user.designation}</p>
   
@@ -136,9 +142,58 @@ button:hover, a:hover {
     <a href="#"><i class="fa fa-linkedin"></i></a>  
   </div>
 
+  <p><button onclick="location.href='deleteImage'">Remove Picture</button></p>
   <p><button>Contact: ${user.mob}</button></p>
   <p><button onclick="location.href='editEmployeeProfile?id=${id}'" type="button">Edit</button></p>
-  <p><button onclick="location.href='uploadForm'" >Upload Picture</button></p>
+  <p><button onclick="showFileDialog();" >Upload Picture</button></p>
+
+
+	<form id="fileFormImage" method="POST" enctype="multipart/form-data" >
+					<input type="file" name="fileImage" id="fileImage" style="display:none" />
+				</form>
 </div>
+
+<script>
+    function showFileDialog(){
+	$("#fileImage").click();
+	
+	}
+	    
+	    $(document).ready(function() {
+	    
+	    var file = $('[name="fileImage"]');
+	    
+	    $('#uploadLink').on('click', function() {
+		});
+		
+	    var fileU = document.getElementById('fileImage');
+		fileU.addEventListener("change", function () {
+			  if (fileU.files.length > 0) {
+			   var filename = $.trim(file.val());
+			
+			$.ajax({
+			   xhr: function() {
+			    var xhr = new window.XMLHttpRequest();
+
+			    return xhr;
+			  },
+			   url: 'uploadImage',
+			    type: "POST",
+			    data: new FormData(document.getElementById("fileFormImage")),
+			    enctype: 'multipart/form-data',
+			    processData: false,
+			    contentType: false
+			  }).done(function(data) {
+			    alert('Success', 'File Upload Successful');
+			   
+			  }).fail(function(jqXHR, textStatus) {
+			      alert('Failure', 'File Upload Failed. Please contact Administrator');
+			  });
+			  document.getElementById('fileImage').value = null;
+			    return;
+			  }
+			});
+		});
+	</script>
 </body>
-</html>
+</html>

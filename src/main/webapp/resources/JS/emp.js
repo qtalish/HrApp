@@ -55,7 +55,7 @@ load = function(page) {
 			
 			});
 };
-
+/*
 function myFunction() {
     $("#myInput").on("keyup", function () {
         var value = $(this).val().toLowerCase();
@@ -68,7 +68,7 @@ function myFunction() {
     });
     
 };
-
+*/
 
 deleteEmp = function(id) {
 	console.log("111")

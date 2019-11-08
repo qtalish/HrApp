@@ -3,11 +3,16 @@ package com.kgate.config;
 import java.io.IOException;
 import java.util.Locale;
 
+import com.kgate.entity.PropertiesConfig;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.core.env.Environment;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -19,10 +24,16 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.ResourceBundleViewResolver;
 
+
+
 @Configuration
 @EnableWebMvc
 @ComponentScan(basePackages = "com")
+@PropertySource({ "classpath:source.properties" })
 public class WebMvcConfig implements WebMvcConfigurer {
+
+	@Autowired
+	private Environment env;
 
 	@Bean(name = "multipartResolver")
 	public CommonsMultipartResolver getResolver() throws IOException {
@@ -80,5 +91,11 @@ public class WebMvcConfig implements WebMvcConfigurer {
 		interceptor.setParamName("mylocale");
 		registry.addInterceptor(interceptor);
 	}
-
+	@Bean
+	public PropertiesConfig setConfig() {
+		PropertiesConfig config = new PropertiesConfig();
+		config.setFileLocation(env.getProperty("fileLocation"));
+		config.setFileUrl(env.getProperty("fileUrl"));
+		return config;
+	}
 }

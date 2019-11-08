@@ -7,4 +7,6 @@ public interface LeavesService {
 	public UserLeaves getLeavesDetails(String empCode, String month, Integer year);
 
 	public UserLeaves getPreviousLeaves(String empc,String monthLeaves,Integer year);
+
+	public UserLeaves getBalanceLeave(String empCode, String month, int year);
 }

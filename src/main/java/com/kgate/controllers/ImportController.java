@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -31,6 +32,7 @@ import org.xml.sax.SAXException;
 import com.kgate.entity.Attendance;
 import com.kgate.entity.AttendanceImport;
 import com.kgate.entity.User;
+import com.kgate.entity.UserDTO;
 import com.kgate.repository.AttendanceRepository;
 import com.kgate.repository.UserRepository;
 
@@ -187,28 +189,55 @@ public class ImportController {
 				System.out.println("stream :	" + stream);
 				String path = "classpath:employee.xml";
 				File file =  ResourceUtils.getFile(path);
-				List<User> user = ImportController.parseExcelFileToBeans(stream, file);
+				List<UserDTO> user = ImportController.parseExcelFileToBeans(stream, file);
 				
 				if (user.size() == 0) {
 					throw new java.lang.Exception("NO_DATA_IN_EXCEL");
 				}			 
 			
 				System.out.println("Person List: " + user);
-				for (User u : user) {
+				for (UserDTO u : user) {
 					System.out.println(u.getFname());
 					System.out.println((u.getLname()));
 					System.out.println(u.getUserType());
+					System.out.println(">>>>>>>>> "+u.getMob());
+					
+					long mob = new BigDecimal(u.getMob()).longValue();
+					long aadhar = new BigDecimal(u.getAadhar()).longValue();
+					System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> "+mob);
+					System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> "+aadhar);
+					
+					User u1 = new User();
+					u1.setFname(u.getFname());
+					u1.setLname(u.getLname());
+					u1.setMname(u.getMname());
+					u1.setAddress(u.getAddress());
+					u1.setDob(u.getDob());
+					u1.setEmail(u.getEmail());
+					u1.setAadhar(aadhar);
+					u1.setMob(mob);
+					u1.setDesignation(u.getDesignation());
+					u1.setEmpCode(u.getEmpCode());
+					u1.setBloodGroup(u.getBloodGroup());
+					u1.setPan(u.getPan());
+					u1.setJoiningDate(u.getJoiningDate());
+					u1.setSalary(u.getSalary());
+					u1.setUserType(u.getUserType());
+					u1.setImage(u.getImage());
+					
 					String salt = BCrypt.gensalt(workload);
 					String hspwd = BCrypt.hashpw(u.getPassword(), salt);
-					u.setPassword(hspwd);
-					urepo.save(u);
+					u1 .setPassword(hspwd);
+					urepo.save(u1);
 					UserController uc = new UserController();
-					uc.sendMail(u.getEmail(),
-							"<font color=\"red\">Hello </font> " + u.getFname() + ",<br>"
-									+ "<font color=\"red\">Your Username is: </font> " + u.getEmail() + "<br>"
-									+ "<font color=\"red\">Your Password is: </font>" + u.getPassword(),
-							"Login Details");
-				}
+
+				
+				  uc.sendMail(u.getEmail(), "<font color=\"red\">Hello </font> " + u.getFname()
+				  + ",<br>" + "<font color=\"red\">Your Username is: </font> " + u.getEmail() +
+				  "<br>" + "<font color=\"red\">Your Password is: </font>" + u.getPassword(),
+				  "Login Details");
+				 
+			}
 			} catch (Exception e) {
 
 				e.printStackTrace();

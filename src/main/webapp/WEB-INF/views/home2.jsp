@@ -149,7 +149,7 @@ var isXlsx = function(name) {
 			  }).fail(function(jqXHR, textStatus) {
 			      alert('Failure', 'File Upload Failed. Please contact Administrator');
 			  });
-			  document.getElementById('fileAttendance').value = null;
+			  document.getElementById('fileEmp').value = null;
 			    return;
 			  }
 			 

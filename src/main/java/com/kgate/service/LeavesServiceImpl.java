@@ -31,4 +31,10 @@ public class LeavesServiceImpl implements LeavesService {
 		return userLeaves;
 	}
 
+	@Override
+	public UserLeaves getBalanceLeave(String empCode, String month, int year) {
+		// TODO Auto-generated method stub
+		return leavesRepository.getBalanceLeave(empCode, month, year);
+	}
+
 }

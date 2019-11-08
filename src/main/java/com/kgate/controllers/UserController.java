@@ -1,10 +1,21 @@
 package com.kgate.controllers;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLDecoder;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
+import java.text.DateFormat;
 import java.text.DateFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -23,11 +34,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
+import org.joda.time.Days;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
@@ -47,26 +63,36 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.common.io.Files;
+import com.itextpdf.text.pdf.codec.Base64.InputStream;
 import com.kgate.entity.Attendance;
 import com.kgate.entity.DailyReport;
 import com.kgate.entity.Leave;
 import com.kgate.entity.MessageEmployee;
+import com.kgate.entity.PropertiesConfig;
 import com.kgate.entity.User;
 import com.kgate.entity.UserDocument;
+import com.kgate.entity.UserLeaves;
 import com.kgate.repository.MessageRepository;
 import com.kgate.repository.UserDocumentRepository;
 import com.kgate.repository.UserRepository;
 import com.kgate.service.DailyReportService;
 import com.kgate.service.HrCallingSheetService;
 import com.kgate.service.HrDailyReportService;
+import com.kgate.service.LeavesService;
 import com.kgate.service.UserDocumentService;
 import com.kgate.service.UserService;
+
+import springfox.documentation.spring.web.paths.Paths;
 
 @Controller
 @SessionAttributes("user")
 public class UserController {
-	
-	private Logger log =  Logger.getLogger(UserController.class);
+
+	private Logger log = Logger.getLogger(UserController.class);
+
+	@Autowired
+	PropertiesConfig config;
 
 	@Autowired
 	HrDailyReportService hrDailyReportService;
@@ -77,7 +103,6 @@ public class UserController {
 	@Autowired
 	MessageRepository msgrepo;
 
-	
 	@Autowired
 	DailyReportService dailyReportService;
 
@@ -86,11 +111,14 @@ public class UserController {
 
 	@Autowired
 	UserDocumentService userDocumentService;
-	
+
 	@Autowired
 	HrCallingSheetService hrCallingSheetService;
 	@Autowired
 	UserRepository userRepo;
+
+	@Autowired
+	LeavesService leavesService;
 
 	static int workload = 12;
 
@@ -105,28 +133,32 @@ public class UserController {
 		ModelAndView mav = new ModelAndView("login");
 		System.out.println("abc");
 		User user = new User();
-		user.setEmail("gulfarooqui1@gmail.com");
+		user.setEmail("admin@kgate.in");
 		user.setPassword("1234");
 		mav.addObject("user", user);
 		return mav;
 	}
-	
+
 	@PostMapping("/authenticate")
 	public ModelAndView authenticate(@ModelAttribute("user") User user) {
 		ModelAndView mav = new ModelAndView();
+		Date date = new Date();
 		User user2 = userRepo.findByEmail(user.getEmail());
 		System.out.println("........." + user2);
 		boolean validate = BCrypt.checkpw(user.getPassword(), user2.getPassword());
 		if (!validate) {
-			log.info("Invalid");
+
 			mav.setViewName("login");
 			mav.addObject("msg", "Please Enter Valid User Details");
 			return mav;
 		}
-		if (user2.getUserType().equalsIgnoreCase("DEVELOPER")) {
-			mav.addObject("user", user2); 	
+		if (user2.getLastLogin() == null) {
+			System.out.println("last time login " + user2.getLastLogin());
+			mav.setViewName("redirect:/editEmployeeProfile?id=" + user2.getId());
+			mav.addObject("user", user2);
+		} else if (user2.getUserType().equalsIgnoreCase("DEVELOPER")) {
+			mav.addObject("user", user2);
 			mav.setViewName("empDash");
-			log.info("Developer Logged In");
 			System.out.println("Developer Logged In");
 		} else if (user2.getUserType().equalsIgnoreCase("ADMIN")) {
 			mav.setViewName("home2");
@@ -149,8 +181,11 @@ public class UserController {
 			mav.addObject("user", user2);
 			System.out.println("Developer Logged In");
 		}
+		user2.setLastLogin(date);
+		userRepo.save(user2);
 		return mav;
 	}
+
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	public String logout(HttpServletRequest request) {
 		return "redirect:/";
@@ -184,13 +219,14 @@ public class UserController {
 		ModelAndView mav = new ModelAndView("home2");
 		UserController uc = new UserController();
 		String salt = BCrypt.gensalt(workload);
-		String hspwd = BCrypt.hashpw(user.getPassword(), salt);
+		String password = user.getPassword();
+		String hspwd = BCrypt.hashpw("1234", salt);
 		user.setPassword(hspwd);
 		userService.save(user);
 		uc.sendMail(user.getEmail(),
 				"<font color=\"red\">Hello </font> " + user.getFname() + ",<br>"
 						+ "<font color=\"red\">Your Username is: </font> " + user.getEmail() + "<br>"
-						+ "<font color=\"red\">Your Password is: </font>" + user.getPassword(),
+						+ "<font color=\"red\">Your Password is: </font>" + "1234",
 				"Login Details");
 		return mav;
 	}
@@ -210,6 +246,7 @@ public class UserController {
 		props.put("mail.smtp.auth", "true");
 		props.put("mail.smtp.port", "465");
 
+		
 		Session session = Session.getInstance(props, new javax.mail.Authenticator() {
 			protected PasswordAuthentication getPasswordAuthentication() {
 				return new PasswordAuthentication("gulfarooqui1@gmail.com", "Infinite#7326");
@@ -233,7 +270,6 @@ public class UserController {
 		} catch (MessagingException e1) {
 			throw new RuntimeException(e1);
 		}
-
 	}
 
 	@GetMapping("/employeeDash")
@@ -247,7 +283,7 @@ public class UserController {
 			throws UnsupportedEncodingException {
 
 		ModelAndView mav = new ModelAndView("employeeProfile");
-		mav.addObject("type",user.getUserType());
+		mav.addObject("type", user.getUserType());
 		System.out.println(user);
 		if (user.getImage() == null) {
 			mav.addObject("user", user);
@@ -255,9 +291,9 @@ public class UserController {
 			return mav;
 		} else {
 			mav.addObject("id", user.getId());
-			byte[] encodeBase64 = Base64.encodeBase64(user.getImage());
-			String base64Encoded = new String(encodeBase64, "UTF-8");
-			mav.addObject("userImage", base64Encoded);
+			String imageValue = user.getImage();
+			System.out.println(">>>>>>>>>>>>>>>>>>> "+imageValue);
+			mav.addObject("userImage", imageValue);
 			return mav;
 		}
 	}
@@ -299,7 +335,7 @@ public class UserController {
 			@SessionAttribute("user") User user) {
 		ModelAndView mav = new ModelAndView("employeeDocuments");
 
-        String type = user.getUserType();
+		String type = user.getUserType();
 		mav.addObject("type", type);
 		userDocument.setEmpCode(user.getEmpCode());
 		List<UserDocument> ud = userDocumentService.findDoc(user.getEmpCode());
@@ -359,39 +395,61 @@ public class UserController {
 			map.put("msg", "Your Password has been send to your email successfully");
 			return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
 		}
-
 	}
 
 	// Leave
 	@GetMapping("/leave")
-	public ModelAndView leave(@ModelAttribute("leave") Leave leave,@SessionAttribute("user")  User user) {
+	public ModelAndView leave(@ModelAttribute("leave") Leave leave, @SessionAttribute("user") User user) {
 		ModelAndView mav = new ModelAndView("leave");
-		mav.addObject("type",user.getUserType());
+		Date date = new Date();
+		String month = Month.of(date.getMonth() + 1).name();
+		UserLeaves ul = leavesService.getBalanceLeave(user.getEmpCode(), month, date.getYear() + 1900);
+		mav.addObject("type", user.getUserType());
+		mav.addObject("ul", ul);
 		return mav;
 	}
 
 	@PostMapping("/send")
 	public ModelAndView send(@ModelAttribute("leave") Leave leave, @RequestParam("file") MultipartFile file,
+			@RequestParam("fromDate") Date fdate, @RequestParam("toDate") Date tdate,
 			@SessionAttribute("user") User user) throws ParseException, IOException {
 		ModelAndView mav = new ModelAndView("redirect:/leave");
 		leave.setContent(file.getBytes());
+
 		UserController uc = new UserController();
-		userService.save(leave);
+		// uncomment the next line if done
+		 userService.save(leave);
+//		 uc.sendMail(to, message, subject);
 		return mav;
 	}
 
-	@GetMapping("uploadForm")
-	public ModelAndView uploadForm() {
-		return new ModelAndView("uploadimage");
+	@PostMapping("/uploadImage")
+	public ModelAndView uploadImage(@ModelAttribute("user") User user, @RequestParam("fileImage") MultipartFile file)
+			throws IOException {
+		ModelAndView mav = new ModelAndView("redirect:/profile");
+		if (!file.getOriginalFilename().isEmpty()) {
+			System.out.println("testing: " + config.getFileLocation() + "/" + file.getOriginalFilename());
+			String destination = config.getFileLocation() + File.separator + "images" + File.separator
+					+ file.getOriginalFilename();
+			File file2 = new File(destination);
+			file.transferTo(file2);
+			String url = config.getFileUrl() + "img/" + file.getOriginalFilename();
+			user.setImageUrl(url);
+			user.setImage("/HrApp/img/" +file.getOriginalFilename());
+			userService.save(user);
+
+			mav.addObject("msg", "File uploaded successfully");
+		} else {
+			mav.addObject("msg", "Please select valid file.");
+		}
+		return mav;
 	}
 
-	@PostMapping("/uploadImage")
-	public ModelAndView uploadImage(@ModelAttribute("user") User user, @RequestParam("file") MultipartFile file)
-			throws IOException {
-		ModelAndView mav = new ModelAndView();
-		user.setImage(file.getBytes());
+	@GetMapping("/deleteImage")
+	public ModelAndView deleteImage(@SessionAttribute("user") User user) {
+		ModelAndView mav = new ModelAndView("redirect:/profile");
+		user.setImage(null);
 		userService.save(user);
-		mav = new ModelAndView("redirect:/profile");
 		return mav;
 	}
 
@@ -414,7 +472,7 @@ public class UserController {
 		List<User> userList = userService.findEmployee();
 		Map<String, String> emp = new HashMap<String, String>();
 		for (User user : userList) {
-			emp.put(user.getEmail(), user.getFname());
+			emp.put(user.getEmail(), user.getFname() +" - "+ user.getDesignation());
 		}
 		mav.addObject("userList", userList);
 		mav.addObject("emp", emp);
@@ -428,12 +486,12 @@ public class UserController {
 		System.out.println("1111" + message.getSubjectMessage());
 		System.out.println("1111" + message.getMessageEmp());
 		System.out.println(message.getTo());
+		User user = userService.fetchPassword(message.getTo());
 		System.out.println("1111");
 		UserController uc = new UserController();
 		message.setDate(date);
-
 		msgrepo.save(message);
-		uc.sendMail(message.getTo(), message.getMessageEmp(), message.getSubjectMessage());
+		uc.sendMail(message.getTo(), "Hello " + user.getFname()+"," + "<br>" +message.getMessageEmp(), message.getSubjectMessage());
 		return mav;
 	}
 
@@ -446,19 +504,31 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/downloadDoc-{docId}", method = RequestMethod.GET)
-	public String downloadDocument(@PathVariable int docId, HttpServletResponse response, @SessionAttribute("user") User user) throws IOException {
+	public ResponseEntity<byte[]> downloadDocument(@PathVariable int docId, HttpServletResponse response,
+			@SessionAttribute("user") User user) throws IOException {
 
 		UserDocument document = userDocumentService.download(docId);
-//		response.setContentType(document.getDocumentType());
 		System.out.println("ddd" + document);
-		response.setContentLength(document.getDocument().length);
-		response.setHeader("Content-Disposition", "attachment; filename=\"" + document.getDname() + "\"");
-		FileCopyUtils.copy(document.getDocument(), response.getOutputStream());
-		if(user.getUserType().equals("ADMIN")) {
-			return "redirect:/documents";
-		}
-		else {
-			return "redirect:/uploadDocumentAjax";
+		String url = document.getDocument();
+		String docName = document.getOriginalDocName();
+		File file = new File(config.getFileLocation() + "/documents/" + docName);
+		byte data[] = FileUtils.readFileToByteArray(file);
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentDispositionFormData(docName, docName);
+		headers.setContentType(MediaType.APPLICATION_PDF);
+		headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+		ResponseEntity<byte[]> response2 = new ResponseEntity<>(data, headers, HttpStatus.OK);
+		return response2;
 	}
+
+	@PostMapping("saveEditEmployee")
+	public ModelAndView saveEditEmployee(@ModelAttribute("user") User user, @SessionAttribute("user") User user2) {
+		ModelAndView mav = new ModelAndView("redirect:/profile");
+		user.setUserType(user2.getUserType());
+		user.setPassword(user2.getPassword());
+		userService.save(user); 
+		return mav;
 	}
+
 }

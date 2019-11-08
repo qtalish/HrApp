@@ -140,7 +140,7 @@ public class AdminAjaxController {
 		userType.add("MARKETING");
 		userType.add("ACCOUNTS");
 		mav.addObject("userType", userType);
-
+		mav.addObject("id", userId);
 		mav.addObject("user", user);
 		return mav;
 	}

@@ -38,7 +38,9 @@ public class UserDocument {
 	@Column(name = "document")
 	@Lob
 	@Basic(fetch = FetchType.EAGER)
-	private byte[] document;
+	private String document;
+	
+	private String originalDocName;
 
 	@Column(name = "document_type")
 	@Nullable
@@ -84,12 +86,22 @@ public class UserDocument {
 		this.description = description;
 	}
 
-	public byte[] getDocument() {
+	
+	public String getDocument() {
 		return document;
 	}
 
-	public void setDocument(byte[] document) {
+	public void setDocument(String document) {
 		this.document = document;
+	}
+
+
+	public String getOriginalDocName() {
+		return originalDocName;
+	}
+
+	public void setOriginalDocName(String originalDocName) {
+		this.originalDocName = originalDocName;
 	}
 
 	public String getDocumentType() {
@@ -118,8 +130,10 @@ public class UserDocument {
 
 	@Override
 	public String toString() {
-		return "UserDocument [id=" + id + ", dname=" + dname + ", description=" + description + ", document="
-				+ Arrays.toString(document) + ", documentType=" + documentType + ", created=" + created + ", empCode="
-				+ empCode + ", userType=" + userType + "]";
+		return "UserDocument [id=" + id + ", dname=" + dname + ", description=" + description + ", document=" + document
+				+ ", originalDocName=" + originalDocName + ", documentType=" + documentType + ", created=" + created
+				+ ", empCode=" + empCode + ", userType=" + userType + "]";
 	}
+
+	
 }
