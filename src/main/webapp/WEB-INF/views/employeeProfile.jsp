@@ -205,6 +205,8 @@
 									<li><span>Address : </span>${user.address}</li>
 									<li><span>E-mail : </span>${user.email}</li>
 									<li><span>Phone : </span>${user.mob}</li>
+									<li><span>Experience : </span>${exp}</li>
+									
 								</ul>
 								
 							

@@ -205,7 +205,7 @@
 			</tr>
 			<tr>
 				<td><form:label path="document">Document</form:label></td>
-				<td><input type="file" name="file" id="file" class="file-field"/></td>
+				<td><input type="file" name="file" id="file" class="file-field" required="required"/></td>
 			</tr>
 			<tr>
 			<td></td>

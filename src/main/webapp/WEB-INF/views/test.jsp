@@ -4,12 +4,12 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Spring MVC Email Example</title>
+<title>Test</title>
 </head>
 
 <body>
 	<center>
-		<h2>Welcome Test Page</h2>
+		<h2>Mail can't be send Please check your connection details </h2>
 	</center>
 </body>
 </html>

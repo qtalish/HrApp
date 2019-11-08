@@ -1,17 +1,27 @@
 package com.kgate.controllers;
 
+import java.awt.Color;
+import java.awt.GradientPaint;
+import java.awt.Paint;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.text.DateFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -24,15 +34,29 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.swing.SwingUtilities;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartUtils;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.CategoryAxis;
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.axis.ValueAxis;
+import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.renderer.category.BarRenderer;
+import org.jfree.data.category.CategoryDataset;
+import org.jfree.data.general.DatasetUtils;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -50,12 +74,15 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.itextpdf.text.log.SysoCounter;
 import com.kgate.entity.Attendance;
 import com.kgate.entity.DailyReport;
 import com.kgate.entity.Leave;
 import com.kgate.entity.MessageEmployee;
 import com.kgate.entity.User;
 import com.kgate.entity.UserDocument;
+import com.kgate.repository.AttendanceRepository;
+import com.kgate.repository.LeaveRepository;
 import com.kgate.repository.MessageRepository;
 import com.kgate.repository.UserDocumentRepository;
 import com.kgate.repository.UserRepository;
@@ -64,6 +91,9 @@ import com.kgate.service.HrCallingSheetService;
 import com.kgate.service.HrDailyReportService;
 import com.kgate.service.UserDocumentService;
 import com.kgate.service.UserService;
+import com.kgate.util.MultipleLinesChart;
+
+import io.swagger.models.Model;
 
 @Controller
 @SessionAttributes("user")
@@ -91,8 +121,15 @@ public class UserController {
 
 	@Autowired
 	HrCallingSheetService hrCallingSheetService;
+	
 	@Autowired
 	UserRepository userRepo;
+
+	@Autowired
+	AttendanceRepository ar;
+	
+	@Autowired
+	LeaveRepository leaveRepository;
 
 	static int workload = 12;
 
@@ -102,13 +139,11 @@ public class UserController {
 		binder.registerCustomEditor(Date.class, dateEditor);
 	}
 
+	
 	@GetMapping("/")
 	public ModelAndView login() {
 		ModelAndView mav = new ModelAndView("login");
-		System.out.println("abc");
-		User user = new User();
-		System.out.println("------------------->" + user);
-		mav.addObject("user", user);
+		mav.addObject("user", new User());
 		return mav;
 	}
 
@@ -116,7 +151,6 @@ public class UserController {
 	public ModelAndView authenticate(@ModelAttribute("user") User user) {
 		ModelAndView mav = new ModelAndView();
 		User user2 = userRepo.findByEmail(user.getEmail());
-		System.out.println("user..........." + user2);
 		if (user2 == null) {
 			mav.addObject("msg", "Please Enter Valid User Details");
 			mav.setViewName("login");
@@ -175,7 +209,7 @@ public class UserController {
 	}
 
 	@GetMapping("/register")
-	public ModelAndView register(@SessionAttribute("user") User user) {
+	public ModelAndView register(@SessionAttribute("user") User user,Locale locale) {
 		if (user.getUserType() == null) {
 			return new ModelAndView("redirect:/");
 		}
@@ -187,18 +221,37 @@ public class UserController {
 		userType.add("MARKETING");
 		userType.add("ACCOUNTS");
 		mav.addObject("userType", userType);
-		mav.addObject("user", new User());
+		mav.addObject("user2", new User());
 		return mav;
 	}
 
 	@PostMapping("/save")
-	public ModelAndView save(@ModelAttribute("user") User user) throws ParseException {
-		ModelAndView mav = new ModelAndView("home2");
+	public ModelAndView save(@ModelAttribute("user2") User user,@SessionAttribute("user") User user2) throws ParseException {
+		ModelAndView mav = new ModelAndView();
+	mav.addObject("type",user2.getUserType());
+	if (user2.getUserType().equalsIgnoreCase("ADMIN")) {
+			mav.setViewName("register");
+		} else {
+			mav.setViewName("employeeEdit");
+		}
 		UserController uc = new UserController();
 		String salt = BCrypt.gensalt(workload);
 		String hspwd = BCrypt.hashpw(user.getPassword(), salt);
-		user.setPassword(hspwd);
-		userService.save(user);
+			
+			if(user2.getUserType().equalsIgnoreCase("ADMIN"))
+			{
+				user.setPassword(hspwd);
+				System.out.println("1");
+			}
+			else
+			{
+			user.setUserType(user2.getUserType());
+			user.setPassword(user2.getPassword());
+			System.out.println("2");
+			}
+			System.out.println("3");
+		
+			userService.save(user);
 		uc.sendMail(user.getEmail(),
 				"<font color=\"red\">Hello </font> " + user.getFname() + ",<br>"
 						+ "<font color=\"red\">Your Username is: </font> " + user.getEmail() + "<br>"
@@ -243,7 +296,7 @@ public class UserController {
 
 			Transport.send(message1);
 
-			System.out.println("Done");
+			System.out.println("Email sent");
 
 		} catch (MessagingException e1) {
 			throw new RuntimeException(e1);
@@ -270,6 +323,48 @@ public class UserController {
 		ModelAndView mav = new ModelAndView("employeeProfile");
 		mav.addObject("type", user.getUserType());
 		System.out.println(user);
+		
+		
+		 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		String currentDate = sdf.format(new Date());
+		String joiningDate = sdf.format(user.getJoiningDate());
+		
+		
+		LocalDate dateBefore = LocalDate.parse(joiningDate);
+		LocalDate dateAfter = LocalDate.parse(currentDate);
+	
+		 dateBefore = LocalDate.of(dateBefore.getYear(),dateBefore.getMonth(),dateBefore.getDayOfMonth());
+		 dateAfter = LocalDate.of(dateAfter.getYear(),dateAfter.getMonth(),dateAfter.getDayOfMonth());
+		 
+		
+		 Period period = Period.between(dateBefore, dateAfter);
+		//	String exp = (period.getYears() + " Years " + period.getMonths() + " Months "+ period.getDays() + " Days ");
+			
+			String day = period.getDays()+""; 
+            String month = period.getMonths()+"";
+		    String year= period.getYears()+"";
+		    System.out.println("year........"+year);
+		    
+		     if(year.equalsIgnoreCase("0")&&month.equalsIgnoreCase("0"))
+		    {
+		    	String exp = day+" Days ";
+		    	mav.addObject("exp",exp);
+		    }
+		     else if(year.equalsIgnoreCase("0"))
+		    {
+		    	System.out.println("inside");
+		    	String exp = month+" Months "+day+" Days ";
+		    	mav.addObject("exp",exp);
+		    }
+		    else
+		    {
+		    	String exp = (period.getYears() + " Years " + period.getMonths() + " Months "+ period.getDays() + " Days ");
+		    	mav.addObject("exp",exp);
+		    }
+		   
+		    
+		 //   mav.addObject("exp",exp);
+		
 		if (user.getImage() == null) {
 			mav.addObject("user", user);
 			mav.addObject("id", user.getId());
@@ -405,6 +500,10 @@ public class UserController {
 		}
 		ModelAndView mav = new ModelAndView("leave");
 		mav.addObject("type", user.getUserType());
+		List<Leave> leaveList = leaveRepository.findByEmpCode(user.getEmpCode());
+		System.out.println(">>>>>>"+leaveList);
+		mav.addObject("leaveList", leaveList);
+	
 		return mav;
 	}
 
@@ -412,13 +511,23 @@ public class UserController {
 	public ModelAndView send(@ModelAttribute("leaveApplication") Leave leave, @RequestParam("file") MultipartFile file,
 			@SessionAttribute("user") User user) throws ParseException, IOException {
 		ModelAndView mav = new ModelAndView("redirect:/leave");
-		leave.setContent(file.getBytes());
-		UserController uc = new UserController();
+		/*leave.setContent(file.getBytes());*/
+		leave.setStatus("Pending");
+		leave.setFname(user.getFname());
+		leave.setLname(user.getLname());
+		leave.setEmpCode(user.getEmpCode());
+		
 		userService.save(leave);
-		uc.sendMail("vartak.m.akshay@gmail.com",
-				"<font color=\"red\"> DATE : </font> " + leave.getFromDate() + " TO " + leave.getToDate() + "<br>"
-						+ "<font color=\"red\"> Message : </font>" + leave.getMessage(),
-				"SUBJECT : " + leave.getSubject());
+		UserController uc = new UserController();
+		try {
+			uc.sendMail("vartak.m.akshay@gmail.com",
+					"<font color=\"red\"> DATE : </font> " + leave.getFromDate() + " TO " + leave.getToDate() + "<br>"
+							+ "<font color=\"red\"> Message : </font>" + leave.getMessage(),
+					"SUBJECT : " + leave.getSubject()+" From "+user.getFname()+" "+user.getLname());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			mav.setViewName("test");
+		}
 		return mav;
 	}
 
@@ -475,4 +584,52 @@ public class UserController {
 			return "redirect:/uploadDocumentAjax";
 		}
 	}
+	
+	@GetMapping("/lms")
+	public ModelAndView lms(@SessionAttribute("user") User user)
+	{ 
+		/*if (user.getUserType() == null) {
+			return new ModelAndView("redirect:/");
+		}*/
+	ModelAndView mav = new ModelAndView("lms");
+	List<Leave> leaves = leaveRepository.findAll();
+	List<String> status = new ArrayList<>();
+	status.add("Approved");
+	status.add("Disapproved");
+	Leave leave = new Leave();
+	mav.addObject("leave", leave);
+	mav.addObject("status",status);
+	mav.addObject("leaves",leaves);
+	return mav;
+	}
+	
+	@GetMapping("/btn")
+	public ModelAndView btn(@RequestParam("button") String button,@RequestParam("id") Integer id )
+	{
+		ModelAndView mav = new ModelAndView();
+		Leave leave = leaveRepository.getOne(id);
+		System.out.println(leave);
+		leave.setStatus(button);
+		leaveRepository.saveAndFlush(leave);
+		mav.setViewName("redirect:/lms");
+		UserController uc = new UserController();
+
+	 User user = userRepo.findByEmpCode(leave.getEmpCode());
+	 
+	 if(button.equalsIgnoreCase("Approved"))
+	 {
+		 uc.sendMail("vartak.m.akshay@gmail.com","Hi "+user.getFname()+",<br> We are Happy to inform you that your leave from "+leave.getFromDate()+" To "+leave.getToDate()+"  has been Accepted.","Leave Request "+button);
+	 }
+	 else
+	 {
+		 uc.sendMail("vartak.m.akshay@gmail.com", "Hi "+user.getFname()+",<br> We are sorry to inform you that your leave from "+leave.getFromDate()+" To "+leave.getToDate()+" has been Rejected. "+"<p> &nbsp&nbsp&nbsp Kindly contact HR for the further information." ,"Leave Request "+button);
+	 }
+	
+	 
+	/* user.getEmail()*/
+		
+		return mav;
+	}
+	
+	
 }

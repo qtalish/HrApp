@@ -158,12 +158,12 @@
 			
 			<tr>
 				<td>Date</td>
-				<td><form:input path="date" type="date" class="dropdown-header" /></td>
+				<td><form:input path="date" type="date" class="dropdown-header" readonly="true" /></td>
 			</tr>
 			
 			<tr>
 				<td>Task Done Today :</td>
-				<td><form:textarea path="taskDoneToday" class="form-control" /></td>
+				<td><form:textarea path="taskDoneToday" onmouseover="tdt()" id="td" class="form-control"/></td>
 			</tr>
 			
 			<tr>
@@ -178,9 +178,38 @@
 			
 			<tr>
 			<td></td>
-				<td><button class="btn btn-primary">Submit</button></td>
+				<td><button class="btn btn-primary"  onclick="valid()">Submit</button></td>
 			</tr>
 		</form:form>
 		</table>
+		<div class="alert alert-secondary alert-dismissible fade show" role="alert">
+		<p id ="abc" aria-label="Close" /></div>
+		
+<script type="text/javascript">
+valid = function()
+{
+var today = $("#td").val();
+var yester = "${yest}";
+console.log("today "+today);
+console.log("yest"+yester);
+if(today.includes(yester))
+	{
+	console.log("true");
+	return true;
+	}
+else
+	{
+	console.log("false");
+	document.getElementById("abc").innerHTML="ABC";
+	return false;
+	}
+}
+
+tdt = function()
+{
+console.log("tdt");	
+document.getElementById("abc").innerHTML = "Today's Task : "+"${yest}"; 
+}
+</script>
 </body>
 </html>

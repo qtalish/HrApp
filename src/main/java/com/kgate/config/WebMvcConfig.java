@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -35,6 +36,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
 		return resolver;
 	}
+	
+	
 
 	@Bean
 	public InternalResourceViewResolver resolver() {
@@ -80,5 +83,11 @@ public class WebMvcConfig implements WebMvcConfigurer {
 		interceptor.setParamName("mylocale");
 		registry.addInterceptor(interceptor);
 	}
+	
+	@Bean
+	public ThreadPoolTaskExecutor taskExecutor() {
+	    return new ThreadPoolTaskExecutor();
+	}
+	
 
 }

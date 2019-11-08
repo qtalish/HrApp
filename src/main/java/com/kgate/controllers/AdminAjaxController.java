@@ -86,7 +86,6 @@ public class AdminAjaxController {
 		}
 		Pageable pageable = PageRequest.of(initialPage, 3);
 		Page<User> userList = userService.findEmployeePage(pageable);
-		System.out.println("saassasa"+userList);
 		if (userList != null) {
 			map.put("list", userList);
 		} else {
@@ -106,7 +105,7 @@ public class AdminAjaxController {
 	}
 
 	@RequestMapping(value = "/editEmployeeAjax", method = RequestMethod.GET)
-	public ModelAndView editEmployee(HttpServletRequest request, @ModelAttribute("user") User user2,@SessionAttribute("user") User user3 ) {
+	public ModelAndView editEmployee(HttpServletRequest request, @ModelAttribute("user2") User user2,@SessionAttribute("user") User user3 ) {
 		if(user3.getUserType() == null)
 		{
 		    return new ModelAndView("redirect:/");  
@@ -114,7 +113,7 @@ public class AdminAjaxController {
 		int userId = Integer.parseInt(request.getParameter("id"));
 		User user = repo.getOne(userId);
 		ModelAndView mav = new ModelAndView("register");
-		
+		mav.addObject("type",user3.getUserType());
 		
 		List<String> userType = new ArrayList<>();
 		userType.add("DEVELOPER");
@@ -124,12 +123,12 @@ public class AdminAjaxController {
 		userType.add("ACCOUNTS");
 		mav.addObject("userType", userType);
 
-		mav.addObject("user", user);
+		mav.addObject("user2", user);
 		return mav;
 	}
 
 	@RequestMapping(value = "/editEmployeeProfile", method = RequestMethod.GET)
-	public ModelAndView editEmployeeProfile(HttpServletRequest request, @ModelAttribute("user") User user2,@SessionAttribute("user") User user3) {
+	public ModelAndView editEmployeeProfile(HttpServletRequest request, @ModelAttribute("user2") User user2,@SessionAttribute("user") User user3) {
 		if(user3.getUserType() == null)
 		{
 		    return new ModelAndView("redirect:/");  
@@ -137,10 +136,9 @@ public class AdminAjaxController {
 		int userId = Integer.parseInt(request.getParameter("id"));
 		User user = repo.getOne(userId);
 		ModelAndView mav = new ModelAndView("employeeEdit");
-		System.out.println("......................................."+user3.getUserType());
 		mav.addObject("type",user3.getUserType());
 
-		mav.addObject("user", user);
+		mav.addObject("user2", user);
 		return mav;
 	}
 
@@ -172,4 +170,6 @@ public class AdminAjaxController {
 		map.put("pno", list.getTotalPages());
 		return map;
 	}
+	
+	
 }  

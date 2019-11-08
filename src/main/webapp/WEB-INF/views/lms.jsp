@@ -1,15 +1,22 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1" isELIgnored="false"%>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+    pageEncoding="ISO-8859-1" isELIgnored="false"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
-
-
 <meta charset="ISO-8859-1">
-<title>Work Report</title>
+<title>Leave Management System</title>
+
+<script type="text/javascript" src="./resources/JS/jquery-3.3.1.min.js"></script>
+<link href="./resources/css/bootstrap.css" rel="stylesheet" />
+<script src="./resources/JS/sweetalert.min.js" type="text/javascript"></script>
+
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+
+
 <link href="./resources/images/kgate.png" rel="shortcut icon"
 	type="image/png" />
 <link rel="stylesheet"
@@ -25,12 +32,12 @@
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-<script
-	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<!-- <script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script> -->
+
 </head>
 <body>
-
-	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
 		<a class="navbar-brand" href="https://www.kgate.in/">K-Gate</a>
 
 		<ul class="navbar-nav">
@@ -42,12 +49,11 @@
 				href="/HrApp/workReport">Report</a></li>
 				<li class="nav-item"><a class="nav-link"
 				href="/HrApp/lms">L.M.S</a></li>
-
 			<li class="nav-item dropdown"><a
 				class="nav-link dropdown-toggle" href="#" id="navbardrop"
 				data-toggle="dropdown"> Employee </a>
 				<div class="dropdown-menu">
-					<a class="dropdown-item" href="/HrApp/register">Add Employee</a> <a
+					<a class="dropdown-item" href="/HrApp/register">Add Employee</a><a
 						class="dropdown-item" href="/HrApp/viewEmployees">View All
 						Employees </a>
 				</div></li>
@@ -64,61 +70,40 @@
 		</div>
 	</nav>
 	<br>
-	<div align="center">
-		<a href="/HrApp/workReport">Developer Report</a> | <a
-			href="/HrApp/hrWorkReport">HR Report</a>
+
+
+
+
+
+
+
+<div class="container">
+<table class="table" border="1">
+<th align="center">Code</th>
+<th align="center">Name</th>
+<th align="center">Subject :</th>
+<th align="center">Dates</th>
+<th align="center">Message</th>
+<th align="center">Status</th>
+<th align="center">Action</th>
+
+
+<c:forEach items="${leaves}" var="l">
+<tr>
+<td> ${l.empCode}</td>
+<td> ${l.fname} ${l.lname} </td>
+<td> ${l.subject}</td>
+<td> ${l.fromDate} To ${l.toDate}</td>
+<td>${l.message}</td>
+<td>${l.status}</td>
+<td><form:form action="btn" method="get"><input name="id" type="hidden" value="${l.id}"><button name="button" value="Approved" class="btn btn-link">Approved</button><button name="button" value="Rejected" class="btn btn-link">Reject</button></form:form>
+</td>
+</tr>
+</c:forEach>
+
+</table>
 	</div>
-	<br>
-	<div align="center">
-		<table>
-			<form:form action="searchWorkReport" method="get">
-				<tr>
-					<td><select name="month" class="dropdown-header">
-					 <option>${mon}</option>
-							<c:forEach items="${months}"  var="months">
-							
-								<option>${months}</option>
-							</c:forEach>
-					</select></td>
-					<td><select name="year" class="dropdown-header">
-					<option>${year}</option>
-							<c:forEach items="${years}" var="years">
-								<option>${years}</option>
-							</c:forEach>
-					</select></td>
-
-					<td><input type="submit" class="btn btn-link" value="Search" />
-					<td>
-				</tr>
-			</form:form>
-		</table>
-	</div>
-	<br>
-
-
-
-
-	<table class="table table-hover" border="1">
-		<thead>
-			<th>Name</th>
-			<th>Task Done Today</th>
-			<th>Task For Tomorrow</th>
-			<th>Impediments</th>
-			<th>date</th>
-		</thead>
-		<tbody>
-			<c:forEach items="${li}" var="user">
-				<tr>
-					<td>${user.firstName}${user.lastName}</td>
-					<td>${user.taskDoneToday}</td>
-					<td>${user.taskForTomorrow}</td>
-					<td>${user.impediments}</td>
-					<c:set var="dd" value="${user.date}" />
-					<td><fmt:formatDate value="${dd}" pattern="dd-MM-yyyy" /></td>
-				</tr>
-			</c:forEach>
-		</tbody>
-	</table>
-
+	
+	
 </body>
 </html>

@@ -2,6 +2,7 @@
     pageEncoding="ISO-8859-1" isELIgnored="false"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -36,10 +37,10 @@
 				<li class="nav-item"><a class="nav-link"
 					href="/HrApp/messageEmployee">Message</a></li>
 				<li class="nav-item"><a class="nav-link"
-					href="/HrApp/workReport">Work Report</a></li>
+					href="/HrApp/workReport">Report</a></li>
 					<li class="nav-item"><a class="nav-link"
-					href="/HrApp/hrWorkReport">HR Work Report</a></li>
-
+				href="/HrApp/lms">L.M.S</a></li>
+				
 				<li class="nav-item dropdown"><a
 					class="nav-link dropdown-toggle" href="#" id="navbardrop"
 					data-toggle="dropdown"> Employee </a>
@@ -61,26 +62,31 @@
 			</div>
 		</nav>
 		<br>
-
-
-
+<div align="center">		
+<a href="/HrApp/workReport">Developer Report</a> | <a href="/HrApp/hrWorkReport">HR Report</a></div>
+<br>
+<div align="center">
+<table>
 <form:form action="searchHrWorkReport" method="get">
-
+<tr><td>
 <select name="month" class="dropdown-header">
-				<c:forEach items="${months}" var="months"  >
+				<option>${mon}</option>
+				<c:forEach items="${months}" var="months">
 					<option>${months}</option>
 				</c:forEach>
-			</select>
-
+			</select></td>
+<td>
 			<select name="year" class="dropdown-header">
+			<option>${year}</option>
 				<c:forEach items="${years}" var="years" >
 					<option>${years}</option>
 				</c:forEach>
-			</select>
-			
-<input type="submit" class="btn btn-info" value="Search"/>
-
-<br><br>
+			</select></td>
+<td>			
+<input type="submit" class="btn btn-link" value="Search"/></td></tr>
+</form:form></table>
+</div>
+<br>
 
 
 <table class="table table-hover" border="1">
@@ -104,11 +110,12 @@
 								<td>${user.interviewPlannedForTomorrow}</td>
 								<td>${user.totalCalls}</td>
 								<td>${user.impediments}</td>
-								<td>${user.date}</td>
+								<c:set var="date" value="${user.date}"></c:set>
+								<td><fmt:formatDate value="${date}" pattern="dd-MM-yyyy"/></td>
 							</tr>
 						</c:forEach>
 					</tbody>
 				</table>
-</form:form>
+
 </body>
 </html>

@@ -1,7 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%> 
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>    
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
 <!DOCTYPE html>
 <html>
 
@@ -37,7 +38,7 @@
 
 
 <body>
-
+<%-- <c:if test="${type == 'ADMIN'}"> --%>
 	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
 			<a class="navbar-brand" href ="https://www.kgate.in/">K-Gate</a>
 
@@ -47,9 +48,10 @@
 				<li class="nav-item"><a class="nav-link"
 					href="/HrApp/messageEmployee">Message</a></li>
 				<li class="nav-item"><a class="nav-link"
-					href="/HrApp/workReport">Work Report</a></li>
+					href="/HrApp/workReport">Report</a></li>
 					<li class="nav-item"><a class="nav-link"
-					href="/HrApp/hrWorkReport">HR Work Report</a></li>
+				href="/HrApp/lms">L.M.S</a></li>
+					
 				<li class="nav-item dropdown"><a
 					class="nav-link dropdown-toggle" href="#" id="navbardrop"
 					data-toggle="dropdown"> Employee </a>
@@ -72,8 +74,7 @@
 		</nav>
 
 
-<p align="center"><a href="register?mylocale=en">English</a> | <a href="register?mylocale=de">
-मराठी   </a> | <a href="register?mylocale=gj">ગુજરાતી</a> </p>
+
 
 <div class="container">
 
@@ -82,16 +83,16 @@
 	<table class="table">
     <p id="head"></p>
 
-		<form:form action="save" method="post" modelAttribute="user" >
+		<form:form action="save" method="post" modelAttribute="user2" >
 			<tr><form:input path="id" class="form-control"   type="hidden" /></tr>
 			<tr>
 				<td><spring:message code="user.empCode" /></td>
-				<td><form:input path="empCode" class="form-control" /></td>
+				<td><form:input path="empCode" class="form-control" required="required" /></td>
 				<td></td>
 			</tr>
 			<tr>
 				<td><spring:message code="user.fname"/></td>
-				<td><form:input  id="fname" path="fname" class="form-control" onblur="first()"/></td><td><p style="color: red" id="fn"></p></td>
+				<td><form:input  id="fname" path="fname" class="form-control" onblur="first()" required="required"/></td><td><p style="color: red" id="fn"></p></td>
 			</tr>
 			<tr>
 				<td><spring:message code="user.mname"/></td>
@@ -100,11 +101,11 @@
 
 			<tr>
 				<td><spring:message code="user.lname"/></td>
-				<td><form:input id="laname" path="lname" class="form-control" onblur="lastName()"/> </td> <td><p style="color: red" id="lastName"></p></td>
+				<td><form:input id="laname" path="lname" class="form-control" onblur="lastName()" /> </td> <td><p style="color: red" id="lastName"></p></td>
 			</tr>
 			<tr>
 				<td><spring:message code="user.email"/></td>
-				<td><form:input id="email" path="email" class="form-control" onblur="emailId()"/></td> <td><p style="color: red" id="em"></p></td>
+				<td><form:input id="email" path="email" class="form-control" onblur="emailId()" required="required"/></td> <td><p style="color: red" id="em"></p></td>
 			</tr>
 			<tr>
 			
@@ -135,7 +136,7 @@
 			
 			<tr>
 			<td>	<spring:message code="user.joiningDate"/></td>
-				<td><form:input path="joiningDate" type="date" class="form-control" id="joiningDate"/></td><td><p style="color: red" id="jd"></p></td>
+				<td><form:input path="joiningDate" type="date" class="form-control" id="joiningDate" required="required"/></td><td><p style="color: red" id="jd"></p></td>
 			</tr>
 			<tr>
 				<td><spring:message code="user.address"/></td>
@@ -153,7 +154,7 @@
 			</tr>
 			<tr>
 				<td><spring:message code="user.password"/></td>
-				<td><form:input path="password" id="password" class="form-control" onblur="psw()" /></td><td><p style="color: red" id="psw"></p></td>
+				<td><form:input path="password" id="password" class="form-control" onblur="psw()" required="required" /></td><td><p style="color: red" id="psw"></p></td>
 			</tr>
 			
 			<tr>
