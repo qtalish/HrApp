@@ -528,6 +528,7 @@ public class UserController {
 			UserController uc = new UserController();
 			uc.sendMail(user2.getEmail(), "Your Password is : " + user2.getPassword(), "Login Credentials");
 			map.put("msg", "Your Password has been send to your email successfully");
+			System.out.println(">>>");
 			return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
 		}
 	}
