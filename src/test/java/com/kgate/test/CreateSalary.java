@@ -1,18 +1,13 @@
-package com.kgate.test;
+/*package com.kgate.test;
 
 import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 
-import com.itextpdf.io.image.ImageData; 
-import com.itextpdf.io.image.ImageDataFactory; 
+import com.itextpdf.text.Document;
+import com.itextpdf.text.pdf.PdfDocument;
+import com.itextpdf.text.pdf.PdfWriter;
 
-import com.itextpdf.kernel.pdf.PdfDocument; 
-import com.itextpdf.kernel.pdf.PdfWriter; 
-
-import com.itextpdf.layout.Document;
-import com.itextpdf.layout.element.Cell; 
-import com.itextpdf.layout.element.Image; 
-import com.itextpdf.layout.element.Table;
+ 
 public class CreateSalary {
 
 	public static void main(String[] args) throws FileNotFoundException, MalformedURLException {
@@ -21,7 +16,7 @@ public class CreateSalary {
 	      PdfWriter writer = new PdfWriter(dest);    
 	      
 	      // Creating a PdfDocument object   
-	      PdfDocument pdfDoc = new PdfDocument(writer);
+	      PdfDocument pdfDoc = new PdfDocument();
 	      
 	      // Creating a Document object
 	      Document doc = new Document(pdfDoc);
@@ -97,3 +92,4 @@ public class CreateSalary {
 	   } 
 		
 }
+*/

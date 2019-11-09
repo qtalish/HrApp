@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -46,6 +47,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
 		return resolver;
 	}
+	
+	
 
 	@Bean
 	public InternalResourceViewResolver resolver() {
@@ -97,5 +100,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
 		config.setFileLocation(env.getProperty("fileLocation"));
 		config.setFileUrl(env.getProperty("fileUrl"));
 		return config;
+	}
+	
+	@Bean
+	public ThreadPoolTaskExecutor taskExecutor() {
+	    return new ThreadPoolTaskExecutor();
 	}
 }

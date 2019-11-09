@@ -21,7 +21,7 @@ public class DailyReportServiceImpl implements DailyReportService {
 	@Override
 	public void saveReport(DailyReport dailyReport) {
 		// TODO Auto-generated method stub
-		dailyReportRepository.save(dailyReport);
+		dailyReportRepository.saveAndFlush(dailyReport);
 	}
 
 

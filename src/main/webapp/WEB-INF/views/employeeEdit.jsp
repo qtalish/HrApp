@@ -106,11 +106,108 @@
 		<br>
 	</c:if>
 
+<%-- <<<<<<< HEAD
 	<p align="center">
 		<a href="editEmployeeProfile?id=${param.id}&mylocale=en">English</a> |
 		<a href="editEmployeeProfile?id=${param.id}&mylocale=de">મરાઠી</a> | <a
 			href="editEmployeeProfile?id=${param.id}&mylocale=gj">ગુજરાતી </a>| <a
 			href="editEmployeeProfile?id=${param.id}&mylocale=urdu">اردو</a>
+======= --%>
+
+	<c:if test="${type == 'OPERATIONS'}">
+		<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+			<a class="navbar-brand" href="https://www.kgate.in/">K-Gate</a>
+
+			<ul class="navbar-nav">
+				<li class="nav-item"><a class="nav-link" href="/HrApp/profile">Profile</a></li>
+				<li class="nav-item"><a class="nav-link"
+					href="/HrApp/documents">Document</a></li>
+				<li class="nav-item"><a class="nav-link" href="/HrApp/leave">Leave
+						Application</a></li>
+				<li class="nav-item"><a class="nav-link"
+					href="/HrApp/dailyReport">Daily Report</a></li>
+				<li class="nav-item"><a class="nav-link"
+					href="/HrApp/downloadSalarySlip">Salary Slip Download</a></li>
+
+			</ul>
+			<div class="navbar-collapse collapse w-25 order-3 dual-collapse2">
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item">
+						<form action="logout" method="get">
+							<button class="btn btn-link" style="color: white;">Log
+								Out</button>
+						</form>
+					</li>
+				</ul>
+			</div>
+		</nav>
+		<br>
+	</c:if>
+
+
+	<c:if test="${type == 'ACCOUNTS'}">
+		<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+			<a class="navbar-brand" href="https://www.kgate.in/">K-Gate</a>
+
+			<ul class="navbar-nav">
+				<li class="nav-item"><a class="nav-link" href="/HrApp/profile">Profile</a></li>
+				<li class="nav-item"><a class="nav-link"
+					href="/HrApp/documents">Document</a></li>
+				<li class="nav-item"><a class="nav-link" href="/HrApp/leave">Leave
+						Application</a></li>
+				<li class="nav-item"><a class="nav-link"
+					href="/HrApp/dailyReport">Daily Report</a></li>
+				<li class="nav-item"><a class="nav-link"
+					href="/HrApp/downloadSalarySlip">Salary Slip Download</a></li>
+
+			</ul>
+			<div class="navbar-collapse collapse w-25 order-3 dual-collapse2">
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item">
+						<form action="logout" method="get">
+							<button class="btn btn-link" style="color: white;">Log
+								Out</button>
+						</form>
+					</li>
+				</ul>
+			</div>
+		</nav>
+		<br>
+	</c:if>
+
+
+
+	<c:if test="${type == 'MARKETING'}">
+		<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+			<a class="navbar-brand" href="https://www.kgate.in/">K-Gate</a>
+
+			<ul class="navbar-nav">
+				<li class="nav-item"><a class="nav-link" href="/HrApp/profile">Profile</a></li>
+				<li class="nav-item"><a class="nav-link"
+					href="/HrApp/documents">Document</a></li>
+				<li class="nav-item"><a class="nav-link" href="/HrApp/leave">Leave
+						Application</a></li>
+				<li class="nav-item"><a class="nav-link"
+					href="/HrApp/dailyReport">Daily Report</a></li>
+				<li class="nav-item"><a class="nav-link"
+					href="/HrApp/downloadSalarySlip">Salary Slip Download</a></li>
+
+			</ul>
+			<div class="navbar-collapse collapse w-25 order-3 dual-collapse2">
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item">
+						<form action="logout" method="get">
+							<button class="btn btn-link" style="color: white;">Log
+								Out</button>
+						</form>
+					</li>
+				</ul>
+			</div>
+		</nav>
+		<br>
+	</c:if>
+
+
 	<div class="container">
 
 		<h3>
@@ -120,18 +217,20 @@
 		<table class="table">
 			<p id="head"></p>
 
-			<form:form action="saveEditEmployee" method="post"
+<%-- 			<form:form action="saveEditEmployee" method="post"
 				modelAttribute="user">
+ --%>
+			<form:form action="save" method="post" modelAttribute="user2">
 				<form:input path="id" type="hidden" class="form-control" />
 				<tr>
 					<td><spring:message code="user.empCode" /></td>
-					<td><form:input path="empCode" class="form-control" /></td>
+					<td><form:input path="empCode" class="form-control" readonly="true" /></td>
 					<td></td>
 				</tr>
 				<tr>
 					<td><spring:message code="user.fname" /></td>
 					<td><form:input id="fname" path="fname" onblur="first()"
-							class="form-control" /></td>
+							class="form-control" required="required"  /></td>
 					<td><p id="fn"></p></td>
 				</tr>
 				<tr>
@@ -151,6 +250,7 @@
 					<td><spring:message code="user.email" /></td>
 					<td><form:input id="email" path="email" onblur="emailId()"
 							class="form-control" readonly="true"/></td>
+
 					<td><p id="em"></p></td>
 				</tr>
 				<tr>
@@ -189,7 +289,7 @@
 				<tr>
 					<td><spring:message code="user.joiningDate" /></td>
 					<td><form:input path="joiningDate" type="date"
-							id="joiningDate" class="form-control" /></td>
+							id="joiningDate" class="form-control" required="required" /></td>
 					<td><p id="jd"></p></td>
 				</tr>
 				<tr>
@@ -202,7 +302,7 @@
 				<tr>
 					<td><spring:message code="user.mob" /></td>
 					<td><form:input path="mob" id="mob" onblur="mobile()"
-							class="form-control" readonly="true"/></td>
+							class="form-control"/></td>
 					<td><p id="mo"></p></td>
 				</tr>
 
@@ -219,7 +319,7 @@
 					<td><p id="psw"></p></td>
 				</tr> --%>
 
- 				<tr>
+				<tr>
 					<td><spring:message code="user.submit" var="submit" /></td>
 					<td><input type="submit" class="btn btn-primary" id="submit"
 						value="${submit}" /></td>

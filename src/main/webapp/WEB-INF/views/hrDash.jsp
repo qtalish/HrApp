@@ -46,7 +46,7 @@
 				href="/HrApp/hrCallingSheet">Calling Sheet</a></li>
 				<li class="nav-item"><a class="nav-link"
 					href="/HrApp/downloadSalarySlip">Salary Slip Download</a></li>
-				
+
 
 		</ul>
 		<div class="navbar-collapse collapse w-25 order-3 dual-collapse2">

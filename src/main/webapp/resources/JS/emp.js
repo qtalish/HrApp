@@ -94,45 +94,6 @@ deleteEmp = function(id) {
 	}
 };
 
-forgot = function() {
-	swal({
-		  text: 'Please Enter your Email',
-		  content: "input",
-		  button: {
-		    text: "Submit",
-		    closeModal: false,
-		  },
-		})
-	.then(name => {
-// if (!name) throw null;
-// console.log(name)
-// console.log(name2)
-		$.ajax({
-		url : 'forgetPassword',
-		type : 'POST',
-		data : JSON.stringify({email : name}),  
-		contentType:"application/json; charset=utf-8",
-		dataType: 'json',
-		success : function(data) {
-			swal(data.msg,{
-				icon : "success",
-			});
-		},
-		error: function(err){
-// console.log("AJAX error in request: " + JSON.stringify(err, null, 2));
-// console.log("AJAX error in request: " + JSON.stringify(err.responseJSON.msg,
-// null, 2));
-			console.log("AJAX error in request: " +err.responseJSON.msg);
-// console.log("failed")
-// console.log(response)
-// console.log(response.msg2)
-			swal(err.responseJSON.msg,{
-				icon : "error",
-			});
-		  }
-	});
-})
-}
 
 myFunction2 = function(page){
 	console.log(page);

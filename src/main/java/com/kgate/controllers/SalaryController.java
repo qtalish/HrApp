@@ -57,7 +57,11 @@ public class SalaryController {
 	}
 
 	@GetMapping("/viewSalary")
-	public ModelAndView viewSalary() {
+	public ModelAndView viewSalary(@SessionAttribute("user") User user) {
+		if(user.getUserType() == null)
+		{
+		    return new ModelAndView("redirect:/");  
+		}
 		ModelAndView mav = new ModelAndView("displaySalary");
 		DateFormatSymbols dfs = new DateFormatSymbols();
 		String[] arr = dfs.getMonths();
@@ -84,11 +88,12 @@ public class SalaryController {
 
 	@GetMapping("/searchSalary")
 	public ModelAndView searchSalary(@RequestParam("month") String month, @RequestParam("year") Integer year,
-			@RequestParam("empCode") String empCode) {
+			@RequestParam("empCode") String empCode,@SessionAttribute("user")User user) {
+		if(user.getUserType() == null)
+		{
+		    return new ModelAndView("redirect:/");  
+		}
 		ModelAndView mav = new ModelAndView("viewLeaves");
-		System.out.println(",......" + month);
-		System.out.println("...." + year);
-		System.out.println("...." + empCode);
 		System.out.println(leavesService.getLeavesDetails(empCode, month, 2019));
 		UserLeaves userLeaves = leavesService.getLeavesDetails(empCode, month, year);
 //	new changes
@@ -197,6 +202,8 @@ public class SalaryController {
 	@GetMapping("/downloadSalarySlip")
 	public ModelAndView downloadSalarySlip(@ModelAttribute("user") User user) {
 		ModelAndView mav = new ModelAndView("salaryslip");
+		String type = user.getUserType();
+		mav.addObject("type",type);
 		DateFormatSymbols dfs = new DateFormatSymbols();
 		String[] arr = dfs.getMonths();
 		List<String> months = new ArrayList<>();

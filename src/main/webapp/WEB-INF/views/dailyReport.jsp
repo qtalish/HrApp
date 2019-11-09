@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1" isELIgnored="false"%>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+    <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -29,33 +30,126 @@
 </head>
 <body>
 
-<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-			<a class="navbar-brand" href ="https://www.kgate.in/">K-Gate</a>
 
-			<ul class="navbar-nav">
-				<li class="nav-item"><a class="nav-link"
-					href="/HrApp/profile">Profile</a></li>
-				<li class="nav-item"><a class="nav-link"
-					href="/HrApp/documents">Document</a></li>
-				<li class="nav-item"><a class="nav-link"
-					href="/HrApp/leave">Leave Application</a></li>
-					<li class="nav-item"><a class="nav-link"
-					href="/HrApp/dailyReport">Daily Report</a></li>
+<c:if test="${type == 'DEVELOPER'}">
+	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+		<a class="navbar-brand" href="https://www.kgate.in/">K-Gate</a>
 
+		<ul class="navbar-nav">
+			<li class="nav-item"><a class="nav-link" href="/HrApp/profile">Profile</a></li>
+			<li class="nav-item"><a class="nav-link" href="/HrApp/documents">Document</a></li>
+			<li class="nav-item"><a class="nav-link" href="/HrApp/leave">Leave
+					Application</a></li>
+			<li class="nav-item"><a class="nav-link"
+				href="/HrApp/dailyReport">Daily Report</a></li>
+				<li class="nav-item"><a class="nav-link"
+					href="/HrApp/downloadSalarySlip">Salary Slip Download</a></li>
+
+		</ul>
+		<div class="navbar-collapse collapse w-25 order-3 dual-collapse2">
+			<ul class="navbar-nav ml-auto">
+				<li class="nav-item">
+					<form action="logout" method="get">
+						<button class="btn btn-link" style="color: white;">Log
+							Out</button>
+					</form>
+				</li>
 			</ul>
-			<div class="navbar-collapse collapse w-25 order-3 dual-collapse2">
-				<ul class="navbar-nav ml-auto">
-					<li class="nav-item">
-						<form action="logout" method="get">
-							<button class="btn btn-link" style="color: white;">Log
-								Out</button>
-						</form>
-					</li>
-				</ul>
-			</div>
-		</nav>
-		<br>
+		</div>
+	</nav>
+	<br>
+	</c:if>
+	
+	
+	<c:if test="${type == 'OPERATIONS'}">
+	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+		<a class="navbar-brand" href="https://www.kgate.in/">K-Gate</a>
 
+		<ul class="navbar-nav">
+			<li class="nav-item"><a class="nav-link" href="/HrApp/profile">Profile</a></li>
+			<li class="nav-item"><a class="nav-link" href="/HrApp/documents">Document</a></li>
+			<li class="nav-item"><a class="nav-link" href="/HrApp/leave">Leave
+					Application</a></li>
+			<li class="nav-item"><a class="nav-link"
+				href="/HrApp/dailyReport">Daily Report</a></li>
+				<li class="nav-item"><a class="nav-link"
+					href="/HrApp/downloadSalarySlip">Salary Slip Download</a></li>
+
+		</ul>
+		<div class="navbar-collapse collapse w-25 order-3 dual-collapse2">
+			<ul class="navbar-nav ml-auto">
+				<li class="nav-item">
+					<form action="logout" method="get">
+						<button class="btn btn-link" style="color: white;">Log
+							Out</button>
+					</form>
+				</li>
+			</ul>
+		</div>
+	</nav>
+	<br>
+	</c:if>
+	
+	<c:if test="${type == 'ACCOUNTS'}">
+	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+		<a class="navbar-brand" href="https://www.kgate.in/">K-Gate</a>
+
+		<ul class="navbar-nav">
+			<li class="nav-item"><a class="nav-link" href="/HrApp/profile">Profile</a></li>
+			<li class="nav-item"><a class="nav-link" href="/HrApp/documents">Document</a></li>
+			<li class="nav-item"><a class="nav-link" href="/HrApp/leave">Leave
+					Application</a></li>
+			<li class="nav-item"><a class="nav-link"
+				href="/HrApp/dailyReport">Daily Report</a></li>
+				<li class="nav-item"><a class="nav-link"
+					href="/HrApp/downloadSalarySlip">Salary Slip Download</a></li>
+
+		</ul>
+		<div class="navbar-collapse collapse w-25 order-3 dual-collapse2">
+			<ul class="navbar-nav ml-auto">
+				<li class="nav-item">
+					<form action="logout" method="get">
+						<button class="btn btn-link" style="color: white;">Log
+							Out</button>
+					</form>
+				</li>
+			</ul>
+		</div>
+	</nav>
+	<br>
+	</c:if>
+	
+	
+	
+	<c:if test="${type == 'MARKETING'}">
+	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+		<a class="navbar-brand" href="https://www.kgate.in/">K-Gate</a>
+
+		<ul class="navbar-nav">
+			<li class="nav-item"><a class="nav-link" href="/HrApp/profile">Profile</a></li>
+			<li class="nav-item"><a class="nav-link" href="/HrApp/documents">Document</a></li>
+			<li class="nav-item"><a class="nav-link" href="/HrApp/leave">Leave
+					Application</a></li>
+			<li class="nav-item"><a class="nav-link"
+				href="/HrApp/dailyReport">Daily Report</a></li>
+				<li class="nav-item"><a class="nav-link"
+					href="/HrApp/downloadSalarySlip">Salary Slip Download</a></li>
+
+		</ul>
+		<div class="navbar-collapse collapse w-25 order-3 dual-collapse2">
+			<ul class="navbar-nav ml-auto">
+				<li class="nav-item">
+					<form action="logout" method="get">
+						<button class="btn btn-link" style="color: white;">Log
+							Out</button>
+					</form>
+				</li>
+			</ul>
+		</div>
+	</nav>
+	<br>
+	</c:if>
+	
 
 <table class="table">
 <form:form action="submitDailyReport" method="post" modelAttribute="dailyReport">
@@ -64,17 +158,17 @@
 			
 			<tr>
 				<td>Date</td>
-				<td><form:input path="date" type="date" class="dropdown-header" /></td>
+				<td><form:input path="date" type="date" class="dropdown-header" required ="required"/></td>
 			</tr>
 			
 			<tr>
 				<td>Task Done Today :</td>
-				<td><form:textarea path="taskDoneToday" class="form-control" /></td>
+				<td><form:textarea path="taskDoneToday" onmouseover="tdt()" id="td" class="form-control" required ="required"/></td>
 			</tr>
 			
 			<tr>
 				<td>Task For Tomorrow :</td>
-				<td><form:textarea path="taskForTomorrow" class="form-control" /></td>
+				<td><form:textarea path="taskForTomorrow" class="form-control" required ="required"/></td>
 			</tr>
 		
 		<tr>
@@ -84,9 +178,38 @@
 			
 			<tr>
 			<td></td>
-				<td><button class="btn btn-primary">Submit</button></td>
+				<td><button class="btn btn-primary"  onclick="valid()">Submit</button></td>
 			</tr>
 		</form:form>
 		</table>
+		<div class="alert alert-secondary alert-dismissible fade show" role="alert">
+		<p id ="abc" aria-label="Close" /></div>
+		
+<script type="text/javascript">
+valid = function()
+{
+var today = $("#td").val();
+var yester = "${yest}";
+console.log("today "+today);
+console.log("yest"+yester);
+if(today.includes(yester))
+	{
+	console.log("true");
+	return true;
+	}
+else
+	{
+	console.log("false");
+	document.getElementById("abc").innerHTML="ABC";
+	return false;
+	}
+}
+
+tdt = function()
+{
+console.log("tdt");	
+document.getElementById("abc").innerHTML = "Today's Task : "+"${yest}"; 
+}
+</script>
 </body>
 </html>

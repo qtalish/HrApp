@@ -16,7 +16,7 @@ import com.kgate.entity.Attendance;
 @Transactional
 public interface AttendanceRepository extends JpaRepository<Attendance, Integer> {
 
-	@Query(value = "select * from Attendance a where a.attDate=:date", nativeQuery = true)
+	@Query(value = "select * from Attendance a where a.attDate=:date order by a.firstName", nativeQuery = true)
 	List<Attendance> getAttendance(@Param("date") Date date);
 
 	@Modifying
@@ -36,4 +36,11 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Integer>
 	
 	@Query("SELECT c FROM Attendance c WHERE c.empCode=:empCode")
 	Attendance findByeCode(@Param("empCode") String empCode);
+	
+	
+	
+	
+	
+	@Query(value= "SELECT * FROM Attendance where empCode=:empCode and month=:month",nativeQuery = true)
+	public List<Attendance> findByEmpCode(@Param("empCode") String empCode,@Param("month") String month);
 }

@@ -27,8 +27,6 @@
 	crossorigin="anonymous"></script>
 
 <script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script
 	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
@@ -46,9 +44,9 @@
 			<li class="nav-item"><a class="nav-link"
 				href="/HrApp/messageEmployee">Message</a></li>
 			<li class="nav-item"><a class="nav-link"
-				href="/HrApp/workReport">Work Report</a></li>
-				<li class="nav-item"><a class="nav-link"
-					href="/HrApp/hrWorkReport">HR Work Report</a></li>
+				href="/HrApp/workReport">Report</a></li>
+			<li class="nav-item"><a class="nav-link"
+				href="/HrApp/lms">L.M.S</a></li>
 
 			<li class="nav-item dropdown"><a
 				class="nav-link dropdown-toggle" href="#" id="navbardrop"

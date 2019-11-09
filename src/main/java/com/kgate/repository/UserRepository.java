@@ -36,6 +36,8 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 	List<User> findEmployee();
 
 	User findByEmail(String email);
+	
+	User findByEmpCode(String empCode);
 
 
 }

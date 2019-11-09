@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1" isELIgnored="false"%>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>    
+	pageEncoding="ISO-8859-1" isELIgnored="false"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -28,7 +28,7 @@
 </head>
 <body>
 
-<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
 		<a class="navbar-brand" href="https://www.kgate.in/">K-Gate</a>
 
 		<ul class="navbar-nav">
@@ -38,7 +38,7 @@
 					Application</a></li>
 			<li class="nav-item"><a class="nav-link"
 				href="/HrApp/hrDailyReport">Daily Report</a></li>
-				<li class="nav-item"><a class="nav-link"
+			<li class="nav-item"><a class="nav-link"
 				href="/HrApp/hrCallingSheet">Calling Sheet</a></li>
 				<li class="nav-item"><a class="nav-link"
 					href="/HrApp/downloadSalarySlip">Salary Slip Download</a></li>
@@ -58,35 +58,62 @@
 	</nav>
 	<br>
 
-<div class="container">
-<table class="table">
-<form:form action="submitHrDailyReport" modelAttribute="hdr">
-<form:input path="id" type="hidden" />
+	<div class="container">
+		<table class="table">
+			<form:form action="submitHrDailyReport" modelAttribute="hdr">
+				<form:input path="id" type="hidden" />
 
- <tr><td>Date </td>	<td><form:input type="date" onload="getDate()" path="date" id="date" class="form-control" readonly="true" /></td></tr> 
+				<tr>
+					<td>Date</td>
+					<td><form:input type="date" path="date"
+							id="date" class="form-control"  /></td>
+				</tr>
 
-<tr><td>Total Calls </td>	<td><form:input path="totalCalls" class="form-control"/></td></tr>
+				<tr>
+					<td>Total Calls</td>
+					<td><form:input path="totalCalls" class="form-control" /></td>
+				</tr>
 
-<tr><td>Resource Called </td>	<td><form:textarea path="resourcesCalled" class="form-control"/></td></tr>
+				<tr>
+					<td>Resource Called</td>
+					<td><form:textarea path="resourcesCalled" class="form-control" /></td>
+				</tr>
 
-<tr><td>Resource Interviewed </td>	<td><form:textarea path="resourcesInterviewed" class="form-control"/></td></tr>
+				<tr>
+					<td>Resource Interviewed</td>
+					<td><form:textarea path="resourcesInterviewed"
+							class="form-control" /></td>
+				</tr>
 
-<tr><td>Task For Tomorrow </td>	<td><form:textarea path="taskForTomorrow" class="form-control"/></td></tr>
+				<tr>
+					<td>Task For Tomorrow</td>
+					<td><form:textarea path="taskForTomorrow" class="form-control" /></td>
+				</tr>
 
-<tr><td>Interview Planned For Tomorrow </td>	 <td><form:textarea path="interviewPlannedForTomorrow" class="form-control"/></td></tr>
+				<tr>
+					<td>Interview Planned For Tomorrow</td>
+					<td><form:textarea path="interviewPlannedForTomorrow"
+							class="form-control" /></td>
+				</tr>
 
-<tr><td>Impediments </td>	<td><form:textarea path="impediments" class="form-control"/></td></tr>
+				<tr>
+					<td>Impediments</td>
+					<td><form:textarea path="impediments" class="form-control" /></td>
+				</tr>
 
-<tr><td></td><td><button class="btn btn-primary">Submit</button></td><td></td></tr>
+				<tr>
+					<td></td>
+					<td><button class="btn btn-primary">Submit</button></td>
+					<td></td>
+				</tr>
 
-</form:form>
-</table>
-</div>
+			</form:form>
+		</table>
+	</div>
 
-<script type="text/javascript">
+	<script type="text/javascript">
 function getDate(){
-    var today = new Date();
-
+ var today = new Date();
 document.getElementById("date").value = today;
 }
 

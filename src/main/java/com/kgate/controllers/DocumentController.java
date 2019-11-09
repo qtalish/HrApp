@@ -47,8 +47,12 @@ public class DocumentController {
 	UserDocumentService uds;
 
 	@RequestMapping(value = "/uploadDocumentAjax", method = RequestMethod.GET)
-	public ModelAndView uploadDocuments(@ModelAttribute("userDocument") UserDocument userDocument,
-			@RequestParam(name = "empCode") String empCode) {
+	public ModelAndView uploadDocuments(@ModelAttribute("userDocument") UserDocument userDocument, 
+			                            @RequestParam(name = "empCode") String empCode,@SessionAttribute("user") User user) {
+		if(user.getUserType() == null)
+		{
+		    return new ModelAndView("redirect:/");  
+		}
 		ModelAndView mav = new ModelAndView("adminDocuments");
 
 		List<UserDocument> ud = userDocumentService.findDoc(empCode);
